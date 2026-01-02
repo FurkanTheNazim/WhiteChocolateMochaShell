@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 08:36:36 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/01/02 08:43:28 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/01/02 21:40:48 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,24 @@ void	inorder(t_tree *root)
 	inorder(root->right);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_tree	*root;
+	int		i;
 
+	if (argc < 2)
+	{
+		printf("Usage: ./tree_house num1 num2 num3 ...\n");
+		return (1);
+	}
 	root = NULL;
-	root = insert_node(root, 50);
-	insert_node(root, 30);
-	insert_node(root, 20);
-	insert_node(root, 40);
-	insert_node(root, 70);
-	insert_node(root, 60);
-	insert_node(root, 80);
+	i = 1;
+	while (i < argc)
+	{
+		root = insert_node(root, atoi(argv[i]));
+		i++;
+	}
+	printf("Inorder: ");
 	inorder(root);
 	printf("\n");
 	return (0);
