@@ -1,30 +1,60 @@
-NAME= minishell
-CC= cc
-CFLAGS= -Wall -Werror -Wextra -g -Lreadline
+# **************************************************************************** #
+#                          WHITE CHOCOLATE MOCHA SHELL                         #
+# **************************************************************************** #
 
-SRCS=	
+NAME		= minishell
+CC			= cc
+CFLAGS		= -Wall -Werror -Wextra -g
 
-LIBFT= ./includes/libft
-LIBFT_A= $(LIBFT)/libft.a
+# Include paths
+INC_DIR		= ./includes
+INC_FLAGS	= -I$(INC_DIR) -I$(INC_DIR)/libft -I/usr/include
 
-OBJS= $(SRCS:.c=.o)
+# Libraries
+LIBFT_DIR	= $(INC_DIR)/libft
+LIBFT_A		= $(LIBFT_DIR)/libft.a
+LIBS		= -lreadline -lncurses
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+# Source files
+SRC_DIR		= ./src
+SRCS		= $(SRC_DIR)/lexer/lexer.c \
+			  lexer.c \
 
-all:$(NAME)
-$(NAME):$(OBJS)
-	@make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS) $(LIBFT_A) -o $(NAME)
+# Object files
+OBJ_DIR		= ./obj
+OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+# Colors
+GREEN		= \033[0;32m
+YELLOW		= \033[0;33m
+RESET		= \033[0m
+
+# Rules
+all: $(NAME)
+
+$(NAME): $(LIBFT_A) $(OBJS)
+	@echo "$(GREEN)🔗 Linking $(NAME)...$(RESET)"
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
+	@echo "$(GREEN)✅ $(NAME) is ready!$(RESET)"
+
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	@echo "$(YELLOW)📦 Compiling $<...$(RESET)"
+	@$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+
+$(LIBFT_A):
+	@echo "$(YELLOW)📚 Building libft...$(RESET)"
+	@make -C $(LIBFT_DIR)
 
 clean:
-	@rm -rf $(OBJS)
-	@make clean -C $(LIBFT)
+	@rm -rf $(OBJ_DIR)
+	@make clean -C $(LIBFT_DIR)
+	@echo "$(YELLOW)🧹 Object files cleaned$(RESET)"
 
-
-fclean:clean
+fclean: clean
 	@rm -rf $(NAME)
-	@make fclean -C $(LIBFT)
+	@make fclean -C $(LIBFT_DIR)
+	@echo "$(YELLOW)🗑️  $(NAME) removed$(RESET)"
 
 re: fclean all
 

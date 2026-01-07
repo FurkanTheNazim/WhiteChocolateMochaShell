@@ -94,11 +94,9 @@ t_token_list	*lexer(char *input)
 			j += lexer_double_quote(&tokenlist, &input[i]);
 		else if (input[i] && input[i] == '\'')
 			j += lexer_quote(&tokenlist, &input[i]);
-		else
-		{
-			while (input[i + j] && input[i + j] != ' ')
-				j++;
-		}
+
+		while (input[i + j] && input[i + j] != ' ')
+			j++;
 		temp = ft_substr(input, i, j);
 		addback(&tokenlist, create_newnode(temp));
 		i += j;
