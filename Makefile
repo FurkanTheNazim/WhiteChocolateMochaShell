@@ -1,0 +1,31 @@
+NAME= minishell
+CC= cc
+CFLAGS= -Wall -Werror -Wextra -g -Lreadline
+
+SRCS=	
+
+LIBFT= ./includes/libft
+LIBFT_A= $(LIBFT)/libft.a
+
+OBJS= $(SRCS:.c=.o)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+all:$(NAME)
+$(NAME):$(OBJS)
+	@make -C $(LIBFT)
+	$(CC) $(CFLAGS) $(SRCS) $(LIBFT_A) -o $(NAME)
+
+clean:
+	@rm -rf $(OBJS)
+	@make clean -C $(LIBFT)
+
+
+fclean:clean
+	@rm -rf $(NAME)
+	@make fclean -C $(LIBFT)
+
+re: fclean all
+
+.PHONY: all clean fclean re
