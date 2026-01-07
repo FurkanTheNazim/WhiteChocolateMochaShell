@@ -109,7 +109,7 @@ typedef struct s_cmd
     int     heredoc;     // << için flag
 }   t_cmd;
 ```
-
+"ls -la" | grep -a > out.txt 
 ---
 
 ## 🚀 ADIM 4: EXECUTOR (Çalıştırma)
