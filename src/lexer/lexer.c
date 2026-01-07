@@ -46,15 +46,18 @@ void	addback(t_token_list **node, t_token_list *newnode)
 		temp = temp->next;
 	temp->next = newnode;
 }
+
 int	lexer_double_quote(t_token_list **list, char *input)
 {
 	char	*tmp;
 	int		i;
 
-	i = 0;
+	i = 1;
 	while (input[i] && input[i] != '\"')
 		i++;
-	tmp = ft_substr(input, 1, i);
+	if (input[i] == '\"')
+		i++;
+	tmp = ft_substr(input, 0, i);
 	addback(list, create_newnode(tmp));
 	return (i);
 }
@@ -64,10 +67,12 @@ int	lexer_quote(t_token_list **list, char *input)
 	char	*tmp;
 	int		i;
 
-	i = 0;
+	i = 1;
 	while (input[i] && input[i] != '\'')
 		i++;
-	tmp = ft_substr(input, 1, i);
+	if (input[i] == '\'')
+		i++;
+	tmp = ft_substr(input, 0, i);
 	addback(&(*list), create_newnode(tmp));
 	return (i);
 }
@@ -84,16 +89,18 @@ t_token_list	*lexer(char *input)
 	{
 		j = 0;
 		while (input[i] && input[i] == ' ')
-			i++;
+			i++;		
 		if (input[i] && input[i] == '\"')
 			j += lexer_double_quote(&tokenlist, &input[i]);
 		else if (input[i] && input[i] == '\'')
 			j += lexer_quote(&tokenlist, &input[i]);
-
-		while (input[i + j] && input[i + j] != ' ')
-			j++;
-		temp = ft_substr(input, i, j);
-		addback(&tokenlist, create_newnode(temp));
+		else
+		{
+			while (input[i + j] && input[i + j] != ' ')
+				j++;
+			temp = ft_substr(input, i, j);
+			addback(&tokenlist, create_newnode(temp));
+		}
 		i += j;
 	}
 	return (tokenlist);
@@ -104,6 +111,7 @@ int main()
 	t_token_list	*tokenlist;
 	char			*input;
 	int				rvalue;
+	int i = 0;
 
 	rvalue = 0;
 	while (1)
@@ -122,8 +130,9 @@ int main()
 		temp = tokenlist;
 		while(temp)
 		{
-			printf("type[%d] : %s\n",temp->type, temp->token);
+			printf("i: %d || type[%d] : %s\n",i, temp->type, temp->token);
 			temp = temp->next;
+			i++;
 		}
 	}
 	return 0;
