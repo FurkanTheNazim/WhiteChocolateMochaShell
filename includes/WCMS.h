@@ -12,11 +12,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <dirent.h>
+#include "libft/libft.h"
+#include "lexer_parser.h" 
 
 typedef struct s_minishell
 {
     t_token *token_list;
-    t_command *command_list;
+    // t_command *command_list;
     char **envp;
     char *input;
     int exit_status;
