@@ -12,20 +12,23 @@ t_token	*create_newnode(char *token)
 	node->content = token;
 	if (*token == '|')
 		node->type = TOKEN_PIPE;
-	else if (*token == '<')
-		node->type = TOKEN_REDIR_IN;
+	else if (token[0] == '<' && token[1] == '<')
+		node->type = TOKEN_HEREDOC;
+	else if (token[0] == '>' && token[1] == '>')
+		node->type = TOKEN_REDIR_APPEND;
 	else if (*token == '>')
 		node->type = TOKEN_REDIR_OUT;
+	else if (*token == '<')
+		node->type = TOKEN_REDIR_IN;
 	else
 		node->type = TOKEN_WORD;
 	node->next = NULL;
 	return (node);
 }
-
 void	addback(t_token **node, t_token *newnode)
 {
 	t_token	*temp;
-
+	
 	if (!*node)
 	{
 		*node = newnode;
@@ -33,8 +36,21 @@ void	addback(t_token **node, t_token *newnode)
 	}
 	temp = *node;
 	while (temp->next)
-		temp = temp->next;
-	temp->next = newnode;
+	temp = temp->next;
+temp->next = newnode;
+}
+int lexer_operator(t_token **list, char *input)
+{
+	char *tmp;
+	int len;
+
+	len = 1;
+	if((input[0] == '>' && input[1] == '>') ||
+		(input[0] == '<' && input[1] == '<'))
+		len = 2;
+	tmp = ft_substr(input, 0, len);
+	addback(list, create_newnode(tmp));
+	return (len);	
 }
 
 int	lexer_double_quote(t_token **list, char *input)
@@ -84,9 +100,12 @@ t_token	*lexer(char *input)
 			j += lexer_double_quote(&tokenlist, &input[i]);
 		else if (input[i] && input[i] == '\'')
 			j += lexer_quote(&tokenlist, &input[i]);
+		else if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+			j += lexer_operator(&tokenlist, &input[i]);
 		else
 		{
-			while (input[i + j] && input[i + j] != ' ')
+			while (input[i + j] && input[i + j] != ' ' 
+					&& input[i + j] != '|' && input[i + j] != '<' && input[i + j] != '>')
 				j++;
 			temp = ft_substr(input, i, j);
 			addback(&tokenlist, create_newnode(temp));
