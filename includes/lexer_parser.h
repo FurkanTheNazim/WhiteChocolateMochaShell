@@ -1,5 +1,5 @@
 #ifndef LEXER_PARSER_H
-#define LEXER_PARSER_H
+# define LEXER_PARSER_H
 
 typedef enum e_token_type
 {
@@ -8,8 +8,17 @@ typedef enum e_token_type
     TOKEN_REDIR_IN,
     TOKEN_REDIR_OUT,
     TOKEN_REDIR_APPEND,
-    TOKEN_HEREDOC
+    TOKEN_HEREDOC,
+    TOKEN_OR
 }	t_token_type;
+
+typedef enum e_quote_type
+{
+    N_QUOTE,
+    S_QUOTE,
+    D_QUOTE
+}	t_quote_type;
+
 
 // t_token: Lexer'ın ürettiği her bir token'ı temsil eder
 // raw: Orijinal string (örn: "hello")
