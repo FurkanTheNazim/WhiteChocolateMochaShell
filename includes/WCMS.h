@@ -13,7 +13,7 @@
 #include <readline/history.h>
 #include <dirent.h>
 #include "libft/libft.h"
-#include "lexer_parser.h" 
+#include "lexer_parser.h"
 
 typedef struct s_minishell
 {
