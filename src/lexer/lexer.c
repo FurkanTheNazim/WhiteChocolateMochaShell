@@ -1,40 +1,30 @@
 #include "../includes/WCMS.h"
 
-#define COMMAND 1
-#define PIPE 2
-#define REDIRECTION 3
-
-typedef struct s_token_list
+t_token	*create_newnode(char *token)
 {
-	int				type;
-	char			*token;
-	void			*next;
-}	t_token_list;
-
-
-t_token_list	*create_newnode(char *token)
-{
-	t_token_list	*node;
+	t_token	*node;
 
 	if (!token)
 		return (NULL);
-	node = malloc(sizeof(t_token_list));
+	node = malloc(sizeof(t_token));
 	if (!node)
 		return (NULL);
-	node->token = token;
+	node->content = token;
 	if (*token == '|')
-		node->type = PIPE;
-	else if (*token == '<' || *token == '>')
-		node->type = REDIRECTION;
+		node->type = TOKEN_PIPE;
+	else if (*token == '<')
+		node->type = TOKEN_REDIR_IN;
+	else if (*token == '>')
+		node->type = TOKEN_REDIR_OUT;
 	else
-		node->type = COMMAND;
+		node->type = TOKEN_WORD;
 	node->next = NULL;
 	return (node);
 }
 
-void	addback(t_token_list **node, t_token_list *newnode)
+void	addback(t_token **node, t_token *newnode)
 {
-	t_token_list	*temp;
+	t_token	*temp;
 
 	if (!*node)
 	{
@@ -47,7 +37,7 @@ void	addback(t_token_list **node, t_token_list *newnode)
 	temp->next = newnode;
 }
 
-int	lexer_double_quote(t_token_list **list, char *input)
+int	lexer_double_quote(t_token **list, char *input)
 {
 	char	*tmp;
 	int		i;
@@ -62,7 +52,7 @@ int	lexer_double_quote(t_token_list **list, char *input)
 	return (i);
 }
 
-int	lexer_quote(t_token_list **list, char *input)
+int	lexer_quote(t_token **list, char *input)
 {
 	char	*tmp;
 	int		i;
@@ -77,9 +67,9 @@ int	lexer_quote(t_token_list **list, char *input)
 	return (i);
 }
 
-t_token_list	*lexer(char *input)
+t_token	*lexer(char *input)
 {
-	t_token_list	*tokenlist;
+	t_token	*tokenlist = NULL;
 	char			*temp;
 	int		i;
 	int		j;
@@ -108,7 +98,7 @@ t_token_list	*lexer(char *input)
 
 int main()
 {
-	t_token_list	*tokenlist;
+	t_token	*tokenlist;
 	char			*input;
 	int				rvalue;
 	int i = 0;
@@ -126,11 +116,11 @@ int main()
 		add_history(input);
 		tokenlist = lexer(input);
 		free(input);
-		t_token_list *temp;
+		t_token *temp;
 		temp = tokenlist;
 		while(temp)
 		{
-			printf("i: %d || type[%d] : %s\n",i, temp->type, temp->token);
+			printf("i: %d || type[%d] : %s\n",i, temp->type, temp->content);
 			temp = temp->next;
 			i++;
 		}
