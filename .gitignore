@@ -1,0 +1,18 @@
+# Object files
+*.o
+*.a
+obj/
+
+# Binary
+minishell
+
+# Editor
+.vscode/
+*.swp
+*~
+
+# macOS
+.DS_Store
+
+# Debug
+*.dSYM/
