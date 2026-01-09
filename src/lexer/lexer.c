@@ -1,194 +1,79 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
+/*   Updated: 2026/01/09 18:02:01 by mahmmous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "WCMS.h"
 
-
-void	init_token(t_minishell *main)
+static void	handle_double_quote(char *input, int *j, t_lexer_state *state)
 {
-	main->token_list->raw = main->input;
-	main->token_list->quote_type = 0;
-	main->token_list->type = 0;	
+	state->in_double_quote = 1;
+	(*j)++;
+	while (input[*j] && input[*j] != '\"')
+		(*j)++;
+	if (input[*j] == '\"')
+		(*j)++;
 }
 
-t_token	*create_newnode(char *raw, t_lexer_state state, char *token)
+static void	handle_single_quote(char *input, int *j, t_lexer_state *state)
 {
-	t_token	*node;
-
-	if (!token)
-		return (NULL);
-	node = malloc(sizeof(t_token));
-	if (!node)
-		return (NULL);
-	node->raw = raw;//buna gerek olmayabilir
-	node->value = token;
-	if (state.in_double_quote)
-		node->quote_type = D_QUOTE;
-	else if (state.in_single_quote)
-		node->quote_type = S_QUOTE;
-	else
-		node->quote_type = N_QUOTE;
-	node->next = NULL;
-	return (node);
+	state->in_single_quote = 1;
+	(*j)++;
+	while (input[*j] && input[*j] != '\'')
+		(*j)++;
+	if (input[*j] == '\'')
+		(*j)++;
 }
 
-
-void	addback(t_minishell *main, t_token *newnode)
+static int	handle_word(t_minishell *shell, int i, t_lexer_state *state)
 {
-	t_token	*temp;
+	int		j;
+	char	*input;
 
-	if (!main->token_list)
+	j = 0;
+	input = shell->input;
+	while (input[i + j] && !ft_isspace(input[i + j])
+		&& !is_operator(input[i + j]))
 	{
-		main->token_list = newnode;
-		return ;
-	}
-	temp = main->token_list;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = newnode;
-}
-
-int	append_operator(t_lexer_state state, char *ptr, t_minishell *main)
-{
-	int	i;
-
-	i = 0;
-	if (ptr[i] == '|')
-	{
-		if (ptr[++i] == '|')
-		{
-			main->token_list->type = TOKEN_OR;
-			i++;
-		}
+		if (input[i + j] == '\"' && !state->in_single_quote)
+			handle_double_quote(&input[i], &j, state);
+		else if (input[i + j] == '\'' && !state->in_double_quote)
+			handle_single_quote(&input[i], &j, state);
 		else
-			main->token_list->type = TOKEN_PIPE;
+			j++;
 	}
-	else if (ptr[i] == '<')
-	{
-		if (ptr[++i] == '<')
-		{
-			main->token_list->type = TOKEN_HEREDOC;
-			i++;
-		}
-		else
-			main->token_list->type = TOKEN_REDIR_IN;
-	}
-	else if (ptr[i] == '>')
-	{
-		if (ptr[++i] == '>')
-		{
-			main->token_list->type = TOKEN_REDIR_APPEND;
-			i++;
-		}
-		else
-			main->token_list->type = TOKEN_REDIR_OUT;
-	}
-	addback(main, create_newnode(main->token_list->raw, state, ft_substr(ptr, 0, i)));
-	return  (i);
+	addback(shell, create_newnode(shell->input, *state,
+			ft_substr(shell->input, i, j)));
+	return (j);
 }
 
-int	is_operator(char c)
-{
-	return (c == '|' || c == '<' || c == '>');
-}
-
-int	ft_isspace(char c)
-{
-	return (c == 9 || c == 32); 
-}
-
-void	init_lexer_stat(t_lexer_state *state)
-{
-	state->in_double_quote = 0;
-	state->in_single_quote = 0;
-}
-
-t_token	*lexer(t_minishell *main)
+t_token	*lexer(t_minishell *shell)
 {
 	t_lexer_state	state;
 	int				i;
 	int				j;
 
 	i = 0;
-	while (main->input[i])
+	while (shell->input[i])
 	{
 		j = 0;
 		init_lexer_stat(&state);
-		while (main->input[i] && ft_isspace(main->input[i]))
+		while (shell->input[i] && ft_isspace(shell->input[i]))
 			i++;
-		if (is_operator(main->input[i]))
-			j += append_operator(state, &main->input[i], main);
+		if (!shell->input[i])
+			break ;
+		if (is_operator(shell->input[i]))
+			j = append_operator(state, &shell->input[i], shell);
 		else
-		{
-			while (main->input[i + j] && !ft_isspace(main->input[i + j]) && !is_operator(main->input[i + j]))
-			{
-				if (main->input[i + j] == '\"' && !state.in_single_quote)
-				{
-					state.in_double_quote = 1;
-					while (main->input[i + j] != '\"' && !state.in_single_quote)
-					j++;
-					j++;
-				}
-				else if (main->input[i] == '\'' && !state.in_double_quote)
-				{
-					state.in_single_quote = 1;
-					while (main->input[i + j] != '\'' && !state.in_double_quote)
-					j++;
-				}
-				else
-				j++;
-			}
-			addback(main ,create_newnode(main->input, state ,ft_substr(main->input, i, j)));
-		}
+			j = handle_word(shell, i, &state);
 		i += j;
 	}
-	return (main->token_list);
-}
-
-//  merhaba> "furkan kerem kuma'mız ayşe" can çekişiyor.
-//merhaba
-//>
-// furkan ...
-
-void	free_node(t_token **list)
-{
-	t_token	*temp;
-
-	while (*list)
-	{
-		temp = (*list)->next;
-		if ((*list)->value)
-			free((*list)->value);
-		if ((*list)->raw)
-			free((*list)->raw);
-		free(*list);
-		*list = temp;
-	}
-	*list = NULL;
-}
-
-int main()
-{
-	t_minishell		main;
-
-	int i = 0;
- 	main.exit_status = 0; //daha sonra hepsi birlikte initialize edilir
-	while (1)
-	{
-		main.input = readline("mochashell>");
-		if (!main.input)
-		{
-			rl_clear_history();
-			free(main.input);
-			return (main.exit_status);
-		}
-		add_history(main.input);
-		main.token_list = lexer(&main);
-		t_token *temp;
-		temp = main.token_list;
-		while(temp)
-		{
-			printf("i: %d || type[%d] : %s\n",i, temp->type, temp->value);
-			temp = temp->next;
-			i++;
-		}
-	}
-	return 0;
+	return (shell->token_list);
 }

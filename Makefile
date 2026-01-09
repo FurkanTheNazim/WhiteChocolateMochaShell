@@ -17,7 +17,11 @@ LIBS		= -lreadline -lncurses
 
 # Source files
 SRC_DIR		= ./src
-SRCS		= $(SRC_DIR)/lexer/lexer.c
+SRCS		= $(SRC_DIR)/main.c \
+		  $(SRC_DIR)/lexer/lexer.c \
+		  $(SRC_DIR)/lexer/lexer_utils.c \
+		  $(SRC_DIR)/lexer/lexer_token.c \
+		  $(SRC_DIR)/lexer/lexer_operators.c
 
 # Object files
 OBJ_DIR		= ./obj

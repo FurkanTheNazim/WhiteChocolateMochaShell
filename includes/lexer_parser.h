@@ -1,6 +1,8 @@
 #ifndef LEXER_PARSER_H
 # define LEXER_PARSER_H
 
+typedef struct s_minishell t_minishell;
+
 typedef enum e_token_type
 {
     TOKEN_WORD,
@@ -47,5 +49,25 @@ typedef struct s_lexer_state
     int i;
     char *input;
 }   t_lexer_state;
+
+// Lexer Utils
+int				is_operator(char c);
+int				ft_isspace(char c);
+void			init_lexer_stat(t_lexer_state *state);
+
+// Lexer Token
+t_token			*create_newnode(char *raw, t_lexer_state state, char *token);
+void			addback(t_minishell *shell, t_token *newnode);
+void			free_node(t_token **list);
+
+// Lexer Operators
+int				append_operator(t_lexer_state state, char *ptr,
+					t_minishell *shell);
+
+// Lexer Main
+t_token			*lexer(t_minishell *shell);
+
+// Init
+void			init_minishell(t_minishell *shell);
 
 #endif  
