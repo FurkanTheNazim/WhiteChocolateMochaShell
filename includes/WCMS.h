@@ -22,6 +22,7 @@ typedef struct s_minishell
     char **envp;
     char *input;
     int exit_status;
+    int syntax_error;
     
 } t_minishell;
 

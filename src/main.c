@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/01/09 18:01:31 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/01/10 08:26:45 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init_minishell(t_minishell *shell)
 	shell->input = NULL;
 	shell->envp = NULL;
 	shell->exit_status = 0;
+	shell->syntax_error = 0;
 }
 
 static void	print_tokens(t_token *list)
@@ -67,6 +68,11 @@ int	main(void)
 			return (handle_eof(&shell));
 		add_history(shell.input);
 		shell.token_list = lexer(&shell);
+		if (shell.syntax_error)
+		{
+			shell.syntax_error = 0;
+			continue ;
+		}
 		print_tokens(shell.token_list);
 	}
 	return (0);
