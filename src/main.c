@@ -74,7 +74,7 @@ int	main(void)
 			shell.syntax_error = 0;
 			continue ;
 		}
-		// expander(&shell.token_list);
+		expander(&shell.token_list);
 		print_tokens(shell.token_list);
 	}
 	return (0);
