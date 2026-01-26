@@ -90,4 +90,8 @@ void add_arg(t_command *cmd, char *arg);
 void add_command(t_command **list, t_command *new);
 void free_command_list(t_command *list);
 
+// Expander
+int expander(t_token **tokens);
+
+
 #endif  

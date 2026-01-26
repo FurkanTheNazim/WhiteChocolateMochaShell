@@ -21,7 +21,8 @@ SRCS		= $(SRC_DIR)/main.c \
 		  $(SRC_DIR)/lexer/lexer.c \
 		  $(SRC_DIR)/lexer/lexer_utils.c \
 		  $(SRC_DIR)/lexer/lexer_token.c \
-		  $(SRC_DIR)/lexer/lexer_operators.c
+		  $(SRC_DIR)/lexer/lexer_operators.c\
+		  $(SRC_DIR)/expander/expander.c
 
 # Object files
 OBJ_DIR		= ./obj
