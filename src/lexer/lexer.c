@@ -21,6 +21,7 @@ static int	handle_double_quote(char *input, int *j, t_lexer_state *state)
 	if (!input[*j])
 		return (1);
 	(*j)++;
+	state->in_double_quote = 0;
 	return (0);
 }
 
@@ -33,6 +34,7 @@ static int	handle_single_quote(char *input, int *j, t_lexer_state *state)
 	if (!input[*j])
 		return (1);
 	(*j)++;
+	state->in_single_quote = 0;
 	return (0);
 }
 

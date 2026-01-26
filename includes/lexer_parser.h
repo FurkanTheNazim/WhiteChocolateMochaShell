@@ -50,6 +50,20 @@ typedef struct s_lexer_state
     char *input;
 }   t_lexer_state;
 
+typedef struct s_redir
+{
+    int type;
+    char *file;
+    struct s_redir *next;
+}   t_redir;
+
+typedef struct s_command
+{
+    char    **args;
+    t_redir *redirs;
+    struct s_command *next;
+}   t_command;
+
 // Lexer Utils
 int				is_operator(char c);
 int				ft_isspace(char c);
@@ -69,5 +83,11 @@ t_token			*lexer(t_minishell *shell);
 
 // Init
 void			init_minishell(t_minishell *shell);
+
+// Parser Utils
+t_command *create_command(void);
+void add_arg(t_command *cmd, char *arg);
+void add_command(t_command **list, t_command *new);
+void free_command_list(t_command *list);
 
 #endif  
