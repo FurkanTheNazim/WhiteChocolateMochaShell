@@ -29,7 +29,7 @@ static void	print_tokens(t_token *list)
 	while (list)
 	{
 		printf("i: %d || type[%d] : %s\n", i, list->type, list->value);
-		printf("qupte type %d\n", list->quote_type);
+		printf("quote type [%d]\n", list->quote_type);
 		list = list->next;
 		i++;
 	}
@@ -74,7 +74,7 @@ int	main(void)
 			shell.syntax_error = 0;
 			continue ;
 		}
-		expander(&shell.token_list);
+		expander(&shell);
 		print_tokens(shell.token_list);
 	}
 	return (0);

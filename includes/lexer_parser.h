@@ -70,13 +70,12 @@ int				ft_isspace(char c);
 void			init_lexer_stat(t_lexer_state *state);
 
 // Lexer Token
-t_token			*create_newnode(char *raw, t_lexer_state state, char *token);
+t_token			*create_newnode(char *raw, char *token);
 void			addback(t_minishell *shell, t_token *newnode);
 void			free_node(t_token **list);
 
 // Lexer Operators
-int				append_operator(t_lexer_state state, char *ptr,
-					t_minishell *shell);
+int				append_operator(char *ptr, t_minishell *shell);
 
 // Lexer Main
 t_token			*lexer(t_minishell *shell);
@@ -91,7 +90,7 @@ void add_command(t_command **list, t_command *new);
 void free_command_list(t_command *list);
 
 // Expander
-int expander(t_token **tokens);
+int expander(t_minishell *shell);
 
 
 #endif  

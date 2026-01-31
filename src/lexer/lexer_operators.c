@@ -45,7 +45,7 @@ static int	get_redir_out_type(char *ptr, int *i)
 	return (TOKEN_REDIR_OUT);
 }
 
-int	append_operator(t_lexer_state state, char *ptr, t_minishell *shell)
+int	append_operator(char *ptr, t_minishell *shell)
 {
 	int		i;
 	int		type;
@@ -59,7 +59,7 @@ int	append_operator(t_lexer_state state, char *ptr, t_minishell *shell)
 		type = get_redir_in_type(ptr, &i);
 	else if (ptr[i] == '>')
 		type = get_redir_out_type(ptr, &i);
-	node = create_newnode(NULL, state, ft_substr(ptr, 0, i));
+	node = create_newnode(NULL, ft_substr(ptr, 0, i));
 	if (node)
 		node->type = type;
 	addback(shell, node);

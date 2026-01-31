@@ -61,7 +61,7 @@ static int	handle_word(t_minishell *shell, int i, t_lexer_state *state)
 		else
 			j++;
 	}
-	addback(shell, create_newnode(shell->input, *state,
+	addback(shell, create_newnode(shell->input,
 			ft_substr(shell->input, i, j)));
 	return (j);
 }
@@ -88,7 +88,7 @@ t_token	*lexer(t_minishell *shell)
 		if (!shell->input[i])
 			break ;
 		if (is_operator(shell->input[i]))
-			j = append_operator(state, &shell->input[i], shell);
+			j = append_operator(&shell->input[i], shell);
 		else
 			j = handle_word(shell, i, &state);
 		if (j == -1)

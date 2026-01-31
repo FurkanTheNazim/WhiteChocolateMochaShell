@@ -12,7 +12,7 @@
 
 #include "WCMS.h"
 
-t_token	*create_newnode(char *raw, t_lexer_state state, char *token)
+t_token	*create_newnode(char *raw, char *token)
 {
 	t_token	*node;
 
@@ -24,12 +24,7 @@ t_token	*create_newnode(char *raw, t_lexer_state state, char *token)
 	node->raw = raw;
 	node->value = token;
 	node->type = TOKEN_WORD;
-	if (state.in_double_quote)
-		node->quote_type = D_QUOTE;
-	else if (state.in_single_quote)
-		node->quote_type = S_QUOTE;
-	else
-		node->quote_type = N_QUOTE;
+	node->quote_type = 0;
 	node->next = NULL;
 	return (node);
 }
