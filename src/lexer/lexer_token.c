@@ -12,7 +12,7 @@
 
 #include "WCMS.h"
 
-t_token	*create_newnode(t_minishell *shell, char *raw, char *token)
+t_token	*create_newnode(t_sh *shell, char *raw, char *token)
 {
 	t_token	*node;
 
@@ -29,7 +29,7 @@ t_token	*create_newnode(t_minishell *shell, char *raw, char *token)
 	return (node);
 }
 
-void	addback(t_minishell *shell, t_token *newnode)
+void	addback(t_sh *shell, t_token *newnode)
 {
 	t_token	*temp;
 

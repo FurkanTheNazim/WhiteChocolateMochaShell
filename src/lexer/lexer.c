@@ -12,7 +12,7 @@
 
 #include "WCMS.h"
 
-static int	handle_double_quote(char *input, int *j, t_lexer_state *state)
+static int	handle_double_quote(char *input, int *j, t_lexer *state)
 {
 	state->in_double_quote = 1;
 	(*j)++;
@@ -25,7 +25,7 @@ static int	handle_double_quote(char *input, int *j, t_lexer_state *state)
 	return (0);
 }
 
-static int	handle_single_quote(char *input, int *j, t_lexer_state *state)
+static int	handle_single_quote(char *input, int *j, t_lexer *state)
 {
 	state->in_single_quote = 1;
 	(*j)++;
@@ -38,7 +38,7 @@ static int	handle_single_quote(char *input, int *j, t_lexer_state *state)
 	return (0);
 }
 
-static int	handle_word(t_minishell *shell, int i, t_lexer_state *state)
+static int	handle_word(t_sh *shell, int i, t_lexer *state)
 {
 	int		j;
 	char	*input;
@@ -69,16 +69,16 @@ static int	handle_word(t_minishell *shell, int i, t_lexer_state *state)
 	return (j);
 }
 
-static int	handle_syntax_error(t_minishell *shell)
+static int	handle_syntax_error(t_sh *shell)
 {
 	printf("minishell: syntax error: unclosed quote\n");
 	shell->syntax_error = 1;
 	return (1);
 }
 
-t_token	*lexer(t_minishell *shell)
+t_token	*lexer(t_sh *shell)
 {
-	t_lexer_state	state;
+	t_lexer	state;
 	int				i;
 	int				j;
 

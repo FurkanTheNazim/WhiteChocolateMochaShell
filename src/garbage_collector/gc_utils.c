@@ -1,6 +1,6 @@
 #include "../../includes/WCMS.h"
 
-void	*gc_malloc(t_minishell *shell, size_t n)
+void	*gc_malloc(t_sh *shell, size_t n)
 {
 	void	*ptr;
 	t_gc	*node;
@@ -20,7 +20,7 @@ void	*gc_malloc(t_minishell *shell, size_t n)
 	return (ptr);
 }
 
-void	gc_free(t_minishell *shell, void *ptr)
+void	gc_free(t_sh *shell, void *ptr)
 {
 	t_gc	*cur;
 	t_gc	*prev;
@@ -46,7 +46,7 @@ void	gc_free(t_minishell *shell, void *ptr)
 	}
 }
 
-void	gc_free_all(t_minishell *shell)
+void	gc_free_all(t_sh *shell)
 {
 	t_gc	*tmp;
 
@@ -59,12 +59,12 @@ void	gc_free_all(t_minishell *shell)
 	}
 }
 
-t_gc	*gc_checkpoint(t_minishell *shell)
+t_gc	*gc_checkpoint(t_sh *shell)
 {
 	return (shell->gc);
 }
 
-void	gc_rollback(t_minishell *shell, t_gc *checkpoint)
+void	gc_rollback(t_sh *shell, t_gc *checkpoint)
 {
 	t_gc	*tmp;
 
@@ -78,7 +78,7 @@ void	gc_rollback(t_minishell *shell, t_gc *checkpoint)
 }
 
 
-void	gc_add(t_minishell *shell, void *ptr)
+void	gc_add(t_sh *shell, void *ptr)
 {
 	t_gc	*node;
 

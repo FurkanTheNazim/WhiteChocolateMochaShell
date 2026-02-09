@@ -45,7 +45,7 @@ static int	get_redir_out_type(char *ptr, int *i)
 	return (TOKEN_REDIR_OUT);
 }
 
-int	append_operator(char *ptr, t_minishell *shell)
+int	append_operator(char *ptr, t_sh *shell)
 {
 	int		i;
 	int		type;

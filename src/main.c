@@ -12,9 +12,9 @@
 
 #include "WCMS.h"
 
-void	init_minishell(t_minishell *shell)
+void	init_minishell(t_sh *shell)
 {
-	ft_bzero(shell, sizeof(t_minishell));
+	ft_bzero(shell, sizeof(t_sh));
 	// shell->token_list = NULL;
 	// shell->input = NULL;
 	// shell->envp = NULL;
@@ -50,7 +50,7 @@ static void	print_tokens(t_token *list)
 // 	}
 // }
 
-static int	handle_eof(t_minishell *shell)
+static int	handle_eof(t_sh *shell)
 {
 	rl_clear_history();
 	gc_free_all(shell);
@@ -59,7 +59,7 @@ static int	handle_eof(t_minishell *shell)
 
 int	main(/*int ac, char **av, char **env*/)
 {
-	t_minishell	shell;
+	t_sh	shell;
 	t_gc		*cp_cmd;
 
 	init_minishell(&shell);

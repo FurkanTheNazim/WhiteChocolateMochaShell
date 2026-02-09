@@ -22,7 +22,7 @@ int	ft_isspace(char c)
 	return (c == 9 || c == 32);
 }
 
-void	init_lexer_stat(t_lexer_state *state)
+void	init_lexer_stat(t_lexer *state)
 {
 	state->in_double_quote = 0;
 	state->in_single_quote = 0;

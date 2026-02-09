@@ -64,7 +64,7 @@
 //     return (temp);
 // }
 
-int expander(t_minishell *shell)
+int expander(t_sh *shell)
 {
     char *new_value;
 	char *tmp_str;

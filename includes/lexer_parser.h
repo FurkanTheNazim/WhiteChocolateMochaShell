@@ -1,7 +1,7 @@
 #ifndef LEXER_PARSER_H
 # define LEXER_PARSER_H
 
-typedef struct s_minishell t_minishell;
+typedef struct s_sh t_sh;
 
 typedef enum e_token_type
 {
@@ -42,13 +42,13 @@ typedef struct s_token
 // in_double_quote ve in_single_quote bool değerleri olacak
 // i: input string'indeki mevcut pozisyon (index)
 // input string'ini tutacak
-typedef struct s_lexer_state
+typedef struct s_lexer
 {
     int in_double_quote;
     int in_single_quote;
     int i;
     char *input;
-}   t_lexer_state;
+}   t_lexer;
 
 typedef struct s_redir
 {
@@ -67,21 +67,21 @@ typedef struct s_command
 // Lexer Utils
 int				is_operator(char c);
 int				ft_isspace(char c);
-void			init_lexer_stat(t_lexer_state *state);
+void			init_lexer_stat(t_lexer *state);
 
 // Lexer Token
-t_token			*create_newnode(t_minishell *shell, char *raw, char *token);
-void			addback(t_minishell *shell, t_token *newnode);
+t_token			*create_newnode(t_sh *shell, char *raw, char *token);
+void			addback(t_sh *shell, t_token *newnode);
 void			free_node(t_token **list);
 
 // Lexer Operators
-int				append_operator(char *ptr, t_minishell *shell);
+int				append_operator(char *ptr, t_sh *shell);
 
 // Lexer Main
-t_token			*lexer(t_minishell *shell);
+t_token			*lexer(t_sh *shell);
 
 // Init
-void			init_minishell(t_minishell *shell);
+void			init_minishell(t_sh *shell);
 
 // Parser Utils
 t_command *create_command(void);
@@ -90,7 +90,7 @@ void add_command(t_command **list, t_command *new);
 void free_command_list(t_command *list);
 
 // Expander
-// int expander(t_minishell *shell);
+// int expander(t_sh *shell);
 
 
 #endif  

@@ -24,16 +24,16 @@ typedef struct s_env
 	struct s_env	*next;
 } t_env;
 
-typedef struct s_minishell
+typedef struct s_sh
 {
     t_token	*token_list;
     t_gc	*gc;
 	t_env	*env;
-    // t_command *command_list;
+    t_command *command_list;
     char	**envp;
     char	*input;
 	int		exit_status;
 	int		syntax_error;	
-} t_minishell;
+} t_sh;
 
 #endif
