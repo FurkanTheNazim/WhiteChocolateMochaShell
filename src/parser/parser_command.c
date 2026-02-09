@@ -38,7 +38,7 @@ void	add_arg(t_sh *shell, t_command *cmd, char *arg)
 	if (cmd->args)
 		while (cmd->args[len])
 			len++;
-	new_args = (char **)gc_malloc(shell, sizeof(char *) * (len + 2));
+	new_args = gc_malloc(shell, sizeof(char *) * (len + 2));
 	if (!new_args)
 		return ;
 	i = 0;

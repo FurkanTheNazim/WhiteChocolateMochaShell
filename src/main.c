@@ -12,14 +12,14 @@
 
 #include "WCMS.h"
 
-void	init_minishell(t_sh *shell)
+void	init_minishell(t_sh *sh)
 {
-	ft_bzero(shell, sizeof(t_sh));
-	// shell->token_list = NULL;
-	// shell->input = NULL;
-	// shell->envp = NULL;
-	// shell->exit_status = 0;
-	// shell->syntax_error = 0;
+	ft_bzero(sh, sizeof(t_sh));
+	// sh->token_list = NULL;
+	// sh->input = NULL;
+	// sh->envp = NULL;
+	// sh->exit_status = 0;
+	// sh->syntax_error = 0;
 }
 
 static void	print_tokens(t_token *list)
@@ -36,62 +36,67 @@ static void	print_tokens(t_token *list)
 	}
 }
 
-// static void	cleanup_loop(t_minishell *shell)
+// static void	cleanup_loop(t_minishell *sh)
 // {
-// 	if (shell->token_list)
+// 	if (sh->token_list)
 // 	{
-// 		free_node(&shell->token_list);
-// 		shell->token_list = NULL;
+// 		free_node(&sh->token_list);
+// 		sh->token_list = NULL;
 // 	}
-// 	if (shell->input)
+// 	if (sh->input)
 // 	{
-// 		free(shell->input);
-// 		shell->input = NULL;
+// 		free(sh->input);
+// 		sh->input = NULL;
 // 	}
 // }
 
-static int	handle_eof(t_sh *shell)
+static int	handle_eof(t_sh *sh)
 {
 	rl_clear_history();
-	gc_free_all(shell);
-	return (shell->exit_status);
+	gc_free_all(sh);
+	return (sh->exit_status);
 }
+
+// void	init_env(t_sh	*sh, char **env)
+// {
+
+// }
 
 int	main(/*int ac, char **av, char **env*/)
 {
-	t_sh	shell;
+	t_sh	sh;
 	t_gc		*cp_cmd;
 
-	init_minishell(&shell);
-	// init_env(&shell, envp);
+	init_minishell(&sh);
+	// init_env(&sh, envp);
 	while (1)
 	{
-		cp_cmd = gc_checkpoint(&shell);
-		shell.input = readline("mochashell>");
-		gc_add(&shell, shell.input);
-		if (!shell.input)
-			return (handle_eof(&shell));
-		add_history(shell.input);
-		shell.token_list = lexer(&shell);
-		if (shell.syntax_error)
+		cp_cmd = gc_checkpoint(&sh);
+		sh.input = readline("mochashell>");
+		gc_add(&sh, sh.input);
+		if (!sh.input)
+			return (handle_eof(&sh));
+		add_history(sh.input);
+		sh.token_list = lexer(&sh);
+		if (sh.syntax_error)
 		{
-			shell.syntax_error = 0;
-			gc_rollback(&shell, cp_cmd);
-			shell.token_list = NULL;
-			shell.input = NULL;
+			sh.syntax_error = 0;
+			gc_rollback(&sh, cp_cmd);
+			sh.token_list = NULL;
+			sh.input = NULL;
 			continue ;
 		}
-		// if (handle_heredoc(&shell) == -1)
+		// if (handle_heredoc(&sh) == -1)
 		// {
-		// 	gc_rollback(&shell, cp_hrd);
+		// 	gc_rollback(&sh, cp_hrd);
 		// 	continue ;
 		// }
-		// expander(&shell);
-		// executor(&shell);
-		print_tokens(shell.token_list);
-		gc_rollback(&shell, cp_cmd);
-		shell.token_list = NULL;
-		shell.input = NULL;
+		// expander(&sh);
+		// executor(&sh);
+		print_tokens(sh.token_list);
+		gc_rollback(&sh, cp_cmd);
+		sh.token_list = NULL;
+		sh.input = NULL;
 	}
 	return (0);
 }
