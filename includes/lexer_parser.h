@@ -84,10 +84,14 @@ t_token			*lexer(t_sh *shell);
 void			init_minishell(t_sh *shell);
 
 // Parser Utils
-t_command *create_command(void);
-void add_arg(t_command *cmd, char *arg);
-void add_command(t_command **list, t_command *new);
-void free_command_list(t_command *list);
+t_command *create_command(t_sh *shell);
+void add_arg(t_sh *shell, t_command *cmd, char *arg);
+void add_command(t_sh *shell, t_command **list, t_command *new);
+void free_command_list(t_sh *shell, t_command *list);
+
+t_redir *create_redir(t_sh *shell, int type, char *file);
+void add_redir(t_sh *shell, t_command *cmd, t_redir *new);
+void free_redir_list(t_sh *shell, t_redir *list);
 
 // Expander
 // int expander(t_sh *shell);
