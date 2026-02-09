@@ -18,3 +18,5 @@ static int	update_quote_status()
 	(*j)++;
 	return (0);
 }
+
+sizeof();

@@ -2,7 +2,7 @@
 
 t_command *create_command(void)
 {
-    t_command *new = (t_command *)malloc(sizeof(t_command));
+    t_command *new = (t_command *)gc_malloc(sizeof(t_command));
     if (!new)
         return NULL;
     new->args = NULL;

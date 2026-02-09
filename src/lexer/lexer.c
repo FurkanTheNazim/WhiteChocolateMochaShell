@@ -42,6 +42,7 @@ static int	handle_word(t_minishell *shell, int i, t_lexer_state *state)
 {
 	int		j;
 	char	*input;
+	char	*substr;
 
 	j = 0;
 	input = shell->input;
@@ -61,8 +62,10 @@ static int	handle_word(t_minishell *shell, int i, t_lexer_state *state)
 		else
 			j++;
 	}
-	addback(shell, create_newnode(shell->input,
-			ft_substr(shell->input, i, j)));
+	substr = ft_substr(shell->input, i, j);
+	if (substr)
+		gc_add(shell, substr);
+	addback(shell, create_newnode(shell, shell->input, substr));
 	return (j);
 }
 

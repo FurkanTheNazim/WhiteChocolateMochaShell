@@ -45,7 +45,7 @@
 //     i = 0;
 //     size = new_size_of_value(state, value);
 //     init_lexer_stat(&state);
-//     temp = malloc(sizeof(char) * size);
+//     temp = gc_malloc(sizeof(char) * size);
 //     if (!temp)
 //         return (NULL);
 //     if (value[i++] == '\"')

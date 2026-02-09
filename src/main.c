@@ -14,11 +14,12 @@
 
 void	init_minishell(t_minishell *shell)
 {
-	shell->token_list = NULL;
-	shell->input = NULL;
-	shell->envp = NULL;
-	shell->exit_status = 0;
-	shell->syntax_error = 0;
+	ft_bzero(shell, sizeof(t_minishell));
+	// shell->token_list = NULL;
+	// shell->input = NULL;
+	// shell->envp = NULL;
+	// shell->exit_status = 0;
+	// shell->syntax_error = 0;
 }
 
 static void	print_tokens(t_token *list)
@@ -35,36 +36,39 @@ static void	print_tokens(t_token *list)
 	}
 }
 
-static void	cleanup_loop(t_minishell *shell)
-{
-	if (shell->token_list)
-	{
-		free_node(&shell->token_list);
-		shell->token_list = NULL;
-	}
-	if (shell->input)
-	{
-		free(shell->input);
-		shell->input = NULL;
-	}
-}
+// static void	cleanup_loop(t_minishell *shell)
+// {
+// 	if (shell->token_list)
+// 	{
+// 		free_node(&shell->token_list);
+// 		shell->token_list = NULL;
+// 	}
+// 	if (shell->input)
+// 	{
+// 		free(shell->input);
+// 		shell->input = NULL;
+// 	}
+// }
 
 static int	handle_eof(t_minishell *shell)
 {
 	rl_clear_history();
-	cleanup_loop(shell);
+	gc_free_all(shell);
 	return (shell->exit_status);
 }
 
-int	main(void)
+int	main(/*int ac, char **av, char **env*/)
 {
 	t_minishell	shell;
+	t_gc		*cp_cmd;
 
 	init_minishell(&shell);
+	// init_env(&shell, envp);
 	while (1)
 	{
-		cleanup_loop(&shell);
+		cp_cmd = gc_checkpoint(&shell);
 		shell.input = readline("mochashell>");
+		gc_add(&shell, shell.input);
 		if (!shell.input)
 			return (handle_eof(&shell));
 		add_history(shell.input);
@@ -72,10 +76,23 @@ int	main(void)
 		if (shell.syntax_error)
 		{
 			shell.syntax_error = 0;
+			gc_rollback(&shell, cp_cmd);
+			shell.token_list = NULL;
+			shell.input = NULL;
 			continue ;
 		}
-		expander(&shell);
+		// if (handle_heredoc(&shell) == -1)
+		// {
+		// 	gc_rollback(&shell, cp_hrd);
+		// 	continue ;
+		// }
+		// expander(&shell);
+		// executor(&shell);
 		print_tokens(shell.token_list);
+		gc_rollback(&shell, cp_cmd);
+		shell.token_list = NULL;
+		shell.input = NULL;
 	}
 	return (0);
 }
+

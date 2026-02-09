@@ -12,13 +12,13 @@
 
 #include "WCMS.h"
 
-t_token	*create_newnode(char *raw, char *token)
+t_token	*create_newnode(t_minishell *shell, char *raw, char *token)
 {
 	t_token	*node;
 
 	if (!token)
 		return (NULL);
-	node = malloc(sizeof(t_token));
+	node = gc_malloc(shell, sizeof(t_token));
 	if (!node)
 		return (NULL);
 	node->raw = raw;
