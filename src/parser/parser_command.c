@@ -6,10 +6,9 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 19:55:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/02/09 20:50:41 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/02/10 19:33:39 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../includes/WCMS.h"
 
@@ -36,8 +35,10 @@ void	add_arg(t_sh *shell, t_command *cmd, char *arg)
 
 	len = 0;
 	if (cmd->args)
+	{
 		while (cmd->args[len])
 			len++;
+	}
 	new_args = gc_malloc(shell, sizeof(char *) * (len + 2));
 	if (!new_args)
 		return ;
@@ -74,5 +75,4 @@ void	free_command_list(t_sh *shell, t_command *list)
 {
 	(void)shell;
 	(void)list;
-	// GC will handle the cleanup when gc_rollback or gc_free_all is called.
 }
