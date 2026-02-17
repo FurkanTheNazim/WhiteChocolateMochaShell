@@ -6,13 +6,13 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 19:55:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/02/10 19:33:39 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/02/17 21:22:48 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/WCMS.h"
 
-// Creates a new empty command node using GC
+// GC (Garbage Collector) kullanarak yeni boş bir komut düğümü oluşturur
 t_command	*create_command(t_sh *shell)
 {
 	t_command	*new_cmd;
@@ -26,7 +26,7 @@ t_command	*create_command(t_sh *shell)
 	return (new_cmd);
 }
 
-// Appends an argument to the command's args array using GC
+// Komutun argüman dizisine GC kullanarak bir argüman ekler
 void	add_arg(t_sh *shell, t_command *cmd, char *arg)
 {
 	char	**new_args;
@@ -53,7 +53,7 @@ void	add_arg(t_sh *shell, t_command *cmd, char *arg)
 	cmd->args = new_args;
 }
 
-// Appends a command to the end of the command list
+// Komut listesinin sonuna bir komut ekler
 void	add_command(t_sh *shell, t_command **list, t_command *new)
 {
 	t_command	*tmp;
@@ -70,7 +70,7 @@ void	add_command(t_sh *shell, t_command **list, t_command *new)
 	tmp->next = new;
 }
 
-// Memory is handled by GC rollback, so this can be a no-op or tailored if needed
+// Bellek GC geri alma (rollback) ile yönetilir, bu yüzden bu işlevsiz olabilir veya gerekirse özelleştirilebilir
 void	free_command_list(t_sh *shell, t_command *list)
 {
 	(void)shell;

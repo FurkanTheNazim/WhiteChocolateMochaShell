@@ -97,4 +97,8 @@ void free_redir_list(t_sh *shell, t_redir *list);
 // int expander(t_sh *shell);
 
 
+// Parser
+t_command	*parser(t_sh *shell);
+int			validate_tokens(t_sh *shell);
+
 #endif  

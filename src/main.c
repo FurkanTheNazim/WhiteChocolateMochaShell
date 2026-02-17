@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/01/10 08:26:45 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/02/10 20:00:41 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,43 @@ static void	print_tokens(t_token *list)
 		list = list->next;
 		i++;
 	}
+}
+
+static void	print_commands(t_command *cmd)
+{
+	int	i;
+	int	j;
+	t_redir	*r;
+
+	i = 0;
+	while (cmd)
+	{
+		printf("--- Command %d ---\n", i++);
+		if (cmd->args)
+		{
+			printf("  Args: ");
+			j = 0;
+			while (cmd->args[j])
+			{
+				printf("[%s] ", cmd->args[j]);
+				j++;
+			}
+			printf("\n");
+		}
+		if (cmd->redirs)
+		{
+			printf("  Redirs: ");
+			r = cmd->redirs;
+			while (r)
+			{
+				printf("(Type:%d File:%s) ", r->type, r->file);
+				r = r->next;
+			}
+			printf("\n");
+		}
+		cmd = cmd->next;
+	}
+	printf("------------------\n");
 }
 
 // static void	cleanup_loop(t_minishell *sh)
@@ -94,6 +131,8 @@ int	main(/*int ac, char **av, char **env*/)
 		// expander(&sh);
 		// executor(&sh);
 		print_tokens(sh.token_list);
+		sh.command_list = parser(&sh);
+		print_commands(sh.command_list);
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;
 		sh.input = NULL;
