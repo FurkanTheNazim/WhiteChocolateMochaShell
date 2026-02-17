@@ -63,10 +63,8 @@ static int	handle_word(t_sh *shell, int i, t_lexer *state)
 			j++;
 	}
 	substr = ft_substr(shell->input, i, j);
-	if (substr)
-		gc_add(shell, substr);
-	addback(shell, create_newnode(shell, shell->input, substr));
-	return (j);
+	gc_add(shell, substr, 0);
+	return (addback(shell, create_newnode(shell, shell->input, substr)), j);
 }
 
 static int	handle_syntax_error(t_sh *shell)

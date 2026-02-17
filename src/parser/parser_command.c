@@ -17,7 +17,7 @@ t_command	*create_command(t_sh *shell)
 {
 	t_command	*new_cmd;
 
-	new_cmd = gc_malloc(shell, sizeof(t_command));
+	new_cmd = gc_malloc(shell, sizeof(t_command), 0);
 	if (!new_cmd)
 		return (NULL);
 	new_cmd->args = NULL;
@@ -39,7 +39,7 @@ void	add_arg(t_sh *shell, t_command *cmd, char *arg)
 		while (cmd->args[len])
 			len++;
 	}
-	new_args = gc_malloc(shell, sizeof(char *) * (len + 2));
+	new_args = gc_malloc(shell, sizeof(char *) * (len + 2), 0);
 	if (!new_args)
 		return ;
 	i = 0;

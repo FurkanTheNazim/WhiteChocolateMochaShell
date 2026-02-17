@@ -39,7 +39,7 @@ void	init_env(t_sh *sh, char **env)
 	int		i;
 
 	i = 0;
-	sh->env = gc_malloc(sh, sizeof(t_env));
+	sh->env = gc_malloc(sh, sizeof(t_env), 1);
 	while (env[i])
 	{
 		ptr = ft_strchr(env[i], '=');

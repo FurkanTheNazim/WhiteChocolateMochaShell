@@ -110,7 +110,7 @@ int	main(/*int ac, char **av, char **env*/)
 	{
 		cp_cmd = gc_checkpoint(&sh);
 		sh.input = readline("mochashell>");
-		gc_add(&sh, sh.input);
+		gc_add(&sh, sh.input, 0);
 		if (!sh.input)
 			return (handle_eof(&sh));
 		add_history(sh.input);

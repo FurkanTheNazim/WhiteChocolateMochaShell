@@ -73,18 +73,14 @@ t_command	*parser(t_sh *shell)
 
 	if (!shell || !shell->token_list)
 		return (NULL);
-	
 	token = shell->token_list;
 	cmd_list = NULL;
-	
 	if (validate_tokens(shell))
 		return (NULL);
-
 	while (token)
 	{
 		new_cmd = parse_simple_command(shell, &token);
 		add_command(shell, &cmd_list, new_cmd);
-		
 		if (token && token->type == TOKEN_PIPE)
 			token = token->next;
 	}

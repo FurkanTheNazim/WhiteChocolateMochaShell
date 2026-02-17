@@ -68,7 +68,6 @@ int	validate_tokens(t_sh *shell)
 {
 	if (!shell->token_list)
 		return (0); // Boş olması geçerlidir veya okuyucu tarafından ele alınır
-	
 	if (check_pipe_syntax(shell->token_list))
 	{
 		shell->exit_status = 2; // Bash sözdizimi hata kodu 2'dir

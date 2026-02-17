@@ -18,7 +18,7 @@ t_token	*create_newnode(t_sh *shell, char *raw, char *token)
 
 	if (!token)
 		return (NULL);
-	node = gc_malloc(shell, sizeof(t_token));
+	node = gc_malloc(shell, sizeof(t_token), 0);
 	if (!node)
 		return (NULL);
 	node->raw = raw;
