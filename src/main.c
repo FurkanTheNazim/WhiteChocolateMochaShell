@@ -94,11 +94,6 @@ static int	handle_eof(t_sh *sh)
 	return (sh->exit_status);
 }
 
-// void	init_env(t_sh	*sh, char **env)
-// {
-
-// }
-
 int	main(int ac, char **av, char **envp)
 {
 	t_sh	sh;
@@ -111,6 +106,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	init_minishell(&sh);
 	init_env(&sh,av[0], envp);
+	builtin_env(&sh, NULL);
 	while (1)
 	{
 		cp_cmd = gc_checkpoint(&sh);

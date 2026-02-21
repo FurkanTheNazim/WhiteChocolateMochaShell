@@ -29,7 +29,8 @@ SRCS		= $(SRC_DIR)/main.c \
 		 	  $(SRC_DIR)/parser/parser_utils.c \
 		 	  $(SRC_DIR)/parser/parser_validate.c \
 		 	  $(SRC_DIR)/enviroment/enviroment.c \
-		 	  $(SRC_DIR)/enviroment/enviroment_utils.c
+		 	  $(SRC_DIR)/enviroment/enviroment_utils.c \
+			  $(SRC_DIR)/builtins/builtin_env.c
 
 
 # Object files

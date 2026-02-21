@@ -7,10 +7,10 @@ void	builtin_pwd(t_sh *sh)
 	t_env	*tmp;
 
 	tmp = sh->env;
-	dir = malloc(sizeof(char) * PATH_MAX);
+	dir = malloc(sizeof(char) * MAX_PATH);
 	if (!dir)
 		return (NULL);
-	if (getcwd(dir, PATH_MAX) == NULL)
+	if (getcwd(dir, MAX_PATH) == NULL)
 	{
 		free(dir);
 		perror("minishell: pwd: getcwd");//bash ile hata kodunu kontorl et
@@ -54,10 +54,10 @@ void	update_pwd(t_sh	*sh, t_env *oldpwd, t_env *pwd, char *path)
 	t_gc	*cp;
 
 	cp = gc_checkpoint(sh);
-	new_pwd = gc_malloc(sh, PATH_MAX, 1);
+	new_pwd = gc_malloc(sh, MAX_PATH, 1);
 	if (!new_pwd)
 		return ;
-	if (getcwd(new_pwd, PATH_MAX))
+	if (getcwd(new_pwd, MAX_PATH))
 	{
 		free(oldpwd->env_value);
 		oldpwd->env_value = pwd->env_value;

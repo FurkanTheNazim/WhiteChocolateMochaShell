@@ -6,7 +6,7 @@ void	update_pwd(t_sh *sh, t_cd *data, char *path)
 {
 	char	*newpwd;
 
-	newpwd = malloc(sizeof(char) * PATH_MAX + 1);
+	newpwd = malloc(sizeof(char) * MAX_PATH + 1);
 	if (!newpwd)
 		return ;
 	if (!(data->pwd_adr) && !(data->tmp_pwd_f))
@@ -40,7 +40,7 @@ void	builtin_cd(t_sh	*sh, char path)
 
 	if (!path)
 		return ;
-	if (!getcwd(data.tmp_pwd, PATH_MAX))
+	if (!getcwd(data.tmp_pwd, MAX_PATH))
 		data.tmp_pwd_f = 1;
 	else
 		data.tmp_pwd[0] = '\0';

@@ -16,6 +16,7 @@
 # include "lexer_parser.h"
 # include "gc.h"
 # include "env.h"
+# include "builtin.h"
 
 typedef struct s_sh
 {
@@ -26,7 +27,8 @@ typedef struct s_sh
     char	**envp;
     char	*input;
 	int		exit_status;
-	int		syntax_error;	
+	int		syntax_error;
+    int     default_path;
 } t_sh;
 
 #endif

@@ -113,5 +113,6 @@ void	init_env(t_sh *sh, char *av ,char **envp)
 	{
 		if (!env_addback(sh, env_newnode(sh, "PATH", DEFAULT_PATH)))
 			env_error(sh, "minishell: enviroment error\n");
+		sh->default_path = 1;
 	}
 }
