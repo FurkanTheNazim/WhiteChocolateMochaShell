@@ -18,16 +18,19 @@ LIBS		= -lreadline -lncurses
 # Source files
 SRC_DIR		= ./src
 SRCS		= $(SRC_DIR)/main.c \
-		  $(SRC_DIR)/lexer/lexer.c \
-		  $(SRC_DIR)/lexer/lexer_utils.c \
-		  $(SRC_DIR)/lexer/lexer_token.c \
-		  $(SRC_DIR)/lexer/lexer_operators.c\
-		  $(SRC_DIR)/garbage_collector/gc_utils.c \
-		  $(SRC_DIR)/parser/parser.c \
-		  $(SRC_DIR)/parser/parser_command.c \
-		  $(SRC_DIR)/parser/parser_redir.c \
-		  $(SRC_DIR)/parser/parser_utils.c \
-		  $(SRC_DIR)/parser/parser_validate.c
+		 	  $(SRC_DIR)/lexer/lexer.c \
+		 	  $(SRC_DIR)/lexer/lexer_utils.c \
+			  $(SRC_DIR)/lexer/lexer_token.c \
+		 	  $(SRC_DIR)/lexer/lexer_operators.c\
+		 	  $(SRC_DIR)/garbage_collector/gc_utils.c \
+		 	  $(SRC_DIR)/parser/parser.c \
+		 	  $(SRC_DIR)/parser/parser_command.c \
+		 	  $(SRC_DIR)/parser/parser_redir.c \
+		 	  $(SRC_DIR)/parser/parser_utils.c \
+		 	  $(SRC_DIR)/parser/parser_validate.c \
+		 	  $(SRC_DIR)/enviroment/enviroment.c \
+		 	  $(SRC_DIR)/enviroment/enviroment_utils.c
+
 
 # Object files
 OBJ_DIR		= ./obj

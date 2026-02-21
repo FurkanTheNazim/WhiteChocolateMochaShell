@@ -60,9 +60,7 @@ int	append_operator(char *ptr, t_sh *shell)
 		type = get_redir_in_type(ptr, &i);
 	else if (ptr[i] == '>')
 		type = get_redir_out_type(ptr, &i);
-	substr = ft_substr(ptr, 0, i);
-	if (substr)
-		gc_add(shell, substr);
+	substr = gc_add(shell, ft_substr(ptr, 0, i), 0);
 	node = create_newnode(shell, NULL, substr);
 	if (node)
 		node->type = type;

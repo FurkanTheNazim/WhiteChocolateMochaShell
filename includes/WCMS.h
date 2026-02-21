@@ -15,14 +15,7 @@
 # include "libft/libft.h"
 # include "lexer_parser.h"
 # include "gc.h"
-
-//çevre değişkenlerinin saklanacağı ve güncelleneceği liste
-typedef struct s_env
-{
-	char			*env_name;
-	char			*env_value;
-	struct s_env	*next;
-} t_env;
+# include "env.h"
 
 typedef struct s_sh
 {

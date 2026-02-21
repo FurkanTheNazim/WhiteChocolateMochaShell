@@ -23,7 +23,7 @@ void	*gc_malloc(t_sh *shell, size_t n, int flag)
 }
 
 // Manuel free: Sadece mark edilmemişse (0) siler
-void	gc_free(t_sh *shell, void *ptr)
+void	gc_free(t_sh *shell, void *ptr, int	key)
 {
 	t_gc	*cur;
 	t_gc	*prev;
@@ -37,7 +37,7 @@ void	gc_free(t_sh *shell, void *ptr)
 		// Sadece adres eşleşirse VE mark 0 (işaretsiz) ise sil
 		if (cur->addr == ptr)
 		{
-			if (cur->mark == 1) // İşaretliyse dokunma
+			if (cur->mark == 1 && key == 0) // İşaretliyse dokunma
 				return ;
 			if (prev)
 				prev->next = cur->next;
@@ -103,20 +103,22 @@ t_gc	*gc_checkpoint(t_sh *shell)
 	return (shell->gc);
 }
 
-void	gc_add(t_sh *shell, void *ptr, int flag)
+void	*gc_add(t_sh *shell, void *ptr, int flag)
 {
 	t_gc	*node;
 
 	if (!ptr)
-		return ;
+		return (NULL);
 	node = malloc(sizeof(t_gc));
 	if (!node)
 	{
 		free(ptr);
-		return ;
+		return (NULL);
 	}
 	node->addr = ptr;
 	node->mark = flag;
 	node->next = shell->gc;
 	shell->gc = node;
+	return (ptr);
 }
+

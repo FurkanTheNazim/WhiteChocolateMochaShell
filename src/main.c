@@ -99,13 +99,18 @@ static int	handle_eof(t_sh *sh)
 
 // }
 
-int	main(/*int ac, char **av, char **env*/)
+int	main(int ac, char **av, char **envp)
 {
 	t_sh	sh;
 	t_gc		*cp_cmd;
 
+	if (ac != 1)
+	{
+		ft_putendl_fd("Usage: ./minishell", 2);
+		exit (1);
+	}
 	init_minishell(&sh);
-	// init_env(&sh, envp);
+	init_env(&sh,av[0], envp);
 	while (1)
 	{
 		cp_cmd = gc_checkpoint(&sh);
@@ -139,4 +144,3 @@ int	main(/*int ac, char **av, char **env*/)
 	}
 	return (0);
 }
-
