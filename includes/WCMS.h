@@ -29,6 +29,7 @@ typedef struct s_sh
 	int		exit_status;
 	int		syntax_error;
     int     default_path;
+    int     in_pipe;
 } t_sh;
 
 #endif
