@@ -22,24 +22,17 @@ static void	handle_redirection(t_sh *shell, t_command *cmd, t_token **token)
 	char	*file;
 
 	type = (*token)->type;
-	if ((*token)->next)
-	{
-		file = (*token)->next->value; // 'value' (tırnaksız) mı yoksa 'raw' (ham) mı kullanılmalı? Genellikle 'value'.
-		// Not: Genişletmeyi (expansion) burada veya daha sonra ele almamız gerekebilir.
-		// Şimdilik 'value'nun lexer veya expander ön geçişi tarafından hazırlandığını varsayıyoruz.
-		// Kontrol listesi, tırnak temizlemenin daha sonra veya daha önce yapılabileceğini belirtiyor.
-		// Eğer lexer tırnakları hallettiyse tokendan gelen 'value'yu kullanmak en güvenlisi.
-	}
-	else
-		file = NULL; // Sözdizimi hatası durumu
+	
+	/* validate_tokens satır 59'da sıradaki token'ın TOKEN_WORD
+	   olduğunu önceden kontrol ettiği ve sözdizimi hatalarını
+	   önlediği için burada güvenle bir sonraki düğüme erişebiliriz. */
+	file = (*token)->next->value;
 	
 	redir = create_redir(shell, type, file);
 	add_redir(shell, cmd, redir);
 	
-	// Tokenı ilerlet: REDIR_OP -> FILE -> [Next]
-	*token = (*token)->next;
-	if (*token)
-		*token = (*token)->next;
+	// Tokenı iki adım ilerlet: REDIR_OP -> FILE -> [Sıradaki]
+	*token = (*token)->next->next;
 }
 
 static t_command	*parse_simple_command(t_sh *shell, t_token **token)

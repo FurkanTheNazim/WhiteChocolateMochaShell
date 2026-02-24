@@ -1,0 +1,7 @@
+[0;33m📦 Compiling src/main.c...[0m
+In file included from src/main.c:13:
+./includes/WCMS.h:12:11: fatal error: readline/readline.h: No such file or directory
+   12 | # include <readline/readline.h>
+      |           ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [Makefile:56: obj/./src/main.o] Error 1
