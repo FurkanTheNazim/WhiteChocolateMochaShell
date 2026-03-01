@@ -38,8 +38,6 @@ char	*get_env_value(t_sh *sh, char *str)
 	size_t	len;
 	char	*result;
 
-	if (!str || !str[0])
-		return (NULL);
 	len = ft_strlen(str);
 	tmp = sh->env;
 	while (tmp)
@@ -48,7 +46,10 @@ char	*get_env_value(t_sh *sh, char *str)
 		{
 			result = gc_add(sh, ft_strdup(tmp->env_value), 0);
 			if (!result)
+			{
+				sh->exit_status= 1;
 				return (NULL);
+			}
 			return (result);
 		}
 		tmp = tmp->next;
@@ -64,9 +65,16 @@ char	*resolve_var_name(t_sh *sh, char *str, int *i)
 		(*i)++;
 	tmp = gc_add(sh, ft_substr(str, 0, *i), 0);
 	if (!tmp)
+	{
+		sh->exit_status = 1;
 		return (NULL);
+	}
 	if (ft_strncmp(tmp, "?", 1) == 0)
+	{
 		tmp = gc_add(sh, ft_itoa(sh->exit_status), 0);
+		if (!tmp)
+			sh->exit_status = 1;
+	}
 	else
 		tmp = get_env_value(sh, tmp);
 	if (!tmp)
@@ -90,10 +98,16 @@ int	expand_dollar_segment(t_sh *sh, char **tmp, int n)
 		return (-1);
 	remain = gc_add(sh, ft_substr(tmp[n], i+1, ft_strlen(&tmp[n][i])), 0);
 	if (!remain)
+	{
+		sh->exit_status = 1;
 		return (-1);
+	}
 	tmp[n] = gc_add(sh, ft_strjoin(name, remain), 0);
 	if (!tmp[n])
+	{
+		sh->exit_status = 1;
 		return (-1);
+	}
 	if (expand_dollar_segment(sh, tmp, n + 1) < 0)
 		return (-1);
 	return (0);
@@ -150,13 +164,19 @@ char	*expand_str(t_sh *sh, char *str)
 		sign_c++;
 	tmp = gc_malloc(sh, (sizeof(char *) * (sign_c + 1)), 0);
 	if (!tmp)
+	{
+		sh->exit_status = 1;
 		return (NULL);
+	}
 	split_by_dollar(sh, tmp, &str[0], 0);
 	if (expand_dollar_segment(sh, tmp, 0) < 0)
 		return (NULL);
 	result = create_expanded(sh, tmp);
 	if (!result)
+	{
+		sh->exit_status = 1;
 		return (NULL);
+	}
 	return (result);
 }
 
@@ -254,14 +274,17 @@ char	*expand_token(t_sh *sh, char *value)
 		if (seg.fail)
 			return (NULL);
 		if (seg.type != SEG_SINGLE_QUOTE && ft_strchr(seg.value, '$'))
+		{
 			expanded = expand_str(sh, seg.value);
+			if (!expanded)
+				return (NULL);
+		}
 		else
 			expanded = seg.value;
 		new_value = gc_add(sh, gc_join(new_value, expanded), 0);
 		if (!new_value)
 			return (NULL);
 	}
-	gc_free(sh, value, 0);
 	return (new_value);
 }
 
@@ -277,10 +300,10 @@ int	expand_token_list(t_sh *sh)
 		if (tmp->type == TOKEN_WORD)
 		{
 			tmp->value = expand_token(sh, tmp->value);
-			if(!(tmp->value))
+			if(!(tmp->value) && sh->exit_status == 1)
 			{
 				gc_rollback(sh, cp);
-				ft_putendl_fd("minishell: cannot allocate memory ", 2);
+				ft_putendl_fd("minishell: cannot allocate memory", 2);
 				return (-1);
 			}
 		}

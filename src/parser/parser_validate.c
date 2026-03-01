@@ -30,7 +30,6 @@ static int	check_pipe_syntax(t_token *t)
 	// İlk token'ın Pipe olup olmadığını kontrol (| ls)
 	if (t->type == TOKEN_PIPE)
 		return (print_syntax_error(t->value));
-	
 	while (t)
 	{
 		if (t->type == TOKEN_PIPE)

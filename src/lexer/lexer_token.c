@@ -44,7 +44,7 @@ void	addback(t_sh *shell, t_token *newnode)
 	temp->next = newnode;
 }
 
-void	free_node(t_token **list)
+void	free_node(t_sh *sh, t_token **list)
 {
 	t_token	*temp;
 
@@ -52,8 +52,8 @@ void	free_node(t_token **list)
 	{
 		temp = (*list)->next;
 		if ((*list)->value)
-			free((*list)->value);
-		free(*list);
+			gc_free(sh, (*list)->value, 1);
+		gc_free(sh, *list, 1);
 		*list = temp;
 	}
 	*list = NULL;

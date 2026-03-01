@@ -21,6 +21,6 @@ typedef	struct	s_cd
 	int		tmp_pwd_f;
 }t_cd;
 
-void	builtin_env(t_sh *sh, char *param);
+void	builtin_env(t_sh *sh, char **param);
 
 #endif

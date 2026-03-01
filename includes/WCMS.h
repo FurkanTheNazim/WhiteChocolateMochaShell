@@ -17,6 +17,7 @@
 # include "gc.h"
 # include "env.h"
 # include "builtin.h"
+# include "expander.h"
 
 typedef struct s_sh
 {

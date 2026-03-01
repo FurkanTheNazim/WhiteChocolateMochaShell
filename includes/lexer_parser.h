@@ -72,7 +72,7 @@ void			init_lexer_stat(t_lexer *state);
 // Lexer Token
 t_token			*create_newnode(t_sh *shell, char *raw, char *token);
 void			addback(t_sh *shell, t_token *newnode);
-void			free_node(t_token **list);
+void			free_node(t_sh *sh, t_token **list);
 
 // Lexer Operators
 int				append_operator(char *ptr, t_sh *shell);

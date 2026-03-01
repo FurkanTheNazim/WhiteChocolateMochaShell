@@ -16,5 +16,6 @@ void	gc_free_all(t_sh *shell);
 t_gc	*gc_checkpoint(t_sh *shell);
 void	gc_rollback(t_sh *shell, t_gc *checkpoint);
 void	*gc_add(t_sh *shell, void *ptr, int flag);
+char	*gc_join(char *s1, char *s2);
 
 #endif

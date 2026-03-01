@@ -22,7 +22,7 @@ void	*gc_malloc(t_sh *shell, size_t n, int flag)
 	return (ptr);
 }
 
-// Manuel free: Sadece mark edilmemişse (0) siler
+// Manuel free: Sadece mark edilmemişse (0) siler, key == 1 ise markı da siler
 void	gc_free(t_sh *shell, void *ptr, int	key)
 {
 	t_gc	*cur;
@@ -37,7 +37,7 @@ void	gc_free(t_sh *shell, void *ptr, int	key)
 		// Sadece adres eşleşirse VE mark 0 (işaretsiz) ise sil
 		if (cur->addr == ptr)
 		{
-			if (cur->mark == 1 && key == 0) // İşaretliyse dokunma
+			if (cur->mark == 1 && key == 0) // İşaretliyse dokunma, anahtar varsa sil
 				return ;
 			if (prev)
 				prev->next = cur->next;
@@ -122,3 +122,30 @@ void	*gc_add(t_sh *shell, void *ptr, int flag)
 	return (ptr);
 }
 
+//if (!s1 || !s2) return (NULL);
+char	*gc_join(char *s1, char *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j] != '\0')
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	return (str);
+}

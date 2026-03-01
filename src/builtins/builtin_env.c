@@ -1,6 +1,6 @@
 #include "WCMS.h"
 
-void	builtin_env(t_sh *sh, char *param)
+void	builtin_env(t_sh *sh, char **param)
 {
 	t_env	*tmp;
 	(void)param;
@@ -10,7 +10,7 @@ void	builtin_env(t_sh *sh, char *param)
 	{
 		if (ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path)
 			tmp = tmp->next;
-		if (tmp && tmp->only_export == 0)
+		if (tmp->exported && tmp->has_value)
 		{
 			printf("%s=%s\n", tmp->env_name, tmp->env_value);
 			tmp = tmp->next;

@@ -18,7 +18,8 @@ t_env	*env_newnode(t_sh *sh, char *name, char *value)
 		return (NULL);
 	node->env_name = name;
 	node->env_value = value;
-	node->only_export = 0;
+	node->exported = 1;
+	node->has_value = 1;
 	node->next = NULL;
 	return (node);
 }

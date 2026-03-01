@@ -1,0 +1,13 @@
+parser_validate.c/print_syntax_error(char *token)
+(satır 40) t->next == TOKEN_PIPE olmamalı "||" "&&" hata veriyor;
+	yönlendirmelerde broken_pipe hatası veriyor bash nedir bu bak(muhtemelen yapmaya gerek olmayan bir şey)
+
+
+parser ile {cmd, -flag, parameter, NULL} ayrımı yapıp güncellediğimiz t_command structına
+	int	builtin flagi kleyelim ve enum oluşturalım.
+	exit, pwd, ve nobuiltin gibi değerlere karşılık gelsin.
+	eğer nobuiltin ise o zaman external gibi davranır path içinde aramasını yaparız
+
+
+
+

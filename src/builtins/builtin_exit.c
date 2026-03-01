@@ -65,9 +65,8 @@ void	builtin_exit(t_sh *sh, char **param)
 	int		flag;
 
 	flag = 0;
-	if (sh->in_pipe)
-		return ;
-	ft_putendl_fd("exit", 2);
+	if (!(sh->in_pipe))
+		ft_putendl_fd("exit", 2);
 	if (!param[1])
 	{
 		gc_free_all(sh);

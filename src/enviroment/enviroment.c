@@ -52,7 +52,7 @@ char	**env_delimeter(t_sh *sh, char *envp, int i)
 			break ;
 		i++;
 	}
-	if (i == 0)
+	if (envp[i] == '\0')
 	{
 		ret[0] = gc_add(sh, ft_strdup(envp), 1);
 		ret[1] = gc_add(sh, ft_strdup(""), 1);
@@ -63,8 +63,6 @@ char	**env_delimeter(t_sh *sh, char *envp, int i)
 		ret[1] = gc_add(sh, ft_substr(envp, i +1, ft_strlen(envp +i +1)), 1);
 	}
 	ret[2] = NULL;
-	if (!ret[0] || !ret[1])
-		env_error(sh, "minishell: enviroment error\n");
 	return (ret);
 }
 
@@ -82,7 +80,15 @@ void	add_to_list(t_sh *sh, char *envp)
 	{
 		shlvl = ft_atoi(data[1]);
 		gc_free(sh, data[1], 1);
-		data[1] = gc_add(sh, ft_itoa(shlvl+1), 1);
+		if (shlvl >= 999)
+		{
+			ft_putstr_fd("minishell: warning: shell level (", 2);
+			ft_putnbr_fd(shlvl, 2);
+			ft_putendl_fd(") too high, resetting to 1", 2);
+			data[1] = gc_add(sh, ft_itoa(1), 1);
+		}
+		else
+			data[1] = gc_add(sh, ft_itoa(shlvl+1), 1);
 	}
 	if (!env_addback(sh, env_newnode(sh, data[0], data[1])))
 		env_error(sh, "minishell: enviroment error\n");

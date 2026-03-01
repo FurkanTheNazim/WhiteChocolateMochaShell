@@ -10,9 +10,12 @@ typedef struct s_env
 {
 	char			*env_name;
 	char			*env_value;
-	int				only_export;
+	int				exported;
+	int				has_value;
 	struct s_env	*next;
 } t_env;
+
+
 
 t_env	*env_newnode(t_sh *sh, char *name, char *value);
 void	init_env(t_sh *sh, char *av ,char **envp);
