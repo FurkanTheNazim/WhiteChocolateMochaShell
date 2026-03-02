@@ -32,7 +32,7 @@ int validate_param(char *str)
     return (1);
 }
 
-void	builtin_export(t_sh *sh, char *param)
+void	builtin_export(t_sh *sh, char **param)
 {
 	
 	

@@ -12,16 +12,16 @@
 
 #include "WCMS.h"
 
-void	print_expanded(t_token *list)
-{
-	while (list)
-	{
-		if (list->value)
-			printf("%s",list->value);
-		list = list->next;
-	}
-	printf("\n");
-}
+// void	print_expanded(t_token *list)
+// {
+// 	while (list)
+// 	{
+// 		if (list->value)
+// 			printf("%s",list->value);
+// 		list = list->next;
+// 	}
+// 	printf("\n");
+// }
 
 void	init_minishell(t_sh *sh)
 {
@@ -33,56 +33,56 @@ void	init_minishell(t_sh *sh)
 	// sh->syntax_error = 0;
 }
 
-// static void	print_tokens(t_token *list)
-// {
-// 	int	i;
+static void	print_tokens(t_token *list)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (list)
-// 	{
-// 		printf("i: %d || type[%d] : %s\n", i, list->type, list->value);
-// 		printf("quote type [%d]\n", list->quote_type);
-// 		list = list->next;
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (list)
+	{
+		printf("i: %d || type[%d] : %s\n", i, list->type, list->value);
+		printf("quote type [%d]\n", list->quote_type);
+		list = list->next;
+		i++;
+	}
+}
 
-// static void	print_commands(t_command *cmd)
-// {
-// 	int	i;
-// 	int	j;
-// 	t_redir	*r;
+static void	print_commands(t_command *cmd)
+{
+	int	i;
+	int	j;
+	t_redir	*r;
 
-// 	i = 0;
-// 	while (cmd)
-// 	{
-// 		printf("--- Command %d ---\n", i++);
-// 		if (cmd->args)
-// 		{
-// 			printf("  Args: ");
-// 			j = 0;
-// 			while (cmd->args[j])
-// 			{
-// 				printf("[%s] ", cmd->args[j]);
-// 				j++;
-// 			}
-// 			printf("\n");
-// 		}
-// 		if (cmd->redirs)
-// 		{
-// 			printf("  Redirs: ");
-// 			r = cmd->redirs;
-// 			while (r)
-// 			{
-// 				printf("(Type:%d File:%s) ", r->type, r->file);
-// 				r = r->next;
-// 			}
-// 			printf("\n");
-// 		}
-// 		cmd = cmd->next;
-// 	}
-// 	printf("------------------\n");
-// }
+	i = 0;
+	while (cmd)
+	{
+		printf("--- Command %d ---\n", i++);
+		if (cmd->args)
+		{
+			printf("  Args: ");
+			j = 0;
+			while (cmd->args[j])
+			{
+				printf("[%s] ", cmd->args[j]);
+				j++;
+			}
+			printf("\n");
+		}
+		if (cmd->redirs)
+		{
+			printf("  Redirs: ");
+			r = cmd->redirs;
+			while (r)
+			{
+				printf("(Type:%d File:%s) ", r->type, r->file);
+				r = r->next;
+			}
+			printf("\n");
+		}
+		cmd = cmd->next;
+	}
+	printf("------------------\n");
+}
 
 // static void	cleanup_loop(t_minishell *sh)
 // {
@@ -140,11 +140,11 @@ int	main(int ac, char **av, char **envp)
 		// 	continue ;
 		// }
 		expand_token_list(&sh);
-		print_expanded(sh.token_list);
+		// print_expanded(sh.token_list);
 		// executor(&sh);
-		// print_tokens(sh.token_list);
+		print_tokens(sh.token_list);
 		sh.command_list = parser(&sh);
-		// print_commands(sh.command_list);
+		print_commands(sh.command_list);
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;
 		sh.input = NULL;
