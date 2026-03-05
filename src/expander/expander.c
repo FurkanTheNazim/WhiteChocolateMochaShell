@@ -138,25 +138,51 @@ char	*create_expanded(t_sh *sh, char **tmp)
 	expanded[i] = '\0';
 	return (expanded);
 }
+static char	*word_splitter(t_sh *sh, char *str)
+{
+	char	**tmp;
+	char	*result;
+	int		i;
 
-char	*expand_str(t_sh *sh, char *str)
+	i = 0;
+	result = "";
+	tmp = gc_add(sh, ft_split(str, ' '), 0);
+	if (!tmp)
+		return (allocate_error(sh), NULL);
+	while (tmp[i])
+	{
+		result = gc_add(sh, ft_strjoin(result, tmp[i]), 0);
+		if (!result)
+			return (allocate_error(sh), NULL);
+		if (tmp[i +1])
+			result = gc_add(sh, ft_strjoin(result, " "), 0);
+		if (!result)
+			return (allocate_error(sh), NULL);
+		i++; 
+	}
+	return (result);
+}
+
+char	*expand_str(t_sh *sh, t_segment seg)
 {
 	char	**tmp;
 	char	*result;
 	int		sign_c;
 
-	sign_c = count_dollar_sign(str);
-	if (str[0] != '$')
+	sign_c = count_dollar_sign(seg.value);
+	if (seg.value[0] != '$')
 		sign_c++;
 	tmp = gc_malloc(sh, (sizeof(char *) * (sign_c + 1)), 0);
 	if (!tmp)
 		return (NULL);
-	split_by_dollar(sh, tmp, &str[0], 0);
+	split_by_dollar(sh, tmp, &seg.value[0], 0);
 	if (expand_dollar_segment(sh, tmp, 0) < 0)
 		return (NULL);
 	result = create_expanded(sh, tmp);
 	if (!result)
 		return (NULL);
+	if (seg.type == SEG_NO_QUOTE)
+		result = word_splitter(sh, result);
 	return (result);
 }
 
@@ -254,7 +280,7 @@ char	*expand_token(t_sh *sh, char *value)
 		if (seg.fail)
 			return (NULL);
 		if (seg.type != SEG_SINGLE_QUOTE && ft_strchr(seg.value, '$'))
-			expanded = expand_str(sh, seg.value);
+			expanded = expand_str(sh, seg);
 		else
 			expanded = seg.value;
 		new_value = gc_add(sh, gc_join(new_value, expanded), 0);

@@ -18,6 +18,7 @@
 # include "env.h"
 # include "builtin.h"
 # include "expander.h"
+# include "errors.h"
 
 typedef struct s_sh
 {

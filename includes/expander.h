@@ -1,6 +1,8 @@
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
+typedef struct s_sh t_sh;
+
 typedef enum e_seg_type
 {
 	SEG_NO_QUOTE,
@@ -20,7 +22,7 @@ char		*expand_token(t_sh *sh, char *value);
 char		*get_env_value(t_sh *sh, char *str);
 char		*resolve_var_name(t_sh *sh, char *str, int *i);
 char		*create_expanded(t_sh *sh, char **tmp);
-char		*expand_str(t_sh *sh, char *str);
+char		*expand_str(t_sh *sh, t_segment seg);
 int			joined_strlen(char **tmp, int n);
 int			count_dollar_sign(char *str);
 int			expand_dollar_segment(t_sh *sh, char **tmp, int n);

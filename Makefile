@@ -30,9 +30,13 @@ SRCS		= $(SRC_DIR)/main.c \
 		 	  $(SRC_DIR)/parser/parser_validate.c \
 		 	  $(SRC_DIR)/enviroment/enviroment.c \
 		 	  $(SRC_DIR)/enviroment/enviroment_utils.c \
-			  $(SRC_DIR)/builtins/builtin_env.c \
 			  $(SRC_DIR)/expander/expander.c\
+			  $(SRC_DIR)/errors/errors.c\
+			  $(SRC_DIR)/builtins/builtin_env.c \
+			  $(SRC_DIR)/builtins/builtin_exit.c \
+			  $(SRC_DIR)/builtins/builtin_unset.c \
 			  $(SRC_DIR)/builtins/builtin_export.c
+
 
 # Object files
 OBJ_DIR		= ./obj

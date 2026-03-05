@@ -12,16 +12,16 @@
 
 #include "WCMS.h"
 
-// void	print_expanded(t_token *list)
-// {
-// 	while (list)
-// 	{
-// 		if (list->value)
-// 			printf("%s",list->value);
-// 		list = list->next;
-// 	}
-// 	printf("\n");
-// }
+void	print_expanded(t_token *list)
+{
+	while (list)
+	{
+		if (list->value)
+			printf("%s",list->value);
+		list = list->next;
+	}
+	printf("\n");
+}
 
 void	init_minishell(t_sh *sh)
 {
@@ -140,15 +140,15 @@ int	main(int ac, char **av, char **envp)
 		// 	continue ;
 		// }
 		expand_token_list(&sh);
-		builtin_env(&sh,NULL);
-		char *param[3];
-		param[0] = "export";
-		param[1] = "TEST=123";
-		param[2] = NULL;
-		builtin_export(&sh, param);
-		printf("\n\n\n\n");
-		builtin_env(&sh, NULL);
-		// print_expanded(sh.token_list);
+		// builtin_env(&sh,NULL);
+		// char *param[3];
+		// param[0] = "export";
+		// param[1] = "TEST=123";
+		// param[2] = NULL;
+		// builtin_export(&sh, param);
+		// printf("\n\n\n\n");
+		// builtin_env(&sh, NULL);
+		print_expanded(sh.token_list);
 		// executor(&sh);
 		print_tokens(sh.token_list);
 		sh.command_list = parser(&sh);
