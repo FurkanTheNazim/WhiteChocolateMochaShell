@@ -281,6 +281,7 @@ int	expand_token_list(t_sh *sh)
 			{
 				gc_rollback(sh, cp);
 				ft_putendl_fd("minishell: cannot allocate memory ", 2);
+				sh->exit_status = 1;
 				return (-1);
 			}
 		}

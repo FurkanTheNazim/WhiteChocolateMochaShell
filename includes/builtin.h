@@ -23,4 +23,20 @@ typedef	struct	s_cd
 
 void	builtin_env(t_sh *sh, char **param);
 
+void	builtin_exit(t_sh *sh, char **param);
+int		validate_parameter(t_sh *sh, char *param);
+long	ft_atol(char *param, int *flag);
+void	exit_err(char *err, char *param);
+
+void	builtin_unset(t_sh *sh, char **param);
+void	env_del_node(t_sh *sh, t_env *list);
+
+void	builtin_export(t_sh *sh, char **param);
+int		check_list(t_sh *sh, char **param);
+char	**get_name_value(t_sh *sh, char *str);
+void	declare(t_sh *sh);
+int		param_count(char **param);
+int		validate_param(t_sh *sh, char *str);
+void	export_err(t_sh *sh, char	*param);
+
 #endif

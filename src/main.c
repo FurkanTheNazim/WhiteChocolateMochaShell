@@ -140,6 +140,14 @@ int	main(int ac, char **av, char **envp)
 		// 	continue ;
 		// }
 		expand_token_list(&sh);
+		builtin_env(&sh,NULL);
+		char *param[3];
+		param[0] = "export";
+		param[1] = "TEST=123";
+		param[2] = NULL;
+		builtin_export(&sh, param);
+		printf("\n\n\n\n");
+		builtin_env(&sh, NULL);
 		// print_expanded(sh.token_list);
 		// executor(&sh);
 		print_tokens(sh.token_list);
@@ -151,3 +159,67 @@ int	main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
+
+
+// int main(int ac, char **av, char **envp)
+// {
+//     t_sh    sh;
+//     t_gc    *cp_cmd;
+//     t_env   *dbg;
+
+//     if (ac != 1)
+//     {
+//         ft_putendl_fd("Usage: ./minishell", 2);
+//         exit(1);
+//     }
+//     init_minishell(&sh);
+//     init_env(&sh, av[0], envp);
+//     while (1)
+//     {
+//         cp_cmd = gc_checkpoint(&sh);
+//         sh.input = readline("mochashell>");
+//         gc_add(&sh, sh.input, 0);
+//         if (!sh.input)
+//             return (handle_eof(&sh));
+//         add_history(sh.input);
+//         sh.token_list = lexer(&sh);
+//         if (sh.syntax_error)
+//         {
+//             sh.syntax_error = 0;
+//             gc_rollback(&sh, cp_cmd);
+//             sh.token_list = NULL;
+//             sh.input = NULL;
+//             continue ;
+//         }
+//         expand_token_list(&sh);
+//         builtin_env(&sh, NULL);
+//         char *param[3];
+//         param[0] = "export";
+//         param[1] = "TEST=123";
+//         param[2] = NULL;
+//         builtin_export(&sh, param);
+//         printf("=== EXPORT SONRASI ===\n");
+//         dbg = sh.env;
+//         while (dbg)
+//         {
+//             printf("ENV: %s=%s\n", dbg->env_name, dbg->env_value ? dbg->env_value : "(null)");
+//             dbg = dbg->next;
+//         }
+//         printf("=== ROLLBACK SONRASI ===\n");
+//         dbg = sh.env;
+//         while (dbg)
+//         {
+// 			printf("ENV: %s=%s\n", dbg->env_name, dbg->env_value ? dbg->env_value : "(null)");
+//             dbg = dbg->next;
+//         }
+//         printf("\n\n\n\n");
+//         builtin_env(&sh, NULL);
+//         print_tokens(sh.token_list);
+//         sh.command_list = parser(&sh);
+//         print_commands(sh.command_list);
+// 		gc_rollback(&sh, cp_cmd);
+//         sh.token_list = NULL;
+//         sh.input = NULL;
+//     }
+//     return (0);
+// }
