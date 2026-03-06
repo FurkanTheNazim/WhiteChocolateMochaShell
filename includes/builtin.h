@@ -39,4 +39,8 @@ int		param_count(char **param);
 int		validate_param(t_sh *sh, char *str);
 void	export_err(t_sh *sh, char	*param);
 
+void	builtin_echo(t_sh *sh, char **param);
+int		validate_flag(char *flag);
+
+
 #endif

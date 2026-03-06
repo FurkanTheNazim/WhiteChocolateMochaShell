@@ -140,13 +140,17 @@ int	main(int ac, char **av, char **envp)
 		// 	continue ;
 		// }
 		expand_token_list(&sh);
-		// builtin_env(&sh,NULL);
-		// char *param[3];
-		// param[0] = "export";
-		// param[1] = "TEST=123";
-		// param[2] = NULL;
-		// builtin_export(&sh, param);
-		// printf("\n\n\n\n");
+		// ft_printf("[----------]");
+		// // builtin_env(&sh,NULL);
+		// char *param[5];
+		// param[0] = "echo";
+		// param[1] = "-nd";
+		// param[2] = "-n";
+		// param[3] = "merhaba";
+		// param[4] = NULL;
+		// builtin_echo(&sh, param);
+		// // builtin_export(&sh, param);
+		// ft_printf("{----\n}");
 		// builtin_env(&sh, NULL);
 		print_expanded(sh.token_list);
 		// executor(&sh);
