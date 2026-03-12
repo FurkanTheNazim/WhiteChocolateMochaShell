@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 20:10:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/02/17 21:22:56 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/03/12 15:26:38 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static t_command	*parse_simple_command(t_sh *shell, t_token **token)
 	cmd = create_command(shell);
 	if (!cmd)
 		return (NULL);
-	while (*token && (*token)->type != TOKEN_PIPE)
+	while (*token && (*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_OR)
 	{
 		if (is_redir_token((*token)->type))
 		{
@@ -74,7 +74,7 @@ t_command	*parser(t_sh *shell)
 	{
 		new_cmd = parse_simple_command(shell, &token);
 		add_command(shell, &cmd_list, new_cmd);
-		if (token && token->type == TOKEN_PIPE)
+		if (token && (token->type == TOKEN_PIPE || token->type == TOKEN_OR))
 			token = token->next;
 	}
 	shell->command_list = cmd_list; // Shell yapısında sakla

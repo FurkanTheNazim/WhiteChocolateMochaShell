@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 20:20:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/02/17 21:23:00 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/03/12 16:12:32 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ static int	print_syntax_error(char *token)
 static int	check_pipe_syntax(t_token *t)
 {
 	// İlk token'ın Pipe olup olmadığını kontrol (| ls)
-	if (t->type == TOKEN_PIPE)
+	if (t->type == TOKEN_PIPE || t->type == TOKEN_OR)
 		return (print_syntax_error(t->value));
 	while (t)
 	{
-		if (t->type == TOKEN_PIPE)
+		if (t->type == TOKEN_PIPE || t->type == TOKEN_OR)
 		{
 			// Bir sonraki tokenın Pipe olup olmadığını kontrol et (| |) veya NULL durumu (ls |)
+			if (t->type == TOKEN_OR)
+				return (print_syntax_error(t->value));
 			if (!t->next)
 				return (print_syntax_error(NULL));
 			if (t->next->type == TOKEN_PIPE)
