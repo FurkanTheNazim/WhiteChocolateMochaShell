@@ -13,6 +13,7 @@ typedef enum e_seg_type
 typedef struct s_segment
 {
 	char		*value;
+	char		*expanded;
 	int			fail;
 	t_seg_type	type;
 }t_segment;

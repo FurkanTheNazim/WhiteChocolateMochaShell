@@ -269,11 +269,11 @@ t_segment	parse_next_segment(t_sh *sh, char *str, int *i, int *flag)
 	return (tmp);
 }
 
+
 char	*expand_token(t_sh *sh, char *value, int *flag)
 {
 	t_segment	seg;
 	char		*new_value;
-	char		*expanded;
 	int			i;
 
 	i = 0;
@@ -284,14 +284,14 @@ char	*expand_token(t_sh *sh, char *value, int *flag)
 		if (seg.fail || !new_value)
 			return (NULL);
 		if (seg.type != SEG_SINGLE_QUOTE && ft_strchr(seg.value, '$'))
-			expanded = expand_str(sh, seg);
+			seg.expanded = expand_str(sh, seg);
 		else
-			expanded = seg.value;
-		if (!expanded)
+			seg.expanded = seg.value;
+		if (!seg.expanded)
 			continue ;
-		new_value = gc_add(sh, gc_join(new_value, expanded), 0);
+		new_value = gc_add(sh, gc_join(new_value, seg.expanded), 0);
 	}
-	if (!new_value[0] && !expanded && !*flag)
+	if (!new_value[0] && !seg.expanded && !(*flag))
 	{
 		*flag = 1;
 		return (NULL);
