@@ -1,52 +1,33 @@
 #include "WCMS.h"
-#include "builtin.h"
 
-
-void	update_pwd(t_sh *sh, t_cd *data, char *path)
+void	cd_home(t_sh *sh)
 {
-	char	*newpwd;
+	char	*home;
 
-	newpwd = malloc(sizeof(char) * MAX_PATH + 1);
-	if (!newpwd)
-		return ;
-	if (!(data->pwd_adr) && !(data->tmp_pwd_f))
+	home = get_env_value(sh, "HOME");
+	if (!home)
+		return (allocate_error(sh));
+	else if (!home[0])
+		return (no_home_error(sh));
+	if (chdir(home) < 0)
 	{
-		
+		perror("minishell: cd: ");
+		sh->exit_status = 1;
 	}
-
+	return ;
 }
 
-t_env	*find_env_adr(t_sh *sh, char *env_name)
+void	builtin_cd(t_sh *sh, char **param)
 {
-	t_env	*tmp;
-	int		len;
-
-	len = ft_strlen(env_name);
-	tmp = sh->env;
-	while (tmp)
+	if (!param[1])
 	{
-		if (ft_strncmp(tmp->env_name, env_name, len) == 0
-			&& ((tmp->env_name)[len] == '=' || !(tmp->env_name)[len]))
-			return (tmp);
-		tmp = tmp->next;	
+		cd_home(sh);
+		return ;	
 	}
-	return (NULL);
-}
-
-void	builtin_cd(t_sh	*sh, char path)
-{
-	t_cd	data;
-	data.tmp_pwd_f = 0;
-
-	if (!path)
+	if (param[1] && !param[1][0])
+	{
+		ft_putendl_fd("minishell: cd: null directory", 2);//expander world split yüzünden NAME="" cd $NAME durumunda bu hata değil errno gelmeli, cd "$NAME" world splitter a girmeyeceği için bu hata gelmeli, kontrol et sonradan
+		sh->exit_status = 1;
 		return ;
-	if (!getcwd(data.tmp_pwd, MAX_PATH))
-		data.tmp_pwd_f = 1;
-	else
-		data.tmp_pwd[0] = '\0';
-	if (chdir(path) < 0)
-		return (perror(""));
-	data.oldpwd_adr = find_env_adr(sh, "OLDPWD");
-	data.pwd_adr = find_env_adr(sh, "PWD");
-	update_pwd(sh, &data, path);
+	}
 }

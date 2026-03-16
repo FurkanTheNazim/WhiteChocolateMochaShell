@@ -35,21 +35,111 @@ int	param_count(char **param)
 	return (i);
 }
 
+int	env_addcopy(t_env **copy, t_env *tmp)
+{
+	t_env	*tmp_copy;
+
+	if (!tmp)
+		return (-1);
+	if (!*copy)
+	{
+		*copy = tmp;
+		return (1);
+	}
+	tmp_copy = *copy;
+	while (tmp_copy->next)
+		tmp_copy = tmp_copy->next;
+	tmp_copy->next = tmp;
+	return (1);
+}
+t_env	*copy_env(t_sh *sh)
+{
+	t_env	*copy;
+	t_env	*tmp;
+	t_env	*origin;
+
+	origin = sh->env;
+	copy = NULL;
+	while (origin)
+	{
+		tmp = gc_malloc(sh, sizeof(t_env), 0);
+		if (!tmp)
+			return (allocate_error(sh), NULL);
+		tmp->env_name = gc_add(sh, ft_strdup(origin->env_name), 0);
+		if (origin->has_value)
+			tmp->env_value = gc_add(sh, ft_strdup(origin->env_value), 0);
+		else
+			tmp->env_value = NULL;
+		tmp->exported = origin->exported;
+		tmp->has_value = origin->has_value;
+		tmp->next = NULL;
+		env_addcopy(&copy, tmp);
+		origin = origin->next;
+	}
+	return (copy);
+}
+
+void	ft_swap_node(t_env	**first, t_env **second)
+{
+	t_env	tmp;
+
+	tmp.env_name = (*first)->env_name;
+	tmp.env_value = (*first)->env_value;
+	tmp.exported = (*first)->exported;
+	tmp.has_value = (*first)->has_value;
+	(*first)->env_name = (*second)->env_name;
+	(*first)->env_value = (*second)->env_value;
+	(*first)->exported = (*second)->exported;
+	(*first)->has_value = (*second)->has_value;
+	(*second)->env_name = tmp.env_name;
+	(*second)->env_value = tmp.env_value;
+	(*second)->exported = tmp.exported;
+	(*second)->has_value = tmp.has_value;
+}
+
+void	sort_env_list(t_env	**tmp)
+{
+	t_env	*first;
+	t_env	*second;
+	int		len;
+
+	first = *tmp;
+	while (first->next)
+	{
+		second = first->next;
+		while (second)
+		{
+			if (ft_strlen(first->env_name) > ft_strlen(second->env_name))
+				len = ft_strlen(first->env_name);
+			else
+				len = ft_strlen(second->env_name);
+			if (ft_strncmp(first->env_name, second->env_name, len) > 0)
+				ft_swap_node(&first, &second);
+			second = second->next;
+		}
+		first = first->next;
+	}
+}
 void	declare(t_sh *sh)
 {
 	t_env	*tmp;
 
-	tmp = sh->env;
+	tmp = copy_env(sh);
+	if (!tmp)
+		return ;
+	sort_env_list(&tmp);
 	while (tmp)
 	{
-		if (tmp->exported)
+		if (ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path)
+			tmp = tmp->next;
+		else if (tmp->exported)
 		{
 			if (tmp->has_value)
 				ft_printf("declare -x %s=\"%s\"\n", tmp->env_name, tmp->env_value);
 			else
 				ft_printf("declare -x %s\n", tmp->env_name);
+			tmp = tmp->next;
 		}
-		tmp = tmp->next;
 	}
 }
 

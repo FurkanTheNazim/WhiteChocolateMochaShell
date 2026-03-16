@@ -12,13 +12,13 @@
 
 #include "WCMS.h"
 
-t_token	*create_newnode(t_sh *shell, char *raw, char *token)
+t_token	*newnode(t_sh *sh, char *raw, char *token)
 {
 	t_token	*node;
 
-	if (!token)
+	if (!gc_add(sh, token, 0))
 		return (NULL);
-	node = gc_malloc(shell, sizeof(t_token), 0);
+	node = gc_malloc(sh, sizeof(t_token), 0);
 	if (!node)
 		return (NULL);
 	node->raw = raw;
@@ -29,19 +29,22 @@ t_token	*create_newnode(t_sh *shell, char *raw, char *token)
 	return (node);
 }
 
-void	addback(t_sh *shell, t_token *newnode)
+int	addback(t_sh *sh, t_token *newnode)
 {
 	t_token	*temp;
 
-	if (!shell->token_list)
+	if (!sh || !newnode)
+		return (allocate_error(sh), -1);
+	if (!sh->token_list)
 	{
-		shell->token_list = newnode;
-		return ;
+		sh->token_list = newnode;
+		return (1);
 	}
-	temp = shell->token_list;
+	temp = sh->token_list;
 	while (temp->next)
 		temp = temp->next;
 	temp->next = newnode;
+	return (1);
 }
 
 void	free_node(t_sh *sh, t_token **list)

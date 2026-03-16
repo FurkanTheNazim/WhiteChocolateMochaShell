@@ -61,9 +61,10 @@ int	append_operator(char *ptr, t_sh *shell)
 	else if (ptr[i] == '>')
 		type = get_redir_out_type(ptr, &i);
 	substr = gc_add(shell, ft_substr(ptr, 0, i), 0);
-	node = create_newnode(shell, NULL, substr);
+	node = newnode(shell, NULL, substr);
 	if (node)
 		node->type = type;
-	addback(shell, node);
+	if (addback(shell, node) < 0)
+		return (-2);
 	return (i);
 }

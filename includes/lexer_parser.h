@@ -70,35 +70,35 @@ int				ft_isspace(char c);
 void			init_lexer_stat(t_lexer *state);
 
 // Lexer Token
-t_token			*create_newnode(t_sh *shell, char *raw, char *token);
-void			addback(t_sh *shell, t_token *newnode);
+t_token			*newnode(t_sh *sh, char *raw, char *token);
+int             addback(t_sh *sh, t_token *newnode);
 void			free_node(t_sh *sh, t_token **list);
 
 // Lexer Operators
-int				append_operator(char *ptr, t_sh *shell);
+int				append_operator(char *ptr, t_sh *sh);
 
 // Lexer Main
-t_token			*lexer(t_sh *shell);
+t_token			*lexer(t_sh *sh);
 
 // Init
-void			init_minishell(t_sh *shell);
+void			init_minishell(t_sh *sh);
 
 // Parser Utils
-t_command *create_command(t_sh *shell);
-void add_arg(t_sh *shell, t_command *cmd, char *arg);
-void add_command(t_sh *shell, t_command **list, t_command *new);
-void free_command_list(t_sh *shell, t_command *list);
+t_command *create_command(t_sh *sh);
+void add_arg(t_sh *sh, t_command *cmd, char *arg);
+void add_command(t_sh *sh, t_command **list, t_command *new);
+void free_command_list(t_sh *sh, t_command *list);
 
-t_redir *create_redir(t_sh *shell, int type, char *file);
-void add_redir(t_sh *shell, t_command *cmd, t_redir *new);
-void free_redir_list(t_sh *shell, t_redir *list);
+t_redir *create_redir(t_sh *sh, int type, char *file);
+void add_redir(t_sh *sh, t_command *cmd, t_redir *new);
+void free_redir_list(t_sh *sh, t_redir *list);
 
 // Expander
-// int expander(t_sh *shell);
+// int expander(t_sh *sh);
 
 
 // Parser
-t_command	*parser(t_sh *shell);
-int			validate_tokens(t_sh *shell);
+t_command	*parser(t_sh *sh);
+int			validate_tokens(t_sh *sh);
 
 #endif  

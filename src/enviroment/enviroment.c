@@ -11,9 +11,9 @@ int	validate_env(t_sh *sh)
 	{
 		if (ft_strncmp(tmp->env_name, "PWD", 3) == 0)
 			i += 1;
-		else if (!ft_strncmp(tmp->env_name, "SHLVL", 5) == 0)
+		else if (ft_strncmp(tmp->env_name, "SHLVL", 5) == 0)
 			i += 1;
-		else if (!ft_strncmp(tmp->env_name, "_", 1) == 0)
+		else if (ft_strncmp(tmp->env_name, "_", 1) == 0)
 			i += 1;
 		tmp = tmp->next;
 	}
@@ -26,11 +26,9 @@ int	validate_env(t_sh *sh)
 void	manuel_init(t_sh *sh, char *av)
 {
 	char	*pwd;
-
-	pwd = gc_malloc(sh, 4048, 1);
-	if (!pwd)
-		exit (1);
-	if (getcwd(pwd, 4048) == NULL)
+	
+		pwd = gc_add(sh, getcwd(NULL, 0), 1);
+		if (!pwd)
 		env_error(sh, "minishell: pwd: getcwd\n");
 	env_addback(sh, env_newnode(sh, "PWD", pwd));
 	env_addback(sh, env_newnode(sh, "SHLVL", "1"));

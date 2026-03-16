@@ -158,8 +158,10 @@ static char	*word_splitter(t_sh *sh, char *str)
 			result = gc_add(sh, ft_strjoin(result, " "), 0);
 		if (!result)
 			return (allocate_error(sh), NULL);
-		i++; 
+		i++;
 	}
+	if (!tmp[0])
+		return (NULL);
 	return (result);
 }
 
@@ -252,7 +254,7 @@ t_segment	parse_unquote(t_sh *sh, char *str, int *i)
 	return (tmp);
 }
 
-t_segment	parse_next_segment(t_sh *sh, char *str, int *i)
+t_segment	parse_next_segment(t_sh *sh, char *str, int *i, int *flag)
 {
 	t_segment tmp;
 
@@ -262,10 +264,12 @@ t_segment	parse_next_segment(t_sh *sh, char *str, int *i)
 		tmp = parse_double_quote(sh, str, i);
 	else
 		tmp = parse_unquote(sh, str, i);
+	if (tmp.type == SEG_DOUBLE_QUOTE || tmp.type == SEG_SINGLE_QUOTE)
+		*flag = 1;
 	return (tmp);
 }
 
-char	*expand_token(t_sh *sh, char *value)
+char	*expand_token(t_sh *sh, char *value, int *flag)
 {
 	t_segment	seg;
 	char		*new_value;
@@ -276,18 +280,22 @@ char	*expand_token(t_sh *sh, char *value)
 	new_value = gc_add(sh, ft_strdup(""), 0);
 	while (value[i])
 	{
-		seg = parse_next_segment(sh, value, &i);
-		if (seg.fail)
+		seg = parse_next_segment(sh, value, &i, flag);
+		if (seg.fail || !new_value)
 			return (NULL);
 		if (seg.type != SEG_SINGLE_QUOTE && ft_strchr(seg.value, '$'))
 			expanded = expand_str(sh, seg);
 		else
 			expanded = seg.value;
+		if (!expanded)
+			continue ;
 		new_value = gc_add(sh, gc_join(new_value, expanded), 0);
-		if (!new_value)
-			return (NULL);
 	}
-	gc_free(sh, value, 0);
+	if (!new_value[0] && !expanded && !*flag)
+	{
+		*flag = 1;
+		return (NULL);
+	}
 	return (new_value);
 }
 
@@ -295,15 +303,17 @@ int	expand_token_list(t_sh *sh)
 {
 	t_token *tmp;
 	t_gc	*cp;
+	int		flag;
 
+	flag = 0;
 	cp = gc_checkpoint(sh);
 	tmp = sh->token_list;
 	while (tmp)
 	{
 		if (tmp->type == TOKEN_WORD)
 		{
-			tmp->value = expand_token(sh, tmp->value);
-			if(!(tmp->value))
+			tmp->value = expand_token(sh, tmp->value, &flag);
+			if(!(tmp->value) && !flag)
 			{
 				gc_rollback(sh, cp);
 				ft_putendl_fd("minishell: cannot allocate memory ", 2);

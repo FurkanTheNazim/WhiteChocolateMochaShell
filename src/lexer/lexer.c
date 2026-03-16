@@ -38,14 +38,13 @@ static int	handle_single_quote(char *input, int *j, t_lexer *state)
 	return (0);
 }
 
-static int	handle_word(t_sh *shell, int i, t_lexer *state)
+static int	handle_word(t_sh *sh, int i, t_lexer *state)
 {
 	int		j;
 	char	*input;
-	char	*substr;
 
 	j = 0;
-	input = shell->input;
+	input = sh->input;
 	while (input[i + j] && !ft_isspace(input[i + j])
 		&& !is_operator(input[i + j]))
 	{
@@ -62,38 +61,41 @@ static int	handle_word(t_sh *shell, int i, t_lexer *state)
 		else
 			j++;
 	}
-	substr = gc_add(shell, ft_substr(shell->input, i, j), 0);
-	return (addback(shell, create_newnode(shell, shell->input, substr)), j);
+	if (addback(sh, newnode(sh, sh->input, ft_substr(sh->input, i, j))) < 0)
+		return (-2);
+	return (j);
 }
 
-static int	handle_syntax_error(t_sh *shell)
+static int	handle_syntax_error(t_sh *sh)
 {
 	printf("minishell: syntax error: unclosed quote\n");
-	shell->syntax_error = 1;
+	sh->syntax_error = 1;
 	return (1);
 }
 
-t_token	*lexer(t_sh *shell)
+t_token	*lexer(t_sh *sh)
 {
 	t_lexer	state;
 	int				i;
 	int				j;
 
 	i = 0;
-	while (shell->input[i])
+	while (sh->input[i])
 	{
 		init_lexer_stat(&state);
-		while (shell->input[i] && ft_isspace(shell->input[i]))
+		while (sh->input[i] && ft_isspace(sh->input[i]))
 			i++;
-		if (!shell->input[i])
+		if (!sh->input[i])
 			break ;
-		if (is_operator(shell->input[i]))
-			j = append_operator(&shell->input[i], shell);
+		if (is_operator(sh->input[i]))
+			j = append_operator(&sh->input[i], sh);
 		else
-			j = handle_word(shell, i, &state);
+			j = handle_word(sh, i, &state);
+		if (j == -2)
+			return (NULL);
 		if (j == -1)
-			return (handle_syntax_error(shell), NULL);
+			return (handle_syntax_error(sh), NULL);
 		i += j;
 	}
-	return (shell->token_list);
+	return (sh->token_list);
 }

@@ -126,7 +126,7 @@ int	main(int ac, char **av, char **envp)
 			return (handle_eof(&sh));
 		add_history(sh.input);
 		sh.token_list = lexer(&sh);
-		if (sh.syntax_error)
+		if (!sh.token_list || sh.syntax_error)
 		{
 			sh.syntax_error = 0;
 			gc_rollback(&sh, cp_cmd);
@@ -142,14 +142,14 @@ int	main(int ac, char **av, char **envp)
 		expand_token_list(&sh);
 		// ft_printf("[----------]");
 		// // builtin_env(&sh,NULL);
-		// char *param[5];
-		// param[0] = "echo";
-		// param[1] = "-nd";
-		// param[2] = "-n";
-		// param[3] = "merhaba";
-		// param[4] = NULL;
-		// builtin_echo(&sh, param);
-		// // builtin_export(&sh, param);
+		// char *param[2];
+		// param[0] = "export";
+		// // param[1] = "-nn";
+		// // param[2] = "-dsdn";
+		// // param[3] = "medsrhaba";
+		// param[1] = NULL;
+		// // builtin_echo(&sh, param);
+		// builtin_export(&sh, param);
 		// ft_printf("{----\n}");
 		// builtin_env(&sh, NULL);
 		print_expanded(sh.token_list);
