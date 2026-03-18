@@ -12,6 +12,7 @@ typedef struct s_env
 	char			*env_value;
 	int				exported;
 	int				has_value;
+	int				env_printable;
 	struct s_env	*next;
 } t_env;
 

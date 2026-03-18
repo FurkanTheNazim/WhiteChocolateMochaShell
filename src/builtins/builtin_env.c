@@ -10,7 +10,7 @@ void	builtin_env(t_sh *sh, char **param)
 	{
 		if (ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path)
 			tmp = tmp->next;
-		else if (tmp->exported && tmp->has_value)
+		else if (tmp->exported && tmp->has_value && tmp->env_printable)
 		{
 			printf("%s=%s\n", tmp->env_name, tmp->env_value);
 			tmp = tmp->next;

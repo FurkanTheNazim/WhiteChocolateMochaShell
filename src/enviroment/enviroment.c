@@ -27,8 +27,8 @@ void	manuel_init(t_sh *sh, char *av)
 {
 	char	*pwd;
 	
-		pwd = gc_add(sh, getcwd(NULL, 0), 1);
-		if (!pwd)
+	pwd = gc_add(sh, getcwd(NULL, 0), 1);
+	if (!pwd)
 		env_error(sh, "minishell: pwd: getcwd\n");
 	env_addback(sh, env_newnode(sh, "PWD", pwd));
 	env_addback(sh, env_newnode(sh, "SHLVL", "1"));

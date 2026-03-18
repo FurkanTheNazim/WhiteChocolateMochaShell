@@ -1,4 +1,4 @@
-#include "WCMS.h"
+#include "../../includes/WCMS.h"
 
 void	env_error(t_sh *sh, char *err)
 {
@@ -23,6 +23,7 @@ t_env	*env_newnode(t_sh *sh, char *name, char *value)
 		node->has_value = 1;
 	else
 		node->has_value = 0;
+	node->env_printable = 1;
 	node->next = NULL;
 	return (node);
 }

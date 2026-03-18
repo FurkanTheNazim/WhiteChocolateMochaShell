@@ -33,10 +33,12 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/expander/expander.c\
 			  $(SRC_DIR)/errors/errors.c\
 			  $(SRC_DIR)/builtins/builtin_env.c \
+			  $(SRC_DIR)/builtins/builtin_echo.c \
 			  $(SRC_DIR)/builtins/builtin_exit.c \
 			  $(SRC_DIR)/builtins/builtin_unset.c \
 			  $(SRC_DIR)/builtins/builtin_export.c \
-			  $(SRC_DIR)/builtins/builtin_echo.c
+			  $(SRC_DIR)/builtins/builtin_cd.c \
+			  $(SRC_DIR)/builtins/builtin_pwd.c
 
 
 # Object files
@@ -76,5 +78,21 @@ fclean: clean
 	@echo "$(YELLOW)🗑️  $(NAME) removed$(RESET)"
 
 re: fclean all
+
+
+# Test
+TEST_SRCS   = $(filter-out $(SRC_DIR)/main.c, $(SRCS)) \
+              ./test.c
+TEST_OBJS   = $(TEST_SRCS:%.c=$(OBJ_DIR)/%.o)
+TEST_NAME   = minishell_test
+
+test: $(LIBFT_A) $(TEST_OBJS)
+	@echo "$(GREEN)🔗 Linking $(TEST_NAME)...$(RESET)"
+	@$(CC) $(CFLAGS) $(TEST_OBJS) $(LIBFT_A) $(LIBS) -o $(TEST_NAME)
+	@echo "$(GREEN)✅ $(TEST_NAME) is ready!$(RESET)"
+
+tclean:
+	@rm -f $(TEST_NAME)
+	@echo "$(YELLOW)🧹 Test binary cleaned$(RESET)"
 
 .PHONY: all clean fclean re

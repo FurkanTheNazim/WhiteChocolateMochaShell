@@ -142,10 +142,13 @@ int	main(int ac, char **av, char **envp)
 		expand_token_list(&sh);
 		// ft_printf("[----------]");
 		// // builtin_env(&sh,NULL);
-		// char *param[2];
-		// param[0] = "export";
-		// // param[1] = "-nn";
-		// // param[2] = "-dsdn";
+		builtin_pwd(&sh, NULL);
+		char *param[3];
+		param[0] = "cd";
+		param[1] = sh.token_list->value;
+		param[2] = NULL;
+		builtin_cd(&sh, param);
+		builtin_pwd(&sh, NULL);
 		// // param[3] = "medsrhaba";
 		// param[1] = NULL;
 		// // builtin_echo(&sh, param);

@@ -42,5 +42,17 @@ void	export_err(t_sh *sh, char	*param);
 void	builtin_echo(t_sh *sh, char **param);
 int		validate_flag(char *flag);
 
+void	builtin_cd(t_sh *sh, char **param);
+int		cd_home(t_sh *sh, char **param);
+void	update_pwds(t_sh *sh, char *param);
+t_env	*find_env(t_sh	*sh, char *name);
+void	logical_pwd_update(t_sh *sh, char *param, t_env *new_oldpwd);
+void	absolute_pwd_update(t_sh *sh, t_env **curr_pwd, char *param);
+void	create_pwd(t_sh *sh, char *param, t_env *new_oldpwd);
+int		count_matrix(char **martix);
+void	update_env_value(t_sh *sh, char *name, char *new_value, int has_value);
+char	*build_path(t_sh *sh, char **base, int b_lvl);
+
+void    builtin_pwd(t_sh *sh, char **param);
 
 #endif

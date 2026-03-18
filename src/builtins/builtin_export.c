@@ -72,6 +72,7 @@ t_env	*copy_env(t_sh *sh)
 			tmp->env_value = NULL;
 		tmp->exported = origin->exported;
 		tmp->has_value = origin->has_value;
+		tmp->env_printable = origin->env_printable;
 		tmp->next = NULL;
 		env_addcopy(&copy, tmp);
 		origin = origin->next;
@@ -87,14 +88,17 @@ void	ft_swap_node(t_env	**first, t_env **second)
 	tmp.env_value = (*first)->env_value;
 	tmp.exported = (*first)->exported;
 	tmp.has_value = (*first)->has_value;
+	tmp.env_printable = (*first)->env_printable;
 	(*first)->env_name = (*second)->env_name;
 	(*first)->env_value = (*second)->env_value;
 	(*first)->exported = (*second)->exported;
 	(*first)->has_value = (*second)->has_value;
+	(*first)->env_printable = (*second)->env_printable;
 	(*second)->env_name = tmp.env_name;
 	(*second)->env_value = tmp.env_value;
 	(*second)->exported = tmp.exported;
 	(*second)->has_value = tmp.has_value;
+	(*second)->env_printable = tmp.env_printable;
 }
 
 void	sort_env_list(t_env	**tmp)
@@ -140,6 +144,8 @@ void	declare(t_sh *sh)
 				ft_printf("declare -x %s\n", tmp->env_name);
 			tmp = tmp->next;
 		}
+		else
+			tmp = tmp->next;
 	}
 }
 

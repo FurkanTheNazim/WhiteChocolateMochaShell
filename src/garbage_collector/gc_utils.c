@@ -6,10 +6,10 @@ void	*gc_malloc(t_sh *shell, size_t n, int flag)
 	void	*ptr;
 	t_gc	*node;
 
-	ptr = malloc(n);
+	ptr = ft_calloc(1, n);
 	if (!ptr)
 		return (NULL);
-	node = malloc(sizeof(t_gc));
+	node = ft_calloc(1, sizeof(t_gc));
 	if (!node)
 	{
 		free(ptr);

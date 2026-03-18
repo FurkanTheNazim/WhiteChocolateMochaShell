@@ -1,4 +1,4 @@
-#include "WCMS.h"
+#include "../../includes/WCMS.h"
 
 int	count_dollar_sign(char *str)
 {
@@ -44,8 +44,10 @@ char	*get_env_value(t_sh *sh, char *str)
 	tmp = sh->env;
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->env_name, str, len) == 0)
+		if (!ft_strncmp(tmp->env_name, str, len + 1))
 		{
+			if (!tmp->env_value)
+				return (NULL);
 			result = gc_add(sh, ft_strdup(tmp->env_value), 0);
 			if (!result)
 				return (NULL);
