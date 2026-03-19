@@ -55,4 +55,7 @@ char	*build_path(t_sh *sh, char **base, int b_lvl);
 
 void    builtin_pwd(t_sh *sh, char **param);
 
+int		identify_builtin(char *cmd_name);
+int		exec_builtin(t_sh *sh, t_command *cmd);
+
 #endif

@@ -73,6 +73,8 @@ t_command	*parser(t_sh *shell)
 	while (token)
 	{
 		new_cmd = parse_simple_command(shell, &token);
+		if (new_cmd && new_cmd->args && new_cmd->args[0])
+			new_cmd->builtin = identify_builtin(new_cmd->args[0]);
 		add_command(shell, &cmd_list, new_cmd);
 		if (token && (token->type == TOKEN_PIPE || token->type == TOKEN_OR))
 			token = token->next;

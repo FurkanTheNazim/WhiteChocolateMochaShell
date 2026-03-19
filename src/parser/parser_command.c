@@ -22,6 +22,7 @@ t_command	*create_command(t_sh *shell)
 		return (NULL);
 	new_cmd->args = NULL;
 	new_cmd->redirs = NULL;
+	new_cmd->builtin = NOT_BUILTIN;
 	new_cmd->next = NULL;
 	return (new_cmd);
 }

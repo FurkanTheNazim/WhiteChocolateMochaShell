@@ -21,6 +21,17 @@ typedef enum e_quote_type
     D_QUOTE
 }	t_quote_type;
 
+typedef enum e_builtin_type
+{
+	NOT_BUILTIN,
+	BUILTIN_ECHO,
+	BUILTIN_CD,
+	BUILTIN_PWD,
+	BUILTIN_EXPORT,
+	BUILTIN_UNSET,
+	BUILTIN_ENV,
+	BUILTIN_EXIT
+}	t_builtin_type;
 
 // t_token: Lexer'ın ürettiği her bir token'ı temsil eder
 // raw: Orijinal string (örn: "hello")
@@ -61,6 +72,7 @@ typedef struct s_command
 {
     char    **args;
     t_redir *redirs;
+    int     builtin;
     struct s_command *next;
 }   t_command;
 

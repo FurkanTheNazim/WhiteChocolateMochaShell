@@ -47,6 +47,16 @@ static void	print_tokens(t_token *list)
 	}
 }
 
+static const char	*builtin_name(int type)
+{
+	const char	*names[] = {"NOT_BUILTIN", "echo", "cd", "pwd",
+		"export", "unset", "env", "exit"};
+
+	if (type >= 0 && type <= 7)
+		return (names[type]);
+	return ("unknown");
+}
+
 static void	print_commands(t_command *cmd)
 {
 	int	i;
@@ -57,6 +67,8 @@ static void	print_commands(t_command *cmd)
 	while (cmd)
 	{
 		printf("--- Command %d ---\n", i++);
+		printf("  Builtin: %s (%d)\n", builtin_name(cmd->builtin),
+			cmd->builtin);
 		if (cmd->args)
 		{
 			printf("  Args: ");
