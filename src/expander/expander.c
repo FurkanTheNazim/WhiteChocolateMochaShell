@@ -271,6 +271,12 @@ t_segment	parse_next_segment(t_sh *sh, char *str, int *i, int *flag)
 	return (tmp);
 }
 
+void	init_expander_data(t_sh *sh, t_segment *seg, char **new_value)
+{
+	seg->expanded = NULL;
+	*new_value = gc_add(sh, ft_strdup(""), 0);
+}
+
 
 char	*expand_token(t_sh *sh, char *value, int *flag)
 {
@@ -279,7 +285,7 @@ char	*expand_token(t_sh *sh, char *value, int *flag)
 	int			i;
 
 	i = 0;
-	new_value = gc_add(sh, ft_strdup(""), 0);
+	init_expander_data(sh, &seg, &new_value);
 	while (value[i])
 	{
 		seg = parse_next_segment(sh, value, &i, flag);

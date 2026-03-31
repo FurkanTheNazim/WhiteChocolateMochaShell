@@ -50,7 +50,6 @@ int	append_operator(char *ptr, t_sh *shell)
 	int		i;
 	int		type;
 	t_token	*node;
-	char	*substr;
 
 	i = 0;
 	type = TOKEN_WORD;
@@ -60,8 +59,7 @@ int	append_operator(char *ptr, t_sh *shell)
 		type = get_redir_in_type(ptr, &i);
 	else if (ptr[i] == '>')
 		type = get_redir_out_type(ptr, &i);
-	substr = gc_add(shell, ft_substr(ptr, 0, i), 0);
-	node = newnode(shell, NULL, substr);
+	node = newnode(shell, NULL, ft_substr(ptr, 0, i));
 	if (node)
 		node->type = type;
 	if (addback(shell, node) < 0)

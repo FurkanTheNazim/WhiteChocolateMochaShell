@@ -10,4 +10,4 @@ parser ile {cmd, -flag, parameter, NULL} ayrımı yapıp güncellediğimiz t_com
 
 
 
-
+Ctrl/D -> bash te null terminalde exit atıyor. minishell null da çıkıyorama exit yazmıyorbu durumları incele
