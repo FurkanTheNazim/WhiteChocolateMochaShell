@@ -15,5 +15,7 @@ void	builtin_env(t_sh *sh, char **param)
 			printf("%s=%s\n", tmp->env_name, tmp->env_value);
 			tmp = tmp->next;
 		}
+		else
+			tmp = tmp->next;
 	}
 }
