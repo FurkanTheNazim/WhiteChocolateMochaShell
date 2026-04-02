@@ -39,7 +39,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/builtins/builtin_export.c \
 			  $(SRC_DIR)/builtins/builtin_cd.c \
 			  $(SRC_DIR)/builtins/builtin_pwd.c \
-			  $(SRC_DIR)/builtins/builtin_dispatch.c
+			  $(SRC_DIR)/builtins/builtin_dispatch.c \
+			  $(SRC_DIR)/builtins/variable.c
 
 
 # Object files

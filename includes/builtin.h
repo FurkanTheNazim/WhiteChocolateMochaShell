@@ -58,4 +58,9 @@ void    builtin_pwd(t_sh *sh, char **param);
 int		identify_builtin(char *cmd_name);
 int		exec_builtin(t_sh *sh, t_command *cmd);
 
+// Variable Assignment
+int		is_assignment(char *str);
+void	exec_assignment(t_sh *sh, char *str);
+int		handle_assignments(t_sh *sh, t_command *cmd);
+
 #endif
