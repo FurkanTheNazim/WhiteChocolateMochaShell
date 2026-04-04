@@ -9,10 +9,12 @@ typedef struct s_sh t_sh;//circular include problemi böyle çözülürmüş
 typedef struct s_env
 {
 	char			*env_name;
-	char			*env_value;
+	char			*env_value;//temp
 	int				exported;
 	int				has_value;
 	int				env_printable;
+	int				temp_flag;
+	int				old_value;//kalıcı
 	struct s_env	*next;
 } t_env;
 

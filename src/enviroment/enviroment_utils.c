@@ -24,6 +24,8 @@ t_env	*env_newnode(t_sh *sh, char *name, char *value)
 	else
 		node->has_value = 0;
 	node->env_printable = 1;
+	node->temp_flag = 0;
+	node->old_value =NULL;
 	node->next = NULL;
 	return (node);
 }

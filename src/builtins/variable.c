@@ -93,3 +93,12 @@ int	handle_assignments(t_sh *sh, t_command *cmd)
 	}
 	return (1);
 }
+
+int main()
+{
+	t_sh sh;
+	t_command *cmd;
+
+	ft_bzero(&sh, sizeof(t_sh));
+	add_command(sh, &cmd, create_command(sh))
+}
