@@ -60,7 +60,9 @@ int		exec_builtin(t_sh *sh, t_command *cmd);
 
 // Variable Assignment
 int		is_assignment(char *str);
-void	exec_assignment(t_sh *sh, char *str);
+int		exec_assignment(t_sh *sh, char *str);
 int		handle_assignments(t_sh *sh, t_command *cmd);
+char	**var_delimeter(t_sh *sh, char *envp, int i);
+int		permanent_update(t_sh *sh, char *str);
 
 #endif

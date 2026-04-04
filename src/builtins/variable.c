@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 18:09:35 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/04 18:09:40 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/04/04 18:56:56 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,46 +31,52 @@ int	is_assignment(char *str)
 	return (1);
 }
 
-static int	update_var(t_sh *sh, char **nv)
-{
-	t_env	*tmp;
-	size_t	len;
-
-	tmp = sh->env;
-	len = ft_strlen(nv[0]);
-	while (tmp)
-	{
-		if (ft_strlen(tmp->env_name) == len
-			&& ft_strncmp(tmp->env_name, nv[0], len) == 0)
-		{
-			if (nv[1])
-			{
-				tmp->env_value = nv[1];
-				tmp->has_value = 1;
-			}
-			return (1);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-void	exec_assignment(t_sh *sh, char *str)
+int permanent_update(t_sh *sh, char *str)
 {
 	char	**nv;
 	t_env	*node;
 
-	nv = get_name_value(sh, str);
-	if (!nv)
-		return ;
-	if (!update_var(sh, nv))
+	nv = env_delimeter(sh, str, 0);
+	if(!nv)
+		return (-1);
+	node = find_env(sh, nv[0]);
+	if(node)
+		node->env_value = nv[1];
+	else
 	{
 		node = env_newnode(sh, nv[0], nv[1]);
-		if (!node)
-			return ;
+		if(!node)
+			return (allocate_error(sh), -1);
 		node->exported = 0;
-		env_addback(sh, node);
+		node->env_printable = 0;
+		if(!env_addback(sh, node))
+			return (allocate_error(sh), -1);
 	}
+	return (1);
+}
+
+int	exec_assignment(t_sh *sh, char *str)
+{
+	char	**nv;
+	t_env	*node;
+
+
+	nv = var_delimeter(sh, str, 0);
+	if (!nv)
+		return (-1);
+	node = find_env(sh, nv[0]);
+	if(node)
+	{
+		node->temp_flag = 1;
+		node->old_value = node->env_value;
+		node->env_value = nv[1];
+	}
+	else 
+	{
+		if(!env_addback(sh, env_newnode(sh, nv[0], nv[1])))
+			return (allocate_error(sh), -1);
+	}
+	return (1);
 }
 
 int	handle_assignments(t_sh *sh, t_command *cmd)
@@ -82,14 +88,15 @@ int	handle_assignments(t_sh *sh, t_command *cmd)
 	i = 0;
 	while (cmd->args[i])
 	{
-		if (!is_assignment(cmd->args[i]))
+		if (!is_assignment(cmd->args[i]) && i == 0)
 			return (0);
-		i++;
-	}
-	i = 0;
-	while (cmd->args[i])
-	{
-		exec_assignment(sh, cmd->args[i]);
+		if (!cmd->args[1])
+		{
+			if(permanent_update(sh, cmd->args[i]) == -1)
+				return (-1);
+		}
+		else if(exec_assignment(sh, cmd->args[i]) == -1)
+			return (-1);
 		i++;
 	}
 	return (1);

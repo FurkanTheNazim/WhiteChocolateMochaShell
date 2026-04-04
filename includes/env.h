@@ -14,7 +14,7 @@ typedef struct s_env
 	int				has_value;
 	int				env_printable;
 	int				temp_flag;
-	int				old_value;//kalıcı
+	char			old_value;//kalıcı
 	struct s_env	*next;
 } t_env;
 
