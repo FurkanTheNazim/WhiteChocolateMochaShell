@@ -177,6 +177,7 @@ int	main(int ac, char **av, char **envp)
 		sh.command_list = parser(&sh);
 		// executor(&sh);
 		// print_commands(sh.command_list);
+		normalize_env(&sh);
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;
 		sh.input = NULL;

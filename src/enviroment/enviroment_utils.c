@@ -47,3 +47,19 @@ int	env_addback(t_sh *sh, t_env *newnode)
 	tmp->next = newnode;
 	return (1);
 }
+
+void	normalize_env(t_sh *sh)
+{
+	t_env	*tmp;
+
+	tmp = sh->env;
+	while (tmp)
+	{
+		if (tmp->temp_flag)
+		{
+			tmp->env_value = tmp->old_value;
+			tmp->temp_flag = 0;
+		}
+		tmp = tmp->next;
+	}
+}
