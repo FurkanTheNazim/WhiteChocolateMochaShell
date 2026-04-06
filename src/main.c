@@ -174,9 +174,14 @@ int	main(int ac, char **av, char **envp)
 		// builtin_env(&sh, NULL);
 		print_expanded(sh.token_list);
 		// print_tokens(sh.token_list);
-		sh.command_list = parser(&sh);
-		// executor(&sh);
-		// print_commands(sh.command_list);
+		sh.ast = build_ast(&sh);
+		if (sh.ast)
+		{
+			print_ast(sh.ast, 0);
+			if (sh.ast->type == AST_CMD && sh.ast->cmd)
+				handle_assignments(&sh, sh.ast->cmd);
+			// TODO: executor(&sh);
+		}
 		normalize_env(&sh);
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;
