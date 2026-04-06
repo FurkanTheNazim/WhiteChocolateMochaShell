@@ -76,6 +76,20 @@ typedef struct s_command
     struct s_command *next;
 }   t_command;
 
+typedef enum e_ast_type
+{
+	AST_CMD,
+	AST_PIPE
+}	t_ast_type;
+
+typedef struct s_ast_node
+{
+	t_ast_type			type;
+	t_command			*cmd;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}	t_ast_node;
+
 // Lexer Utils
 int				is_operator(char c);
 int				ft_isspace(char c);
@@ -112,5 +126,11 @@ void free_redir_list(t_sh *sh, t_redir *list);
 // Parser
 t_command	*parser(t_sh *sh);
 int			validate_tokens(t_sh *sh);
+
+// AST
+t_ast_node	*build_ast(t_sh *sh);
+t_ast_node	*create_ast_cmd(t_sh *sh, t_command *cmd);
+t_ast_node	*create_ast_pipe(t_sh *sh, t_ast_node *left, t_ast_node *right);
+void		print_ast(t_ast_node *node, int depth);
 
 #endif  

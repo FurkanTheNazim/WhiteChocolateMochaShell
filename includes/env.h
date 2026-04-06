@@ -28,5 +28,6 @@ void	manuel_init(t_sh *sh, char *av);
 char	**env_delimeter(t_sh *sh, char *envp, int i);
 int		validate_env(t_sh *sh);
 int		env_addback(t_sh *sh, t_env *newnode);
+void	normalize_env(t_sh *sh);
 
 #endif

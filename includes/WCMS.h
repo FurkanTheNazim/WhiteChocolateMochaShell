@@ -26,6 +26,7 @@ typedef struct s_sh
     t_gc	*gc;
 	t_env	*env;
     t_command *command_list;
+    t_ast_node *ast;
     char	**envp;
     char	*input;
 	int		exit_status;
