@@ -116,6 +116,7 @@ static int	handle_eof(t_sh *sh)
 {
 	rl_clear_history();
 	gc_free_all(sh);
+	ft_putendl_fd("exit", 2);
 	return (sh->exit_status);
 }
 
