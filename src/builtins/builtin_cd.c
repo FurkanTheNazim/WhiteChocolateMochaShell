@@ -162,8 +162,8 @@ void	create_pwd(t_sh *sh, char *param, t_env *new_oldpwd)
 	char	**base;
 	char	**result;
 
-	base = gc_add(sh, ft_split(new_oldpwd->env_value, '/'), 0);
-	path = gc_add(sh, ft_split(param, '/'), 0);
+	base = gc_add_matrix(sh, (void **)ft_split(new_oldpwd->env_value, '/'), 0);
+	path = gc_add_matrix(sh, (void **)ft_split(param, '/'), 0);
 	if (!base || !path)
 		return (allocate_error(sh));
 	calculate_new_pwd(sh, &result, base, path);

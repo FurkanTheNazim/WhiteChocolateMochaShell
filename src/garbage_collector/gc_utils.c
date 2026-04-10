@@ -149,3 +149,17 @@ char	*gc_join(char *s1, char *s2)
 	str[i + j] = '\0';
 	return (str);
 }
+
+void	*gc_add_matrix(t_sh *sh, void **ptr, int flag)
+{
+	int	i;
+
+	i = 0;
+	while (ptr[i])
+	{
+		gc_add(sh, ptr[i], flag);
+		i++;
+	}
+	gc_add(sh, ptr, flag);
+	return (ptr);
+}

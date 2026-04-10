@@ -148,7 +148,7 @@ static char	*word_splitter(t_sh *sh, char *str)
 
 	i = 0;
 	result = "";
-	tmp = gc_add(sh, ft_split(str, ' '), 0);
+	tmp = gc_add_matrix(sh, (void **)ft_split(str, ' '), 0);
 	if (!tmp)
 		return (allocate_error(sh), NULL);
 	while (tmp[i])
