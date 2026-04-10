@@ -53,6 +53,46 @@ int	apply_redirections(t_sh *sh, t_redir *redirs)
 	return (0);
 }
 
+static void	child_process(t_sh *sh, t_command *cmd)
+{
+	char	*path;
+	char	**envp;
+
+	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)
+		exit(1);
+	path = resolve_path(sh, cmd->args[0]);
+	if (!path)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putendl_fd(": command not found", 2);
+		exit(127);
+	}
+	envp = env_to_envp(sh);
+	execve(path, cmd->args, envp);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->args[0], 2);
+	ft_putendl_fd(": execution failed", 2);
+	exit(126);
+}
+
+static void	exec_external(t_sh *sh, t_command *cmd, int sin, int sout)
+{
+	pid_t	pid;
+	int		status;
+
+	dup2(sin, STDIN_FILENO);
+	dup2(sout, STDOUT_FILENO);
+	close(sin);
+	close(sout);
+	pid = fork();
+	if (pid == 0)
+		child_process(sh, cmd);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		sh->exit_status = WEXITSTATUS(status);
+}
+
 void	execute_cmd(t_sh *sh, t_command *cmd)
 {
 	int	saved_stdin;
@@ -77,10 +117,13 @@ void	execute_cmd(t_sh *sh, t_command *cmd)
 		return ;
 	}
 	if (cmd->builtin != NOT_BUILTIN)
+	{
 		exec_builtin(sh, cmd);
-	// TODO: external commands (fork + execve)
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
+		return ;
+	}
+	exec_external(sh, cmd, saved_stdin, saved_stdout);
 }
