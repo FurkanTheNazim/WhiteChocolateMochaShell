@@ -172,16 +172,10 @@ int	main(int ac, char **av, char **envp)
 		// builtin_export(&sh, param);
 		// ft_printf("{----\n}");
 		// builtin_env(&sh, NULL);
-		print_expanded(sh.token_list);
 		// print_tokens(sh.token_list);
 		sh.ast = build_ast(&sh);
 		if (sh.ast)
-		{
-			print_ast(sh.ast, 0);
-			if (sh.ast->type == AST_CMD && sh.ast->cmd)
-				handle_assignments(&sh, sh.ast->cmd);
-			// TODO: executor(&sh);
-		}
+			execute_ast(&sh, sh.ast);
 		normalize_env(&sh);
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;
