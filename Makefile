@@ -42,7 +42,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/builtins/builtin_dispatch.c \
 			  $(SRC_DIR)/builtins/variable.c \
 			  $(SRC_DIR)/builtins/variable_utils.c \
-			  $(SRC_DIR)/parser/ast_builder.c
+			  $(SRC_DIR)/parser/ast_builder.c \
+			  $(SRC_DIR)/executor/executor_utils.c
 
 
 # Object files

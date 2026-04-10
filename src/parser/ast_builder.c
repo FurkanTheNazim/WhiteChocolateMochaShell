@@ -104,6 +104,17 @@ void	print_ast(t_ast_node *node, int depth)
 				i++;
 			}
 		}
+		if (node->cmd && node->cmd->redirs)
+		{
+			t_redir *tmp = node->cmd->redirs;
+			ft_putstr_fd(" | Redirs: ", 1);
+			while (tmp)
+			{
+				ft_putstr_fd(tmp->file, 1);
+				ft_putstr_fd(" ", 1);
+				tmp = tmp->next;
+			}
+		}
 		ft_putstr_fd("\n", 1);
 	}
 }

@@ -19,6 +19,7 @@
 # include "builtin.h"
 # include "expander.h"
 # include "errors.h"
+# include "executor.h"
 
 typedef struct s_sh
 {
