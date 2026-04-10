@@ -54,7 +54,10 @@ int	append_operator(char *ptr, t_sh *shell)
 	i = 0;
 	type = TOKEN_WORD;
 	if (ptr[i] == '|')
+	{
 		type = get_pipe_type(ptr, &i);
+		shell->in_pipe = 1;
+	}
 	else if (ptr[i] == '<')
 		type = get_redir_in_type(ptr, &i);
 	else if (ptr[i] == '>')

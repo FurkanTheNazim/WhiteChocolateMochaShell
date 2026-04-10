@@ -14,5 +14,5 @@ Ctrl/D -> bash te null terminalde exit atıyor. minishell null da çıkıyorama 
 
 
 Exit | exit (çıktı vermemeli ama veriyor.)
-exit 12dsd => hata raporu vermeli ama çıkmalı yine de (exit->status = 2)
-OLDPWD güncellenmiyor cd sonrası
+exit 12dsd => hata raporu vermeli ama çıkmalı yine de (exit->status = 2) //düzeltildi
+OLDPWD güncellenmiyor cd sonrası //halledildi

@@ -52,7 +52,7 @@ int	validate_parameter(t_sh *sh, char *param)
 		{
 			exit_err("numeric argument required", param);
 			sh->exit_status = 2;
-			return (0);
+			exit (2);
 		}
 		i++;
 	}
@@ -77,7 +77,7 @@ void	builtin_exit(t_sh *sh, char **param)
 	if (param[2])
 	{
 		exit_err("too many arguments", NULL);
-		sh->exit_status = 2;
+		sh->exit_status = 1;
 		return ;
 	}
 	value = ft_atol(param[1], &flag);
