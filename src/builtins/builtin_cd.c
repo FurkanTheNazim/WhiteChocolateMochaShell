@@ -201,29 +201,31 @@ void	create_oldpwd(t_sh *sh, t_env *new_oldpwd)
 
 void	update_pwds(t_sh *sh, char *param)
 {
-	t_env	*new_oldpwd;
-	t_env	*curr_oldpwd;
+	t_env	*env_pwd;
+	t_env	*env_oldpwd;
 	char	*curr_pwd;
 
-	new_oldpwd = find_env(sh, "PWD");
-	curr_oldpwd = find_env(sh, "OLDPWD");
-	if (!curr_oldpwd)
-		create_oldpwd(sh, new_oldpwd);
+	env_pwd = find_env(sh, "PWD");
+	env_oldpwd = find_env(sh, "OLDPWD");
+	if (!env_oldpwd)
+		create_oldpwd(sh, env_pwd);
 	curr_pwd = getcwd(NULL, 0);
 	if (!curr_pwd)
-		return (logical_pwd_update(sh, param, new_oldpwd));
-	if (!new_oldpwd)
+		return (logical_pwd_update(sh, param, env_pwd));
+	if (!env_pwd)
 	{
-		new_oldpwd = env_newnode(sh, "PWD", "");
-		new_oldpwd->env_printable = 0;
-		env_addback(sh, new_oldpwd);
+		env_pwd = env_newnode(sh, "PWD", "");
+		env_pwd->env_printable = 0;
+		env_addback(sh, env_pwd);
 	}
-	else if (new_oldpwd->has_value)
-		gc_free(sh, new_oldpwd->env_value, 1);
-	new_oldpwd->env_value = gc_add(sh, ft_strdup(curr_pwd), 1);
-	new_oldpwd->has_value = 1;
-	free(curr_pwd);
-	return ;
+	else if (env_pwd->has_value)
+	{
+		env_oldpwd->env_value = gc_add(sh, ft_strdup(env_pwd->env_value), 1);
+		env_oldpwd->has_value = 1;
+	}
+	env_pwd->env_value = gc_add(sh, ft_strdup(curr_pwd), 1);
+	env_pwd->has_value = 1;
+	return (free(curr_pwd));
 }
 
 void	builtin_cd(t_sh *sh, char **param)

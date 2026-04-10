@@ -11,3 +11,8 @@ parser ile {cmd, -flag, parameter, NULL} ayrımı yapıp güncellediğimiz t_com
 
 
 Ctrl/D -> bash te null terminalde exit atıyor. minishell null da çıkıyorama exit yazmıyorbu durumları incele
+
+
+Exit | exit (çıktı vermemeli ama veriyor.)
+exit 12dsd => hata raporu vermeli ama çıkmalı yine de (exit->status = 2)
+OLDPWD güncellenmiyor cd sonrası
