@@ -23,7 +23,6 @@ typedef struct s_env
 t_env	*env_newnode(t_sh *sh, char *name, char *value);
 void	init_env(t_sh *sh, char *av ,char **envp);
 void	add_to_list(t_sh *sh, char *envp);
-void	env_error(t_sh *sh, char *err);
 void	manuel_init(t_sh *sh, char *av);
 char	**env_delimeter(t_sh *sh, char *envp, int i);
 int		validate_env(t_sh *sh);

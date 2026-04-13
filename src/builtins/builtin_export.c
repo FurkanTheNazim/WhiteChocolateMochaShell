@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/12 20:11:15 by kedemiro          #+#    #+#             */
+/*   Updated: 2026/04/12 20:11:16 by kedemiro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "WCMS.h"
 
 void	export_err(t_sh *sh, char	*param)
@@ -134,7 +146,7 @@ void	declare(t_sh *sh)
 	sort_env_list(&tmp);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path)
+		if ((ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path) || ft_strncmp(tmp->env_name, "_", 1) == 0)
 			tmp = tmp->next;
 		else if (tmp->exported)
 		{

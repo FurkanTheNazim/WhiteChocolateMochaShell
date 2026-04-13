@@ -5,6 +5,7 @@ typedef struct s_sh t_sh;
 
 void	allocate_error(t_sh *sh);
 void	no_home_error(t_sh *sh);
-
+void	env_error(t_sh *sh, char *err);
+void	exit_err(t_sh *sh, char *err, char *param, int stat);
 
 #endif

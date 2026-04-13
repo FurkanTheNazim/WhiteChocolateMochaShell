@@ -10,9 +10,27 @@ parser ile {cmd, -flag, parameter, NULL} ayrımı yapıp güncellediğimiz t_com
 
 
 
-Ctrl/D -> bash te null terminalde exit atıyor. minishell null da çıkıyorama exit yazmıyorbu durumları incele
+Ctrl/D -> bash te null terminalde exit atıyor. minishell null da çıkıyorama exit yazmıyorbu durumları incele // düzeltildi
 
 
-Exit | exit (çıktı vermemeli ama veriyor.)
+Exit | exit (çıktı vermemeli ama veriyor.) //düzeltildi
 exit 12dsd => hata raporu vermeli ama çıkmalı yine de (exit->status = 2) //düzeltildi
-OLDPWD güncellenmiyor cd sonrası //halledildi
+OLDPWD güncellenmiyor cd sonrası //düzeltildi
+Son komut env'si güncellenmiyor ve _=/home/kedemiro/Desktop/minishell/./minishell olarak kalıyor
+export declare -x _= göstermemeli
+exit atoll hatalı kontrol edilmeli //düzeltildi
+exit builtini çalıştırıldığında açıkta kalan file descriptorlar var
+
+
+
+
+Yapılan Testler 
+
+fds, leak ve child procces takibi ">echo "selam' $PWD' "arkadaş | grep mini > test.txt" komutu ile incelendi => OK
+unset HOME; cd => çıktı ve return doğru
+cd non_exist_dir => çıktı ve return doğru
+exit i > LLONG_MAX || exit i < LLONG_MIN => doğru çıktı ve return 
+exit LLONG_MIN <i < 0 || exit 0 > i > LLONG_MAX || exit 0 => doğru çıktı ve sonuç
+
+
+

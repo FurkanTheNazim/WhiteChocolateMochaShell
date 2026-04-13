@@ -1,18 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/12 20:11:06 by kedemiro          #+#    #+#             */
+/*   Updated: 2026/04/13 14:36:02 by kedemiro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/WCMS.h"
 
-void	exit_err(char *err, char *param)
-{
-	ft_putstr_fd("minishell: exit: ", 2);
-	if (param)
-	{
-		ft_putstr_fd(param, 2);
-		ft_putstr_fd(": ", 2);
-	}
-	ft_putendl_fd(err, 2);
-	return ;
-}
-
-long	ft_atol(char *param, int *flag)
+long	ft_atol(t_sh *sh, char *param, int *flag)
 {
 	long long int	sign;
 	long long int	result;
@@ -34,29 +34,67 @@ long	ft_atol(char *param, int *flag)
 	}
 	if (result * sign > LLONG_MAX || result * sign < LLONG_MIN)
 	{
-		exit_err("numeric argument required", param);
+		exit_err(sh, "numeric argument required", param, 2);
 		*flag = 1;
 		return (-1);
 	}
-	return ((long)(result));
+	return (((long)(result)) * sign);
+}
+
+static void	check_overflow(t_sh *sh, char *param, int *data)
+{
+	int		i;
+	char	*lim;
+
+	if (data[1] < 19)
+		return ;
+	lim = "9223372036854775807";
+	if (data[2] == -1)
+		lim = "9223372036854775808";
+	i = data[0];
+	while (data[1] == 19 && param[i])
+	{
+		if (param[i] != lim[i - data[0]])
+		{
+			if (param[i] > lim[i - data[0]])
+				data[2] = 2;
+			break ;
+		}
+		i++;
+	}
+	if (data[2] == 2 || data[1] > 19)
+	{
+		exit_err(sh, "numeric argument required", param, 2);
+		exit(2);
+	}
 }
 
 int	validate_parameter(t_sh *sh, char *param)
 {
 	int	i;
+	int	data[3];
 
-	i  = 0;
+	i = 0;
+	data[1] = 0;
+	data[2] = 0;
+	while ((param[i] >= 9 && param[i] <= 13) || param[i] == 32)
+		i++;
+	if (param[i] == '-' || param[i] == '+')
+		data[2] = 44 - param[i++];
+	while (param[i] == '0')
+		i++;
+	data[0] = i;
 	while (param[i])
 	{
 		if (!ft_isdigit(param[i]))
 		{
-			exit_err("numeric argument required", param);
-			sh->exit_status = 2;
+			exit_err(sh, "numeric argument required", param, 2);
 			exit (2);
 		}
+		data[1]++;
 		i++;
 	}
-	return (1);
+	return (check_overflow(sh, param, data), 1);
 }
 
 void	builtin_exit(t_sh *sh, char **param)
@@ -76,34 +114,12 @@ void	builtin_exit(t_sh *sh, char **param)
 		return ;
 	if (param[2])
 	{
-		exit_err("too many arguments", NULL);
-		sh->exit_status = 1;
+		exit_err(sh, "too many arguments", NULL, 1);
 		return ;
 	}
-	value = ft_atol(param[1], &flag);
+	value = ft_atol(sh, param[1], &flag);
 	if (flag)
 		return ;
 	sh->exit_status = value % 256;
 	exit(sh->exit_status);
 }
-
-// int main()
-// {
-// 	t_sh sh;
-// 	int i = 0;
-// 	ft_bzero(&sh, sizeof(t_sh));
-// 	char **param;
-// 	param = malloc(sizeof(char *)* 4);
-// 	param[0] = ft_strdup("exit");
-// 	param[1] = ft_strdup("122a");
-// 	param[2] = ft_strdup("123");
-// 	param[3] = NULL;
-
-// 	builtin_exit(&sh, param);
-// 	printf("%d", sh.exit_status);
-// 	free(param[0]);
-// 	free(param[1]);
-// 	free(param[2]);
-// 	free(param[3]);
-// 	free(param);
-// }
