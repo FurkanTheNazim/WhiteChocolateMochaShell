@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/10 15:00:00 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/04/14 00:03:27 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
