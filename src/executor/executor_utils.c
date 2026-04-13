@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 06:09:45 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/13 23:01:38 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/14 00:17:05 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*resolve_path(t_sh *sh, char *cmd_name)
 	if (!dirs)
 		return (NULL);
 	i = 0;
-	while (dirs[i])
+	while (dirs && dirs[i])
 	{
 		result = try_path(sh, dirs[i], cmd_name);
 		if (result)

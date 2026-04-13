@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/02/10 20:00:41 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/04/14 00:21:50 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,3 +248,5 @@ int	main(int ac, char **av, char **envp)
 //     }
 //     return (0);
 // }
+
+
