@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/14 00:03:27 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/14 17:06:44 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,12 @@ int	apply_redirections(t_sh *sh, t_redir *redirs)
 	return (0);
 }
 
-static void	child_process(t_sh *sh, t_command *cmd)
+static void	child_process(t_sh *sh, t_command *cmd, char *path)
 {
-	char	*path;
 	char	**envp;
 
 	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)
 		exit(1);
-	path = resolve_path(sh, cmd->args[0]);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: ", 2);
@@ -80,14 +78,17 @@ static void	exec_external(t_sh *sh, t_command *cmd, int sin, int sout)
 {
 	pid_t	pid;
 	int		status;
+	char	*path;
 
 	dup2(sin, STDIN_FILENO);
 	dup2(sout, STDOUT_FILENO);
 	close(sin);
 	close(sout);
+	path = resolve_path(sh, cmd->args[0]);
+	update_lastcmd_env(sh, cmd, path, 0);
 	pid = fork();
 	if (pid == 0)
-		child_process(sh, cmd);
+		child_process(sh, cmd, path);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		sh->exit_status = WEXITSTATUS(status);

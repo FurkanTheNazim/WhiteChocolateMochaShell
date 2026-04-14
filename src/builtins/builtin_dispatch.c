@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_dispatch.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:47:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/03/19 16:47:00 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/04/14 16:46:28 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	exec_builtin(t_sh *sh, t_command *cmd)
 {
 	if (!cmd || cmd->builtin == NOT_BUILTIN)
 		return (0);
+	update_lastcmd_env(sh, cmd, NULL, 1);
 	if (cmd->builtin == BUILTIN_ECHO)
 		builtin_echo(sh, cmd->args);
 	else if (cmd->builtin == BUILTIN_CD)

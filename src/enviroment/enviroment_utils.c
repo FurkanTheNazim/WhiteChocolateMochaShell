@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 20:11:49 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/13 12:39:55 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/14 16:47:18 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,28 @@ int	env_addback(t_sh *sh, t_env *newnode)
 		tmp = tmp->next;
 	tmp->next = newnode;
 	return (1);
+}
+
+void	update_lastcmd_env(t_sh *sh, t_command *cmd, char *path, int flag)
+{
+	t_env	*last_cmd;
+
+	last_cmd = find_env(sh, "_");
+	if (flag)
+	{
+		flag = 0;
+		if (last_cmd)
+		{
+			while (cmd->args[flag])
+				flag++;
+			last_cmd->env_value = gc_add(sh, ft_strdup(cmd->args[flag -1]), 1);
+		}
+	}
+	else
+	{
+		if (last_cmd && path)
+			last_cmd->env_value = gc_add(sh, ft_strdup(path), 1);
+	}
 }
 
 void	normalize_env(t_sh *sh)

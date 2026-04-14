@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 06:09:45 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/14 00:17:05 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/14 16:15:54 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,7 @@ char	*resolve_path(t_sh *sh, char *cmd_name)
 	path_env = find_env(sh, "PATH");
 	if (!path_env || !path_env->env_value)
 		return (NULL);
-	dirs = gc_add(sh, ft_split(path_env->env_value, ':'), 0);
-	if (!dirs)
-		return (NULL);
+	dirs = gc_add_matrix(sh, (void **)ft_split(path_env->env_value, ':'), 0);
 	i = 0;
 	while (dirs && dirs[i])
 	{
