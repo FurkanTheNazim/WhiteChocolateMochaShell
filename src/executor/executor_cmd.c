@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/14 17:06:44 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 00:03:46 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,10 @@ void	execute_cmd(t_sh *sh, t_command *cmd)
 
 	if (!cmd)
 		return ;
-	if (!cmd->args || !cmd->args[0])
-	{
-		handle_assignments(sh, cmd);
+	
+	handle_assignments(sh, cmd);
+	if (!cmd->args || !(cmd->args[0]))
 		return ;
-	}
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)

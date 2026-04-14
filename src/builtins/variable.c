@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/04 18:09:35 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/04 18:56:56 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/04/14 23:49:26 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,56 @@ int	exec_assignment(t_sh *sh, char *str)
 	return (1);
 }
 
+// int	handle_assignments(t_sh *sh, t_command *cmd)
+// {
+// 	int	i;
+
+// 	if (!cmd || !cmd->args || !cmd->args[0])
+// 		return (0);
+// 	i = 0;
+// 	while (cmd->args[i])
+// 	{
+// 		if (!is_assignment(cmd->args[i]))
+// 		{
+// 			perror("5");	
+// 			return (0);
+// 		}
+// 		if (!cmd->args[i])
+// 		{
+// 			perror("6");
+// 			if(permanent_update(sh, cmd->args[i]) == -1)
+// 			{
+// 				perror("7");
+// 				return (-1);
+// 			}
+// 		}
+// 		else if(exec_assignment(sh, cmd->args[i]) == -1)
+// 		{
+// 			perror("");
+// 			return (-1);
+// 		}
+// 		i++;
+// 	}
+// 	return (1);
+// }
+
 int	handle_assignments(t_sh *sh, t_command *cmd)
 {
 	int	i;
+	int	has_command;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
 	i = 0;
-	while (cmd->args[i])
+	while (cmd->args[i] && is_assignment(cmd->args[i]))
+		i++;
+	if (i == 0)
+		return (0);
+	has_command = (cmd->args[i] != NULL);
+	i = 0;
+	while (cmd->args[i] && is_assignment(cmd->args[i]))
 	{
-		if (!is_assignment(cmd->args[i]) && i == 0)
-			return (0);
-		if (!cmd->args[1])
+		if (!has_command)
 		{
 			if(permanent_update(sh, cmd->args[i]) == -1)
 				return (-1);
@@ -99,5 +137,6 @@ int	handle_assignments(t_sh *sh, t_command *cmd)
 			return (-1);
 		i++;
 	}
+	cmd->args = &(cmd->args[i]);
 	return (1);
 }
