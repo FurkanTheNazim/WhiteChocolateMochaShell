@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 20:11:00 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/12 20:11:01 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:48:55 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,18 @@ void	builtin_echo(t_sh *sh, char **param)
 {
 	int	i;
 	int	flag;
-	
+	int	write_start;
+
+	write_start = 0;
 	flag = 0;
 	i = 1;
 	while (param[i])
 	{
-		if(validate_flag(param[i]) && validate_flag(param[1]))
+		if(!write_start && validate_flag(param[i]) && validate_flag(param[1]))
 			flag = 1;
 		else
 		{
+			write_start = 1; 
 			ft_printf("%s", param[i]);
 			if (param[i +1])
 				ft_printf(" ");
@@ -48,8 +51,6 @@ void	builtin_echo(t_sh *sh, char **param)
 		i++;
 	}
 	if (!flag)
-	{
 		printf("\n");
-		sh->exit_status = 0;
-	}
+	sh->exit_status = 0;
 }
