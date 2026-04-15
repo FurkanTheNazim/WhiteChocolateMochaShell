@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 20:11:00 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/15 16:48:55 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 18:08:45 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	validate_flag(char *flag)
 	int	i;
 
 	i = 1;
-	if (flag[0] != '-' && flag[1] != 'n')
+	if (flag[0] != '-' || flag[1] != 'n')
 		return (0);
 	while (flag[i])
 	{
@@ -39,7 +39,7 @@ void	builtin_echo(t_sh *sh, char **param)
 	i = 1;
 	while (param[i])
 	{
-		if(!write_start && validate_flag(param[i]) && validate_flag(param[1]))
+		if(!write_start && (validate_flag(param[i]) && validate_flag(param[1])))
 			flag = 1;
 		else
 		{

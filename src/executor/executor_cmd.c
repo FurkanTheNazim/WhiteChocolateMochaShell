@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/15 16:14:11 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 17:40:14 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,3 +129,4 @@ void	execute_cmd(t_sh *sh, t_command *cmd)
 	}
 	exec_external(sh, cmd);
 }
+	
