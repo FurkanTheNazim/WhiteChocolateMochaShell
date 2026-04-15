@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:47:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/14 16:46:28 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:12:14 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ int	exec_builtin(t_sh *sh, t_command *cmd)
 	else if (cmd->builtin == BUILTIN_ENV)
 		builtin_env(sh, cmd->args);
 	else if (cmd->builtin == BUILTIN_EXIT)
+	{
+		close(sh->fds[0]);
+		close(sh->fds[1]);
 		builtin_exit(sh, cmd->args);
+	}
 	return (1);
 }

@@ -14,11 +14,11 @@ Ctrl/D -> bash te null terminalde exit atıyor. minishell null da çıkıyorama 
 Exit | exit (çıktı vermemeli ama veriyor.)																		//düzeltildi
 exit 12dsd => hata raporu vermeli ama çıkmalı yine de (exit->status = 2) 										//düzeltildi
 OLDPWD güncellenmiyor cd sonrası																				//düzeltildi
-Son komut env'si güncellenmiyor ve _=/home/kedemiro/Desktop/minishell/./minishell olarak kalıyor
+Son komut env'si güncellenmiyor ve _=/home/kedemiro/Desktop/minishell/./minishell olarak kalıyor				//düzeltildi
 export declare -x _= göstermemeli																				//düzeltildi
 exit atoll hatalı kontrol edilmeli 																				//düzeltildi
 exit builtini çalıştırıldığında açıkta kalan file descriptorlar var
->TEST=123  || > TEST=123 ls -> command not found diyor. index'in execve için atlanması gerekli
+>TEST=123  || > TEST=123 ls -> command not found diyor. index'in execve için atlanması gerekli					//düzeltildi
 
 
 

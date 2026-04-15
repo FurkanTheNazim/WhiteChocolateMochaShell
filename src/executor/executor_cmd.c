@@ -6,11 +6,23 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/15 00:03:46 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:14:11 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "WCMS.h"
+
+static void	close_fds(t_sh *sh, t_command *cmd)
+{
+	if (cmd->builtin != BUILTIN_EXIT)
+	{
+		dup2(sh->fds[0], STDIN_FILENO);
+		dup2(sh->fds[1], STDOUT_FILENO);
+		close(sh->fds[0]);
+		close(sh->fds[1]);
+	}
+	return ;
+}
 
 static int	open_redir(t_redir *redir)
 {
@@ -74,16 +86,13 @@ static void	child_process(t_sh *sh, t_command *cmd, char *path)
 	exit(126);
 }
 
-static void	exec_external(t_sh *sh, t_command *cmd, int sin, int sout)
+static void	exec_external(t_sh *sh, t_command *cmd)
 {
 	pid_t	pid;
 	int		status;
 	char	*path;
 
-	dup2(sin, STDIN_FILENO);
-	dup2(sout, STDOUT_FILENO);
-	close(sin);
-	close(sout);
+	close_fds(sh, cmd);
 	path = resolve_path(sh, cmd->args[0]);
 	update_lastcmd_env(sh, cmd, path, 0);
 	pid = fork();
@@ -94,36 +103,25 @@ static void	exec_external(t_sh *sh, t_command *cmd, int sin, int sout)
 		sh->exit_status = WEXITSTATUS(status);
 }
 
-void	execute_cmd(t_sh *sh, t_command *cmd)
-{
-	int	saved_stdin;
-	int	saved_stdout;
 
+void	execute_cmd(t_sh *sh, t_command *cmd)
+{ 
 	if (!cmd)
 		return ;
-	
 	handle_assignments(sh, cmd);
 	if (!cmd->args || !(cmd->args[0]))
 		return ;
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
+	sh->fds[0] = dup(STDIN_FILENO);
+	sh->fds[1] = dup(STDOUT_FILENO);
 	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)
 	{
-		dup2(saved_stdin, STDIN_FILENO);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdin);
-		close(saved_stdout);
 		sh->exit_status = 1;
-		return ;
+		return (close_fds(sh, cmd));
 	}
 	if (cmd->builtin != NOT_BUILTIN)
 	{
 		exec_builtin(sh, cmd);
-		dup2(saved_stdin, STDIN_FILENO);
-		dup2(saved_stdout, STDOUT_FILENO);
-		close(saved_stdin);
-		close(saved_stdout);
-		return ;
+		return (close_fds(sh, cmd));
 	}
-	exec_external(sh, cmd, saved_stdin, saved_stdout);
+	exec_external(sh, cmd);
 }

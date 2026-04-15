@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/04/14 00:21:50 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:17:23 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	print_expanded(t_token *list)
 void	init_minishell(t_sh *sh)
 {
 	ft_bzero(sh, sizeof(t_sh));
+	sh->fds[0] = -1;
+	sh->fds[1] = -1;
 	// sh->token_list = NULL;
 	// sh->input = NULL;
 	// sh->envp = NULL;
@@ -117,6 +119,10 @@ static int	handle_eof(t_sh *sh)
 	rl_clear_history();
 	gc_free_all(sh);
 	ft_putendl_fd("exit", 2);
+	if (sh->fds[0] != -1)
+		close(sh->fds[0]);
+	if (sh->fds[1] != -1)
+		close(sh->fds[1]);
 	return (sh->exit_status);
 }
 
@@ -131,7 +137,7 @@ int	main(int ac, char **av, char **envp)
 		exit (1);
 	}
 	init_minishell(&sh);
-	init_env(&sh,av[0], envp);
+	init_env(&sh, av[0], envp);
 	while (1)
 	{
 		cp_cmd = gc_checkpoint(&sh);
