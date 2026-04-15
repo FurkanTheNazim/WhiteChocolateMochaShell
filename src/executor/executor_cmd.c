@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "WCMS.h"
+#include <errno.h>
 
 static void	close_fds(t_sh *sh, t_command *cmd)
 {
@@ -35,6 +36,8 @@ static int	open_redir(t_redir *redir)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (redir->type == TOKEN_REDIR_APPEND)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else if (redir->type == TOKEN_HEREDOC)
+		fd = redir->heredoc_fd;
 	return (fd);
 }
 
@@ -51,7 +54,8 @@ int	apply_redirections(t_sh *sh, t_redir *redirs)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(redirs->file, 2);
-			ft_putendl_fd(": No such file or directory", 2);
+			ft_putstr_fd(": ", 2);
+			ft_putendl_fd(strerror(errno), 2);
 			return (-1);
 		}
 		if (redirs->type == TOKEN_REDIR_IN)

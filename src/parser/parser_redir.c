@@ -21,6 +21,7 @@ t_redir	*create_redir(t_sh *shell, int type, char *file)
 		return (NULL);
 	new_redir->type = type;
 	new_redir->file = file;
+	new_redir->heredoc_fd = -1;
 	new_redir->next = NULL;
 	return (new_redir);
 }

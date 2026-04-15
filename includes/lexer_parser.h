@@ -65,6 +65,7 @@ typedef struct s_redir
 {
     int type;
     char *file;
+    int heredoc_fd;
     struct s_redir *next;
 }   t_redir;
 
