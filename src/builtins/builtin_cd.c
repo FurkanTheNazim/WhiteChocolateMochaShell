@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 20:10:15 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/12 21:28:39 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/17 18:18:56 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void	builtin_cd(t_sh *sh, char **param)
 	}
 	else if (param[1] && !param[1][0])
 	{
-		ft_putstr_fd("minishell: cd: null directory", 2);//expander world split yüzünden NAME="" cd $NAME durumunda bu hata değil errno gelmeli, cd "$NAME" world splitter a girmeyeceği için bu hata gelmeli, kontrol et sonradan //kampüste test et
-		sh->exit_status = 1;
+		// ft_putendl_fd("minishell: cd: null directory", 2);//expander world split yüzünden NAME="" cd $NAME durumunda bu hata değil errno gelmeli, cd "$NAME" world splitter a girmeyeceği için bu hata gelmeli, kontrol et sonradan //kampüste test et
+		sh->exit_status = 0;
 		return ;
 	}
 	else

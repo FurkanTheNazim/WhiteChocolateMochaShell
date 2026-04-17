@@ -35,6 +35,7 @@ typedef struct s_sh
     int         default_path;
     int         in_pipe;
     int         fds[2];
+	int			newline;
 } t_sh;
 
 #endif

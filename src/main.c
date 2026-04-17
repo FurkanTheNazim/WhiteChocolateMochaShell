@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/04/15 18:07:24 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:16:09 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,34 @@ static int	handle_eof(t_sh *sh)
 	return (sh->exit_status);
 }
 
+int	newline_handler(t_sh *sh)
+{
+	static char	**split = NULL;
+	static int	stop = 0;
+
+	if (!split && !ft_strchr(sh->input, '\n'))
+		return (0);
+	if (!split)
+	{
+		split = ft_split(sh->input, '\n');
+		if (!split)
+			return (allocate_error(sh), -1);
+		sh->newline = 1;
+	}
+	if ((stop -1) >= 0)
+		free(split[stop-1]);
+	if (!split[stop])
+	{
+		free(split);
+		sh->newline = 0;
+		split = NULL;
+		return (-1);
+	}
+	sh->input = split[stop];
+	stop++;
+	return (0);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_sh	sh;
@@ -141,10 +169,15 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		cp_cmd = gc_checkpoint(&sh);
-		sh.input = readline("mochashell>");
-		gc_add(&sh, sh.input, 0);
-		if (!sh.input)
-			return (handle_eof(&sh));
+		if (sh.newline == 0)
+		{
+			sh.input = readline("mochashell>");
+			gc_add(&sh, sh.input, 0);
+			if (!sh.input)
+				return (handle_eof(&sh));
+		}
+		if (newline_handler(&sh) < 0)
+			continue ;
 		add_history(sh.input);
 		sh.token_list = lexer(&sh);
 		if (!sh.token_list || sh.syntax_error)
@@ -254,4 +287,3 @@ int	main(int ac, char **av, char **envp)
 //     }
 //     return (0);
 // }
-
