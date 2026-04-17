@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/04/17 21:16:09 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/18 00:35:35 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	newline_handler(t_sh *sh)
 		sh->newline = 1;
 	}
 	if ((stop -1) >= 0)
-		free(split[stop-1]);
+		free(split[stop - 1]);
 	if (!split[stop])
 	{
 		free(split);
@@ -149,8 +149,38 @@ int	newline_handler(t_sh *sh)
 		split = NULL;
 		return (-1);
 	}
-	sh->input = split[stop];
-	stop++;
+	sh->input = split[stop++];
+	return (0);
+}
+
+int	get_input(t_sh *sh)
+{
+	if (sh->newline == 0)
+	{
+		sh->input = readline("mochashell>");
+		gc_add(sh, sh->input, 0);
+		if (!sh->input)
+			return (handle_eof(sh));
+	}
+	if (newline_handler(sh) < 0)
+		get_input(sh);
+	add_history(sh->input);
+	return (0);
+}
+
+int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
+{
+	sh->token_list = lexer(sh);
+	if (!sh->token_list || sh->syntax_error)
+	{
+		sh->syntax_error = 0;
+		gc_rollback(sh, cp_cmd);
+		sh->token_list = NULL;
+		sh->input = NULL;
+		return (-1);
+	}
+	if  (expand_token_list(sh) < 0)
+		return (-1);
 	return (0);
 }
 
@@ -169,50 +199,9 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		cp_cmd = gc_checkpoint(&sh);
-		if (sh.newline == 0)
-		{
-			sh.input = readline("mochashell>");
-			gc_add(&sh, sh.input, 0);
-			if (!sh.input)
-				return (handle_eof(&sh));
-		}
-		if (newline_handler(&sh) < 0)
+		get_input(&sh);
+		if (execute_lexer_and_expander(&sh, cp_cmd) < 0)
 			continue ;
-		add_history(sh.input);
-		sh.token_list = lexer(&sh);
-		if (!sh.token_list || sh.syntax_error)
-		{
-			sh.syntax_error = 0;
-			gc_rollback(&sh, cp_cmd);
-			sh.token_list = NULL;
-			sh.input = NULL;
-			continue ;
-		}
-		// if (handle_heredoc(&sh) == -1)
-		// {
-		// 	gc_rollback(&sh, cp_hrd);
-		// 	continue ;
-		// }
-		if (expand_token_list(&sh) < 0)
-		{
-			continue;
-		}
-		// ft_printf("[----------]");
-		// // builtin_env(&sh,NULL);
-		// builtin_pwd(&sh, NULL);
-		// char *param[3];
-		// param[0] = "cd";
-		// param[1] = sh.token_list->value;
-		// param[2] = NULL;
-		// builtin_cd(&sh, param);
-		// builtin_pwd(&sh, NULL);
-		// // param[3] = "medsrhaba";
-		// param[1] = NULL;
-		// // builtin_echo(&sh, param);
-		// builtin_export(&sh, param);
-		// ft_printf("{----\n}");
-		// builtin_env(&sh, NULL);
-		// print_tokens(sh.token_list);
 		sh.ast = build_ast(&sh);
 		if (sh.ast)
 			execute_ast(&sh, sh.ast);
@@ -223,6 +212,76 @@ int	main(int ac, char **av, char **envp)
 	}
 	return (0);
 }
+
+// int	main(int ac, char **av, char **envp)
+// {
+// 	t_sh	sh;
+// 	t_gc	*cp_cmd;
+
+// 	if (ac != 1)
+// 	{
+// 		ft_putendl_fd("Usage: ./minishell", 2);
+// 		exit (1);
+// 	}
+// 	init_minishell(&sh);
+// 	init_env(&sh, av[0], envp);
+// 	while (1)
+// 	{
+// 		cp_cmd = gc_checkpoint(&sh);
+// 		if (sh.newline == 0)
+// 		{
+// 			sh.input = readline("mochashell>");
+// 			gc_add(&sh, sh.input, 0);
+// 			if (!sh.input)
+// 				return (handle_eof(&sh));
+// 		}
+// 		if (newline_handler(&sh) < 0)
+// 			continue ;
+// 		add_history(sh.input);
+// 		sh.token_list = lexer(&sh);
+// 		if (!sh.token_list || sh.syntax_error)
+// 		{
+// 			sh.syntax_error = 0;
+// 			gc_rollback(&sh, cp_cmd);
+// 			sh.token_list = NULL;
+// 			sh.input = NULL;
+// 			continue ;
+// 		}
+// 		// if (handle_heredoc(&sh) == -1)
+// 		// {
+// 		// 	gc_rollback(&sh, cp_hrd);
+// 		// 	continue ;
+// 		// }
+// 		if (expand_token_list(&sh) < 0)
+// 		{
+// 			continue;
+// 		}
+// 		// ft_printf("[----------]");
+// 		// // builtin_env(&sh,NULL);
+// 		// builtin_pwd(&sh, NULL);
+// 		// char *param[3];
+// 		// param[0] = "cd";
+// 		// param[1] = sh.token_list->value;
+// 		// param[2] = NULL;
+// 		// builtin_cd(&sh, param);
+// 		// builtin_pwd(&sh, NULL);
+// 		// // param[3] = "medsrhaba";
+// 		// param[1] = NULL;
+// 		// // builtin_echo(&sh, param);
+// 		// builtin_export(&sh, param);
+// 		// ft_printf("{----\n}");
+// 		// builtin_env(&sh, NULL);
+// 		// print_tokens(sh.token_list);
+// 		sh.ast = build_ast(&sh);
+// 		if (sh.ast)
+// 			execute_ast(&sh, sh.ast);
+// 		normalize_env(&sh);
+// 		gc_rollback(&sh, cp_cmd);
+// 		sh.token_list = NULL;
+// 		sh.input = NULL;
+// 	}
+// 	return (0);
+// }
 
 
 // int main(int ac, char **av, char **envp)
