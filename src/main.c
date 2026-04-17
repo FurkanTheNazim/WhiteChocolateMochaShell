@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/04/18 00:35:35 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/04/18 00:44:53 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ static int	handle_eof(t_sh *sh)
 		close(sh->fds[0]);
 	if (sh->fds[1] != -1)
 		close(sh->fds[1]);
-	return (sh->exit_status);
+	exit (sh->exit_status);
 }
 
 int	newline_handler(t_sh *sh)
@@ -153,19 +153,23 @@ int	newline_handler(t_sh *sh)
 	return (0);
 }
 
-int	get_input(t_sh *sh)
+void	get_input(t_sh *sh)
 {
-	if (sh->newline == 0)
+	while (1)
 	{
-		sh->input = readline("mochashell>");
-		gc_add(sh, sh->input, 0);
-		if (!sh->input)
-			return (handle_eof(sh));
+		if (sh->newline == 0)
+		{
+			sh->input = readline("mochashell>");
+			gc_add(sh, sh->input, 0);
+			if (!sh->input)
+				handle_eof(sh);
+		}
+		if (newline_handler(sh) < 0)
+			continue ;
+		break ;
 	}
-	if (newline_handler(sh) < 0)
-		get_input(sh);
 	add_history(sh->input);
-	return (0);
+	return ;
 }
 
 int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
