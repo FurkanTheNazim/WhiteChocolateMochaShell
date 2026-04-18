@@ -118,7 +118,8 @@ static int	handle_eof(t_sh *sh)
 {
 	rl_clear_history();
 	gc_free_all(sh);
-	ft_putendl_fd("exit", 2);
+	if (isatty(STDIN_FILENO))
+		ft_putendl_fd("exit", 2);
 	if (sh->fds[0] != -1)
 		close(sh->fds[0]);
 	if (sh->fds[1] != -1)
@@ -159,7 +160,14 @@ void	get_input(t_sh *sh)
 	{
 		if (sh->newline == 0)
 		{
-			sh->input = readline("mochashell>");
+			if (isatty(STDIN_FILENO))
+				sh->input = readline("mochashell>");
+			else
+			{
+				sh->input = get_next_line(STDIN_FILENO);
+				if (sh->input && ft_strlen(sh->input) > 0 && sh->input[ft_strlen(sh->input) - 1] == '\n')
+					sh->input[ft_strlen(sh->input) - 1] = '\0';
+			}
 			gc_add(sh, sh->input, 0);
 			if (!sh->input)
 				handle_eof(sh);
