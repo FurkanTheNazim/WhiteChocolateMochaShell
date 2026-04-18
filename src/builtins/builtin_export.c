@@ -146,7 +146,7 @@ void	declare(t_sh *sh)
 	sort_env_list(&tmp);
 	while (tmp)
 	{
-		if ((ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path) || ft_strncmp(tmp->env_name, "_", 1) == 0)
+		if ((ft_strncmp(tmp->env_name, "PATH", 5) == 0 && sh->default_path) || ft_strncmp(tmp->env_name, "_", 2) == 0)
 			tmp = tmp->next;
 		else if (tmp->exported)
 		{

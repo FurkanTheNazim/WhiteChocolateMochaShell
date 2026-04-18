@@ -13,16 +13,12 @@
 #include "WCMS.h"
 #include <errno.h>
 
-static void	close_fds(t_sh *sh, t_command *cmd)
+static void	close_fds(t_sh *sh)
 {
-	if (cmd->builtin != BUILTIN_EXIT)
-	{
-		dup2(sh->fds[0], STDIN_FILENO);
-		dup2(sh->fds[1], STDOUT_FILENO);
-		close(sh->fds[0]);
-		close(sh->fds[1]);
-	}
-	return ;
+	dup2(sh->fds[0], STDIN_FILENO);
+	dup2(sh->fds[1], STDOUT_FILENO);
+	close(sh->fds[0]);
+	close(sh->fds[1]);
 }
 
 static int	open_redir(t_redir *redir)
@@ -96,7 +92,7 @@ static void	exec_external(t_sh *sh, t_command *cmd)
 	int		status;
 	char	*path;
 
-	close_fds(sh, cmd);
+	close_fds(sh);
 	path = resolve_path(sh, cmd->args[0]);
 	update_lastcmd_env(sh, cmd, path, 0);
 	pid = fork();
@@ -120,12 +116,14 @@ void	execute_cmd(t_sh *sh, t_command *cmd)
 	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)
 	{
 		sh->exit_status = 1;
-		return (close_fds(sh, cmd));
+		close_fds(sh);
+		return ;
 	}
 	if (cmd->builtin != NOT_BUILTIN)
 	{
 		exec_builtin(sh, cmd);
-		return (close_fds(sh, cmd));
+		close_fds(sh);
+		return ;
 	}
 	exec_external(sh, cmd);
 }
