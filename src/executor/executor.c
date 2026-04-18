@@ -17,6 +17,7 @@ static void	exec_pipe_left(t_sh *sh, t_ast_node *node, int *fd)
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
+	sh->in_pipe = 1;
 	execute_ast(sh, node->left);
 	exit(sh->exit_status);
 }
@@ -26,6 +27,7 @@ static void	exec_pipe_right(t_sh *sh, t_ast_node *node, int *fd)
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
+	sh->in_pipe = 1;
 	execute_ast(sh, node->right);
 	exit(sh->exit_status);
 }
