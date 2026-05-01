@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/26 16:56:45 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/01 16:51:25 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,11 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 	{
 		pid = fork();
 		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			child_process(sh, cmd, resolve_path(sh, cmd->args[0]));
+		}
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			sh->exit_status = WEXITSTATUS(status);

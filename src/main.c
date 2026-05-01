@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/04/18 00:44:53 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/01 16:48:14 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void	get_input(t_sh *sh)
 {
 	while (1)
 	{
+		setup_signal(1);
 		if (sh->newline == 0)
 		{
 			if (isatty(STDIN_FILENO))
@@ -171,6 +172,7 @@ void	get_input(t_sh *sh)
 			gc_add(sh, sh->input, 0);
 			if (!sh->input)
 				handle_eof(sh);
+			setup_signal(2);
 		}
 		if (newline_handler(sh) < 0)
 			continue ;

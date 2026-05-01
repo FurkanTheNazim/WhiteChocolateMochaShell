@@ -20,6 +20,7 @@
 # include "expander.h"
 # include "errors.h"
 # include "executor.h"
+# include "sh_signals.h"
 
 typedef struct s_sh
 {

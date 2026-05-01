@@ -47,7 +47,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/ast_builder.c \
 			  $(SRC_DIR)/executor/executor_utils.c \
 			  $(SRC_DIR)/executor/executor_cmd.c \
-			  $(SRC_DIR)/executor/executor.c
+			  $(SRC_DIR)/executor/executor.c \
+			  $(SRC_DIR)/signals/signal.c
 
 
 # Object files
