@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/05/01 16:48:14 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/03 02:45:46 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void	get_input(t_sh *sh)
 {
 	while (1)
 	{
-		setup_signal(1);
+		setup_signal(sh, 1);
 		if (sh->newline == 0)
 		{
 			if (isatty(STDIN_FILENO))
@@ -172,7 +172,7 @@ void	get_input(t_sh *sh)
 			gc_add(sh, sh->input, 0);
 			if (!sh->input)
 				handle_eof(sh);
-			setup_signal(2);
+			setup_signal(sh, 2);
 		}
 		if (newline_handler(sh) < 0)
 			continue ;
@@ -210,6 +210,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	init_minishell(&sh);
 	init_env(&sh, av[0], envp);
+	term_pacifier();
 	while (1)
 	{
 		cp_cmd = gc_checkpoint(&sh);
@@ -223,6 +224,7 @@ int	main(int ac, char **av, char **envp)
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;
 		sh.input = NULL;
+		sh.in_pipe = 0;
 	}
 	return (0);
 }

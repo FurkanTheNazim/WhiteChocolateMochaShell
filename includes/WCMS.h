@@ -1,6 +1,9 @@
 #ifndef WCMS_H
 # define WCMS_H
 
+# define _XOPEN_SOURCE 700
+# define _DEFAULT_SOURCE
+
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -9,6 +12,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
