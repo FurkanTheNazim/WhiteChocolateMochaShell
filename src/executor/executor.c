@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:25:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/26 16:56:17 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/03 02:59:56 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,18 @@ static void	execute_pipe(t_sh *sh, t_ast_node *node)
 		return ;
 	pid_left = fork();
 	if (pid_left == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		exec_pipe_left(sh, node, fd);
+	}
 	pid_right = fork();
 	if (pid_right == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		exec_pipe_right(sh, node, fd);
+	}
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid_left, &status, 0);
