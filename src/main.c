@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/05/03 02:45:46 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/04 21:11:23 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,20 @@ void	init_minishell(t_sh *sh)
 	// sh->envp = NULL;
 	// sh->exit_status = 0;
 	// sh->syntax_error = 0;
+}
+
+static int	check_ischar(char	*input)
+{
+	int	i;
+
+	i = 0;
+	if (input[i] == '\n')
+		return (0);
+	while (input[i] && ft_isspace(input[i]))
+		i++;
+	if (input[i])
+		return (1);
+	return (0);
 }
 
 // static void	print_tokens(t_token *list)
@@ -175,6 +189,8 @@ void	get_input(t_sh *sh)
 			setup_signal(sh, 2);
 		}
 		if (newline_handler(sh) < 0)
+			continue ;
+		if (!check_ischar(sh->input))
 			continue ;
 		break ;
 	}

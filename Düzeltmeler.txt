@@ -17,9 +17,9 @@ OLDPWD güncellenmiyor cd sonrası																				//düzeltildi
 Son komut env'si güncellenmiyor ve _=/home/kedemiro/Desktop/minishell/./minishell olarak kalıyor				//düzeltildi
 export declare -x _= göstermemeli																				//düzeltildi
 exit atoll hatalı kontrol edilmeli 																				//düzeltildi
-exit builtini çalıştırıldığında açıkta kalan file descriptorlar var
+exit builtini çalıştırıldığında açıkta kalan file descriptorlar var												//düzeltildi
 >TEST=123  || > TEST=123 ls -> command not found diyor. index'in execve için atlanması gerekli					//düzeltildi
-
+Hata çıktılarını kontrol et, data race oluşmasın
 
 
 

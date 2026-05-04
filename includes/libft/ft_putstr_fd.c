@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:36:27 by kedemiro          #+#    #+#             */
-/*   Updated: 2025/06/24 20:16:37 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/04 17:58:53 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	int	i;
-
-	i = 0;
-	while (s[i])
-		write(fd, &s[i++], 1);
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
 }

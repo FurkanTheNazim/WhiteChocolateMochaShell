@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 20:01:49 by kedemiro          #+#    #+#             */
-/*   Updated: 2025/07/09 05:49:28 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/04 21:16:24 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int	ft_putstr(const char *str)
 	i = 0;
 	if (str == NULL)
 		return (ft_putstr("(null)"));
-	while (str[i] != '\0')
-		write(1, &str[i++], 1);
+	while (str[i])
+		i++;
+	write(1, str, i);
 	return (i);
 }
 
