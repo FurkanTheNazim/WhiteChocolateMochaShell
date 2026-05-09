@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_cd_pwd.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/12 20:18:32 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/12 20:35:47 by kedemiro         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   builtin_cd_pwd.c                                     :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/04/12 20:18:32 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/07 03:55:18 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,28 @@ char	*build_path(t_sh *sh, char **base, int b_lvl)
 void	calculate_new_pwd(t_sh	*sh, char ***result, char **base, char **path)
 {
 	int	all_size;
-	int	b_lvl;
-	int	p_lvl;
+	int	p_b_lvl[2];
 
 	all_size = count_max_lvl(base, path);
 	*result = gc_add(sh, ft_calloc(all_size + 1, sizeof(char *)), 0);
-	b_lvl = 0;
-	p_lvl = 0;
-	while (base[b_lvl])
+	ft_bzero(p_b_lvl, sizeof(p_b_lvl));
+	while (base[p_b_lvl[1]])
 	{
-		(*result)[b_lvl] = base[b_lvl];
-		b_lvl++;
+		(*result)[p_b_lvl[1]] = base[p_b_lvl[1]];
+		p_b_lvl[1]++;
 	}
-	while (path[p_lvl])
+	while (path[p_b_lvl[0]])
 	{
-		if (!ft_strncmp(path[p_lvl], "..", 2) && !path[p_lvl][2])
+		if (!ft_strncmp(path[p_b_lvl[0]], "..", 2) && !path[p_b_lvl[0]][2])
 		{
-			if (b_lvl > 0)
-				b_lvl--;
+			if (p_b_lvl[1] > 0)
+				p_b_lvl[1]--;
 		}
-		else if (!ft_strncmp(path[p_lvl], ".", 1) && !path[p_lvl][1]);
+		else if (!ft_strncmp(path[p_b_lvl[0]], ".", 1) && !path[p_b_lvl[0]][1])
+			p_b_lvl[0] = p_b_lvl[0];											//mükemmel bir norm çözümü. Bunu yazan çocuk kör oldu.
 		else
-			(*result)[b_lvl++] = path[p_lvl];
-		p_lvl++;
+			(*result)[p_b_lvl[1]++] = path[p_b_lvl[0]];
+		p_b_lvl[0]++;
 	}
 }
 
@@ -92,7 +91,8 @@ void	create_pwd(t_sh *sh, char *param, t_env *new_oldpwd)
 	if (!base || !path)
 		return (allocate_error(sh));
 	calculate_new_pwd(sh, &result, base, path);
-	update_env_value(sh, "PWD", build_path(sh, result, count_max_lvl(base, path)), 1);
+	update_env_value(sh, "PWD",
+		build_path(sh, result, count_max_lvl(base, path)), 1);
 	gc_free(sh, base, 1);
 	gc_free(sh, path, 1);
 }

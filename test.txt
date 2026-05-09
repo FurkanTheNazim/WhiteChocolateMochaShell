@@ -1,1 +1,20 @@
-selam' /home/kedemiro/Desktop/minishell' arkadaş
+HEREDOC YOL HARİTASI
+
+1.	pipe ile bölünecek şekilde tüm komutları ayıkla.
+2.	Ayıklama sırasında o kod bloğu heredoc içeriyor mu incele.
+3.	Heredoc bulunan her bir kod bloğu için bir /tmp/heredoc_<blok_index> oluştur.
+4.	Kod bloğunun içerisindeki her bir tokenın ilgili flagine ilgili dosya yolunu kayıt et.
+5.	Readline ile kullanıcıdan girdiyi al ve char *tmp içerisinde sakla.
+6.	tmp içerisinde ki girdiyi delimeterın tırnak durumuna göre expand et ya da etme.
+7.	expand sürecinden sonra elde edilen tmp'yi ilgili /tmp/heredoc<blok_index> içerisine yaz.
+8.	Süreci kod bloğu içerisindeki her bir heredoc için tekrarla.
+9.	Elde edilen son /tmp/heredoc<blok_index> dosyasını parser içerisindeki t_command structında her  bir komuta flag olarak aktar.
+10.	Fork işlemi başladığında child içerisinde ilgili /tmp/heredoc<blok_index> dosyasını mevcut koda stdin olarak aktar.
+11.	İşi biten /tmp/heredoc<blok_index> dosyasını unlink et ve varsa ilgili fd'leri kapat.
+12. Heredoc içeren blokların historysini ayrı olarak güncellemeyi unutma.
+
+İLGİLİ ERROR DURUMLARI
+1.	Eğer ki open ile dosya açarken (-1) dönüyorsa hata verip komutu iptal et.
+	bash: pipe error: Too many open files					// yeterli.
+	bash: start_pipeline: pgrp pipe: Too many open files	//pgrp pipe — bash job control için process group sinyalleşmesinde kullandığı internal pipe
+															//bash içerisinde ki ayrı bir servisten gelen hata.

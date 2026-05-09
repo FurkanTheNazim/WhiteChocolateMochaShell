@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/05/04 21:11:23 by kedemiro         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   main.c                                               :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
+/*   Updated: 2026/05/09 13:17:18 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void	get_input(t_sh *sh)
 {
 	while (1)
 	{
-		setup_signal(sh, 1);
+		setup_signal(1);
 		if (sh->newline == 0)
 		{
 			if (isatty(STDIN_FILENO))
@@ -186,15 +186,18 @@ void	get_input(t_sh *sh)
 			gc_add(sh, sh->input, 0);
 			if (!sh->input)
 				handle_eof(sh);
-			setup_signal(sh, 2);
+			if (g_sig == SIGINT)
+			{
+				sh->exit_status = g_sig + 128;
+				g_sig = 0;
+			}
 		}
-		if (newline_handler(sh) < 0)
-			continue ;
-		if (!check_ischar(sh->input))
+		if (!check_ischar(sh->input) || (newline_handler(sh) < 0))
 			continue ;
 		break ;
 	}
 	add_history(sh->input);
+	setup_signal(2);
 	return ;
 }
 
@@ -209,6 +212,8 @@ int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
 		sh->input = NULL;
 		return (-1);
 	}
+	isheredoc(sh);
+	// print_tokens(sh->token_list);
 	if  (expand_token_list(sh) < 0)
 		return (-1);
 	return (0);
@@ -235,7 +240,10 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		sh.ast = build_ast(&sh);
 		if (sh.ast)
+		{
 			execute_ast(&sh, sh.ast);
+			g_sig = 0;
+		}
 		normalize_env(&sh);
 		gc_rollback(&sh, cp_cmd);
 		sh.token_list = NULL;

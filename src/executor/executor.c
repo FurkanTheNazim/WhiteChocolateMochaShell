@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:25:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/05/03 02:59:56 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/05 01:43:57 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,15 @@ static void	execute_pipe(t_sh *sh, t_ast_node *node)
 	pid_left = fork();
 	if (pid_left == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		exec_pipe_left(sh, node, fd);
 	}
 	pid_right = fork();
 	if (pid_right == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		exec_pipe_right(sh, node, fd);
 	}
 	close(fd[0]);
@@ -117,6 +117,8 @@ static void	execute_pipe(t_sh *sh, t_ast_node *node)
 	waitpid(pid_right, &status, 0);
 	if (WIFEXITED(status))
 		sh->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		sh->exit_status = WTERMSIG(status) + 128;
 }
 
 void	execute_ast(t_sh *sh, t_ast_node *node)

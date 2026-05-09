@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/05/01 16:51:25 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/05/05 01:38:41 by kedemiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@
 // }
 	
 
-#include "WCMS.h"
+#include "../includes/WCMS.h"
 #include <errno.h>
 
 // executor_utils.c (veya başka bir dosya) içine:
@@ -192,21 +192,29 @@ void	close_fds(t_sh *sh, t_command *cmd)
 void	child_process(t_sh *sh, t_command *cmd, char *path)
 {
 	char	**envp;
+	char	*msg;
+	char	*tmp;
 
 	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)
 		exit(1);
 	if (!path)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putendl_fd(": command not found", 2);
+		msg = ft_strjoin("minishell: ", cmd->args[0]);
+		tmp = ft_strjoin(msg, ": command not found\n");
+		ft_putstr_fd(tmp, 2);
+		free(msg);
+		free(tmp);
 		exit(127);
 	}
 	envp = env_to_envp(sh);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	execve(path, cmd->args, envp);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd->args[0], 2);
-	ft_putstr_fd(": execution failed\n", 2);
+	msg = ft_strjoin("minishell: ", cmd->args[0]);
+	tmp = ft_strjoin(msg, ": execution failed\n");
+	ft_putstr_fd(tmp, 2);
+	free(msg);
+	free(tmp);
 	exit(126);
 }
 
@@ -239,6 +247,8 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			sh->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			sh->exit_status = WTERMSIG(status) + 128;
 	}
 }
 
@@ -248,21 +258,13 @@ static void	exec_in_pipe(t_sh *sh, t_command *cmd)
 	{
 		if (cmd->redirs && (apply_redirections(sh, cmd->redirs) < 0))
 			exit(1);
-		exec_builtin(sh, cmd); // pwd çalıştı
-		
-		// BUILTIN BİTTİ: Çocuk süreç ölmeden önce açık kalan standart boruları (0 ve 1)
-        // manuel olarak kapatıyoruz ki Valgrind şikayet etmesin.
-        // NOT: Sadece STDIN ve STDOUT'u kapatıyoruz.
+		exec_builtin(sh, cmd);
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
-		
-		exit(sh->exit_status); // Şimdi güvenle çıkabilirsin!
+		exit(sh->exit_status);
 	}
 	else
-	{
-		// External komutlarda close yapmaya gerek yok, execve her şeyi devralır.
 		child_process(sh, cmd, resolve_path(sh, cmd->args[0]));
-	}
 }
 
 void	execute_cmd(t_sh *sh, t_command *cmd)

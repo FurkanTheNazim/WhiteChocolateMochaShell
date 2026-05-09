@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/10 20:10:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/04/17 18:40:29 by kedemiro         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   parser.c                                             :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/02/10 20:10:00 by mahmmous            #+#    #+#           */
+/*   Updated: 2026/05/08 02:33:36 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static t_command	*parse_simple_command(t_sh *shell, t_token **token)
 		if (is_redir_token((*token)->type))
 		{
 			handle_redirection(shell, cmd, token);
+			if ((*token)->type == TOKEN_HEREDOC)
+				ft_printf("%s\n", cmd->args);
 		}
 		else
 		{

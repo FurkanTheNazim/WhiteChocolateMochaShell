@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                          :::      :::::::: */
+/*   signal.c                                             :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/05/07 03:34:57 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/07 20:35:38 by kedemiro           ###   ########.fr     */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "../../includes/WCMS.h"
 
@@ -9,7 +21,7 @@ void	signal_in_main(int sig)
 	if (sig == SIGINT)
 	{
 		g_sig = SIGINT;
-		rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		rl_redisplay();
 		write(1, "^C\n", 3);
 		rl_on_new_line();
@@ -19,7 +31,7 @@ void	signal_in_main(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-		rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		rl_redisplay();
 		g_sig = SIGQUIT;
 	}
@@ -39,7 +51,7 @@ void	signal_in_wait(int sig)
 	}
 }
 
-void	setup_signal(t_sh *sh, int mode)
+void	setup_signal(int mode)
 {
 	struct sigaction sa;
 
@@ -51,16 +63,6 @@ void	setup_signal(t_sh *sh, int mode)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
-	if (g_sig == SIGINT)
-	{
-		sh->exit_status = 128 + SIGINT;
-		g_sig = 0;
-	}
-	else if (g_sig == SIGQUIT)
-	{
-		sh->exit_status = 128 + SIGQUIT;
-		g_sig = 0;
-	}
 }
 
 void	term_pacifier(void)

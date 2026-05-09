@@ -25,6 +25,9 @@
 # include "errors.h"
 # include "executor.h"
 # include "sh_signals.h"
+# include "heredoc.h"
+
+extern volatile sig_atomic_t g_sig;
 
 typedef struct s_sh
 {
@@ -33,6 +36,7 @@ typedef struct s_sh
 	t_env	    *env;
     t_command   *command_list;
     t_ast_node  *ast;
+    t_heredoc   *heredoc;
     char        **envp;
     char        *input;
 	int		    exit_status;
