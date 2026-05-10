@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/09 13:17:18 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/10 05:10:57 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,8 @@ int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
 		sh->input = NULL;
 		return (-1);
 	}
-	isheredoc(sh);
-	// print_tokens(sh->token_list);
+	if (is_heredoc(sh) < 0)
+		return (-1);
 	if  (expand_token_list(sh) < 0)
 		return (-1);
 	return (0);

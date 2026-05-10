@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/08 05:58:55 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/09 20:01:12 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ t_token	*newnode(t_sh *sh, char *raw, char *token)
 	node->value = token;
 	node->type = TOKEN_WORD;
 	node->quote_type = 0;
+	node->is_heredoc = 0;
+	node->heredoc_file = NULL;
 	node->next = NULL;
 	return (node);
 }

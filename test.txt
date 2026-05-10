@@ -18,3 +18,7 @@ HEREDOC YOL HARİTASI
 	bash: pipe error: Too many open files					// yeterli.
 	bash: start_pipeline: pgrp pipe: Too many open files	//pgrp pipe — bash job control için process group sinyalleşmesinde kullandığı internal pipe
 															//bash içerisinde ki ayrı bir servisten gelen hata.
+
+Token validation parserdansa lexer-heredoc arasında taşınması gerekebilir.
+Şuan heredoc iptal edildiğinde operatörleriin en sonda kalması segfault veriyor.
+Undefined behavior olabilir, ft_printf ve perror ile debug ederken yok oldu ve silindiklerinde geri gelmedi..? 

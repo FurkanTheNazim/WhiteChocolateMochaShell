@@ -6,14 +6,14 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:10 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/09 13:33:41 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/10 05:09:51 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "WCMS.h"
 #include <errno.h>
 
-char	*cr_file_name(t_sh *sh, int *cmd_index)
+char	*cr_file_name(t_sh *sh, int cmd_index)
 {
 	char	*num;
 	char	*file_name;
@@ -27,55 +27,128 @@ char	*cr_file_name(t_sh *sh, int *cmd_index)
 	return (file_name);
 }
 
-int	create_tmp_dir(t_sh *sh, t_heredoc *data)
+char	*expand_heredoc_input(t_sh *sh, int q_type, char *input)
+{
+	if (q_type == S_QUOTE)
+	{
+		input = gc_add(sh, ft_strjoin("\'", input), 0);
+		if (!input)
+			return (allocate_error(sh), NULL);
+		input = gc_add(sh, ft_strjoin(input, "\'"), 0);
+		if (!input)
+			return (allocate_error(sh), NULL);
+	}
+	else
+	{
+		input = gc_add(sh, ft_strjoin("\"", input), 0);
+		if (!input)
+			return (allocate_error(sh), NULL);
+		input = gc_add(sh, ft_strjoin(input, "\""), 0);
+		if (!input)
+			return (allocate_error(sh), NULL);	
+	}
+	return (expand_token(sh, input, &q_type));
+}
+
+
+int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data)
 {
 	static int	cmd_index = 0;
 	int			fd;
-	char		*file_name;
 	char		*input;
 
-	fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);
+	data->start->heredoc_file = cr_file_name(sh, cmd_index);
+	fd = open(data->start->heredoc_file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd < 0)
-		return (strerror(errno), -1);
+		return (ft_putendl_fd(strerror(errno), 2), -1);
+	tmp->heredoc_file = data->start->heredoc_file;
 	while (1)
 	{
-		input = readline(">");
+		input = gc_add(sh, readline(">"), 0);
 		if (!input)
-			return (-1);
+			return (ft_putendl_fd("bash: warning: here-document at line 24 delimited by end-of-file (wanted `eof')", 2),-1);
+		input = expand_heredoc_input(sh, data->expand, input);	
+		if (!input)
+			return (allocate_error(sh), -1);
+		if ((ft_strlen(input) == ft_strlen(data->delimeter)) &&
+				!ft_strncmp(input, data->delimeter, ft_strlen(input)))
+			break ;
+		write(fd, input, ft_strlen(input));
 	}
+	data->start->is_heredoc = 1;
+	cmd_index += 1;
+	close(fd);
+	return (0);
 }
 
-void	check_expand(t_token *node, t_heredoc *data)
+int	check_expand(t_sh *sh, t_heredoc *data)
 {
-	if (!(node->next))
-		return ;
+	int	i;
+
+	i = ft_strlen(data->delimeter);
+	if (data->delimeter[0] == '\'' && data->delimeter[i] == '\'')
+	{
+		data->delimeter = gc_add(sh, ft_strtrim(data->delimeter, "\'"), 0);
+		if  (!(data->delimeter))
+			return (-1);
+		data->expand = S_QUOTE;
+	}
+	else if (data->delimeter[0] =='\"' && data->delimeter[i] == '\"')
+	{
+		data->delimeter = gc_add(sh, ft_strtrim(data->delimeter, "\""), 0);
+		if (!(data->delimeter))
+			return (-1);
+		data->expand = S_QUOTE;
+	}
+	else
+		data->expand = D_QUOTE;
+	return (0);
+}
+
+void	cut_token_list(t_token *start, t_token *end)
+{
+	while (start)
+	{
+		if (start->next == end)
+		{
+			start->next = end->next->next;
+			break ;
+		}
+		start = start->next;
+	}
 }
 
 int	is_heredoc(t_sh *sh)
 {
 	t_token		*tmp;
-	t_heredoc	data;
+	t_heredoc	data;//norm için sh->heredoc.XXX yapılabilir.
 
+	ft_bzero(&data, sizeof(data));
 	tmp = sh->token_list;
 	while (tmp)
 	{
-		data.start = tmp;	
+		data.start = tmp;
 		while (tmp && tmp->type != TOKEN_PIPE)
 		{
 			if (tmp->type == TOKEN_HEREDOC)
 			{
-				data.flag = 1;
-				check_expand(tmp, &data);
+				if (!(tmp->next))
+					return (-1);//Geçici bu. Önceside lexer - heredoc arası syntax kontrol olmalı 
+				data.delimeter = tmp->next->value;
+				if (check_expand(sh, &data) < 0)
+					return (allocate_error(sh) ,-1);
+				cut_token_list(data.start, tmp);
 			}
-			data.end = tmp;
+			if (data.delimeter)
+			{
+				if (cr_tmp_file(sh, data.start, &data) < 0)
+					return (-1);
+				data.delimeter = NULL;
+			}
 			tmp = tmp->next;
-		}	
-		if (tmp->type == TOKEN_PIPE && data.flag == 1)
-		{
-			if (create_tmp_dir(sh, &data) < 0)
-				return (-1);
 		}
-		tmp = tmp->next;
+		if (tmp && tmp->type == TOKEN_PIPE)
+			tmp = tmp->next;
 	}
 	return (0);
 }

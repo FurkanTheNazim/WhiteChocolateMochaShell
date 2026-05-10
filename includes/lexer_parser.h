@@ -42,11 +42,13 @@ typedef enum e_builtin_type
 
 typedef struct s_token
 {
-    char *raw;
-    char *value;
-    int type;
-    int quote_type;
-    struct s_token *next;
+	char			*raw;
+	char			*value;
+	int				type;
+	int				quote_type;
+	int				is_heredoc;
+	char			*heredoc_file;
+    struct s_token	*next;
 } t_token;
 
 // t_lexer_state: Lexer'ın durumunu tutacak
@@ -55,25 +57,27 @@ typedef struct s_token
 // input string'ini tutacak
 typedef struct s_lexer
 {
-    int in_double_quote;
-    int in_single_quote;
-    int i;
-    char *input;
+    int		in_double_quote;
+    int		in_single_quote;
+    int		i;
+    char	*input;
 }   t_lexer;
 
 typedef struct s_redir
 {
-    int type;
-    char *file;
-    int heredoc_fd;
-    struct s_redir *next;
-}   t_redir;
+	int				type;
+	char			*file;
+	int				heredoc_fd;
+	struct s_redir	*next;
+}	t_redir;
 
 typedef struct s_command
 {
     char    **args;
     t_redir *redirs;
     int     builtin;
+    int     is_heredoc;
+    char	*heredoc_file;
     struct s_command *next;
 }   t_command;
 
@@ -112,7 +116,7 @@ void			init_minishell(t_sh *sh);
 
 // Parser Utils
 t_command *create_command(t_sh *sh);
-void add_arg(t_sh *sh, t_command *cmd, char *arg);
+void add_arg(t_sh *sh, t_command *cmd, t_token *token);
 void add_command(t_sh *sh, t_command **list, t_command *new);
 void free_command_list(t_sh *sh, t_command *list);
 

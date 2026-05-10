@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_command.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 19:55:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/02/17 21:22:48 by mahmmous         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   parser_command.c                                     :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/02/09 19:55:00 by mahmmous            #+#    #+#           */
+/*   Updated: 2026/05/09 23:27:01 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ t_command	*create_command(t_sh *shell)
 	new_cmd->args = NULL;
 	new_cmd->redirs = NULL;
 	new_cmd->builtin = NOT_BUILTIN;
+	new_cmd->heredoc_file = NULL;
+	new_cmd->is_heredoc = 0;
 	new_cmd->next = NULL;
 	return (new_cmd);
 }
 
 // Komutun argüman dizisine GC kullanarak bir argüman ekler
-void	add_arg(t_sh *shell, t_command *cmd, char *arg)
+void	add_arg(t_sh *shell, t_command *cmd, t_token *token)
 {
 	char	**new_args;
 	int		len;
@@ -49,8 +51,10 @@ void	add_arg(t_sh *shell, t_command *cmd, char *arg)
 		new_args[i] = cmd->args[i];
 		i++;
 	}
-	new_args[i] = arg;
+	new_args[i] = token->value;
 	new_args[i + 1] = NULL;
+	cmd->heredoc_file = token->heredoc_file;
+	cmd->is_heredoc = token->is_heredoc;
 	cmd->args = new_args;
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor_cmd.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/10 15:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/05/05 01:38:41 by kedemiro         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   executor_cmd.c                                       :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/04/10 15:00:00 by mahmmous            #+#    #+#           */
+/*   Updated: 2026/05/10 05:13:56 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,7 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 {
 	pid_t	pid;
 	int		status;
+	int		fd;
 
 	if (cmd->builtin != NOT_BUILTIN)
 	{
@@ -240,11 +241,25 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 		pid = fork();
 		if (pid == 0)
 		{
+			ft_printf("arg 0 : %s\n", cmd->heredoc_file);
+			if (cmd->is_heredoc)
+			{
+				fd = open(cmd->heredoc_file, O_RDONLY);
+				if (fd < 0)
+				{
+					ft_putstr_fd("minishell: cannot create temp file for here-document: ", 2);
+				    ft_putendl_fd(strerror(errno), 2);
+					exit(1);
+				}
+				dup2(fd, STDIN_FILENO);
+			}
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 			child_process(sh, cmd, resolve_path(sh, cmd->args[0]));
 		}
 		waitpid(pid, &status, 0);
+		if (cmd->is_heredoc)
+			unlink(cmd->heredoc_file);
 		if (WIFEXITED(status))
 			sh->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
