@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:10 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/10 05:09:51 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/10 16:37:12 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data)
 		if ((ft_strlen(input) == ft_strlen(data->delimeter)) &&
 				!ft_strncmp(input, data->delimeter, ft_strlen(input)))
 			break ;
+		input = gc_add(sh, ft_strjoin(input, "\n"), 0);
 		write(fd, input, ft_strlen(input));
 	}
 	data->start->is_heredoc = 1;

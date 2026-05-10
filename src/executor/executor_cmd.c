@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/10 15:00:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/10 05:13:56 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/10 16:37:42 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,6 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 		pid = fork();
 		if (pid == 0)
 		{
-			ft_printf("arg 0 : %s\n", cmd->heredoc_file);
 			if (cmd->is_heredoc)
 			{
 				fd = open(cmd->heredoc_file, O_RDONLY);

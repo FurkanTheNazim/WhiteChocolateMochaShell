@@ -1,19 +1,1 @@
-Düzeltmeler.txt
-Makefile
-a.out
-a.txt
-cat
-documents
 dunya
-dunya.txt
-export_mini.txt
-export_og.txt
-furkan_biraz_kırgın.c
-includes
-kırgın değilim.c
-minishell
-obj
-src
-test.c
-test.txt
-test2.txt
