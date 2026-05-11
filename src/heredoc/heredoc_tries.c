@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:10 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/10 17:14:20 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/11 17:08:45 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,20 @@ char	*expand_heredoc_input(t_sh *sh, int q_type, char *input)
 	return (expand_token(sh, input, &q_type));
 }
 
+int	handle_heredoc_eof(t_sh *sh, t_heredoc *data)
+{
+	char	*msg;
+	char	*cmd_count;
+
+	cmd_count = gc_add(sh, ft_itoa(sh->cmd_cnt), 0);
+	msg = gc_add(sh,ft_strdup("minishell: Warning: here-document at line "), 0);	
+	msg = gc_add(sh, ft_strjoin(msg, cmd_count), 0);
+	msg = gc_add(sh, ft_strjoin(msg, " delimeted by end-of-file (wanted '"), 0);
+	msg = gc_add(sh, ft_strjoin(msg, data->delimeter), 0);
+	msg = gc_add(sh, ft_strjoin(msg, "')"), 0);
+	ft_putendl_fd(msg, 2);
+	return (-1);
+}
 
 int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data)
 {
@@ -65,23 +79,22 @@ int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data)
 	while (1)
 	{
 		setup_signal_heredoc();
+		input = gc_add(sh, readline(">"), 0);
+		if (!input)
+			return (handle_heredoc_eof(sh, data));
+		input = expand_heredoc_input(sh, data->expand, input);	
+		if (!input)
+			return (allocate_error(sh), -1);
+		if ((ft_strlen(input) == ft_strlen(data->delimeter)) &&
+				!ft_strncmp(input, data->delimeter, ft_strlen(input)))
+			break ;
+		input = gc_add(sh, ft_strjoin(input, "\n"), 0);
 		if (g_sig == SIGINT)
 		{
 			sh->exit_status = g_sig + 128;
 			g_sig = 0;
 			return (-1);
 		}
-		input = gc_add(sh, readline(">"), 0);
-		if (!input)
-			return (ft_putendl_fd("bash: warning: here-document at line 24 delimited by end-of-file (wanted `eof')", 2),-1);
-		input = expand_heredoc_input(sh, data->expand, input);	
-		if (!input)
-			return (allocate_error(sh), -1);
-
-		if ((ft_strlen(input) == ft_strlen(data->delimeter)) &&
-				!ft_strncmp(input, data->delimeter, ft_strlen(input)))
-			break ;
-		input = gc_add(sh, ft_strjoin(input, "\n"), 0);
 		write(fd, input, ft_strlen(input));
 	}
 	data->start->is_heredoc = 1;

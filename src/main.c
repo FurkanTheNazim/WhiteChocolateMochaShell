@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/11 10:31:52 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/11 17:20:16 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,20 +183,24 @@ void	get_input(t_sh *sh)
 				if (sh->input && ft_strlen(sh->input) > 0 && sh->input[ft_strlen(sh->input) - 1] == '\n')
 					sh->input[ft_strlen(sh->input) - 1] = '\0';
 			}
-			gc_add(sh, sh->input, 0);
 			if (!sh->input)	
 				handle_eof(sh);
+			gc_add(sh, sh->input, 0);
 			if (g_sig == SIGINT)
 			{
 				sh->exit_status = g_sig + 128;
 				g_sig = 0;
 			}
 		}
-		if (!check_ischar(sh->input) || (newline_handler(sh) < 0))
+		if ((newline_handler(sh) < 0))
+			continue ;
+		if (!check_ischar(sh->input))
 			continue ;
 		break ;
 	}
 	add_history(sh->input);
+	ft_printf("==%s==\n", sh->input);
+	sh->cmd_cnt += 1;
 	setup_signal(2);
 	return ;
 }
@@ -215,10 +219,7 @@ int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
 	if (validate_tokens(sh))
 		return (-1);
 	if (is_heredoc(sh) < 0)
-	{
-		printf("===%d\n", sh->exit_status);	
 		return (-1);
-	}
 	if  (expand_token_list(sh) < 0)
 		return (-1);
 	return (0);

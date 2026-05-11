@@ -11,7 +11,6 @@ HEREDOC YOL HARİTASI
 9.	Elde edilen son /tmp/heredoc<blok_index> dosyasını parser içerisindeki t_command structında her  bir komuta flag olarak aktar.
 10.	Fork işlemi başladığında child içerisinde ilgili /tmp/heredoc<blok_index> dosyasını mevcut koda stdin olarak aktar.
 11.	İşi biten /tmp/heredoc<blok_index> dosyasını unlink et ve varsa ilgili fd'leri kapat.
-12. Heredoc içeren blokların historysini ayrı olarak güncellemeyi unutma.
 
 İLGİLİ ERROR DURUMLARI
 1.	Eğer ki open ile dosya açarken (-1) dönüyorsa hata verip komutu iptal et.
@@ -22,3 +21,9 @@ HEREDOC YOL HARİTASI
 Token validation parserdansa lexer-heredoc arasında taşınması gerekebilir.
 Şuan heredoc iptal edildiğinde operatörleriin en sonda kalması segfault veriyor.
 Undefined behavior olabilir, ft_printf ve perror ile debug ederken yok oldu ve silindiklerinde geri gelmedi..? 
+
+
+
+echo $PWD
+ls
+pwd

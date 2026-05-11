@@ -45,6 +45,7 @@ typedef struct s_sh
     int         in_pipe;
     int         fds[2];
 	int			newline;
+    int         cmd_cnt;
 } t_sh;
 
 #endif
