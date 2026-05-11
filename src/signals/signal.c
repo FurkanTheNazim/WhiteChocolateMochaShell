@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:57 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/07 20:35:38 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/10 17:12:49 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	signal_in_main(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_sig = SIGINT;
-		// rl_replace_line("", 0);
 		rl_redisplay();
 		write(1, "^C\n", 3);
 		rl_on_new_line();
@@ -31,7 +29,6 @@ void	signal_in_main(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-		// rl_replace_line("", 0);
 		rl_redisplay();
 		g_sig = SIGQUIT;
 	}
@@ -63,6 +60,17 @@ void	setup_signal(int mode)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+}
+
+void setup_signal_heredoc(void)
+{
+	struct sigaction sa;
+
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_handler = signal_in_main;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+	
 }
 
 void	term_pacifier(void)

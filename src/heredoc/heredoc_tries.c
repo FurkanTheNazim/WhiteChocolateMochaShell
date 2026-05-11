@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:10 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/10 16:37:12 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/10 17:14:20 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,20 @@ int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data)
 	tmp->heredoc_file = data->start->heredoc_file;
 	while (1)
 	{
+		setup_signal_heredoc();
+		if (g_sig == SIGINT)
+		{
+			sh->exit_status = g_sig + 128;
+			g_sig = 0;
+			return (-1);
+		}
 		input = gc_add(sh, readline(">"), 0);
 		if (!input)
 			return (ft_putendl_fd("bash: warning: here-document at line 24 delimited by end-of-file (wanted `eof')", 2),-1);
 		input = expand_heredoc_input(sh, data->expand, input);	
 		if (!input)
 			return (allocate_error(sh), -1);
+
 		if ((ft_strlen(input) == ft_strlen(data->delimeter)) &&
 				!ft_strncmp(input, data->delimeter, ft_strlen(input)))
 			break ;
@@ -79,6 +87,7 @@ int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data)
 	data->start->is_heredoc = 1;
 	cmd_index += 1;
 	close(fd);
+	setup_signal(2);
 	return (0);
 }
 
@@ -123,7 +132,6 @@ int	is_heredoc(t_sh *sh)
 {
 	t_token		*tmp;
 	t_heredoc	data;//norm için sh->heredoc.XXX yapılabilir.
-
 	ft_bzero(&data, sizeof(data));
 	tmp = sh->token_list;
 	while (tmp)

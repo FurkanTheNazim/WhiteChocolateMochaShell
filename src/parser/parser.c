@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/02/10 20:10:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/09 23:47:02 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/11 10:30:40 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ t_command	*parser(t_sh *shell)
 		return (NULL);
 	token = shell->token_list;
 	cmd_list = NULL;
-	if (validate_tokens(shell))
-		return (NULL);
+	// if (validate_tokens(shell))
+	// 	return (NULL);
 	while (token)
 	{
 		new_cmd = parse_simple_command(shell, &token);
