@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:10 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/11 17:08:45 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/12 16:59:51 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,37 +140,46 @@ void	cut_token_list(t_token *start, t_token *end)
 		start = start->next;
 	}
 }
-
-int	is_heredoc(t_sh *sh)
+int	init_heredoc(t_sh *sh, t_heredoc *data, t_token *tmp)
 {
-	t_token		*tmp;
-	t_heredoc	data;//norm için sh->heredoc.XXX yapılabilir.
-	ft_bzero(&data, sizeof(data));
-	tmp = sh->token_list;
 	while (tmp)
 	{
-		data.start = tmp;
+		data->start = tmp;
 		while (tmp && tmp->type != TOKEN_PIPE)
 		{
 			if (tmp->type == TOKEN_HEREDOC)
-			{
-				if (!(tmp->next))
-					return (-1);//Geçici bu. Önceside lexer - heredoc arası syntax kontrol olmalı 
-				data.delimeter = tmp->next->value;
-				if (check_expand(sh, &data) < 0)
+			{ 
+				data->delimeter = tmp->next->value;
+				if (check_expand(sh, data) < 0)
 					return (allocate_error(sh) ,-1);
-				cut_token_list(data.start, tmp);
+				cut_token_list(data->start, tmp);
 			}
-			if (data.delimeter)
+			if (data->delimeter)
 			{
-				if (cr_tmp_file(sh, data.start, &data) < 0)
+				if (cr_tmp_file(sh, data->start, data) < 0)
 					return (-1);
-				data.delimeter = NULL;
+				data->delimeter = NULL;
 			}
 			tmp = tmp->next;
 		}
 		if (tmp && tmp->type == TOKEN_PIPE)
 			tmp = tmp->next;
 	}
+	return (0);
+}
+
+int	is_heredoc(t_sh *sh)
+{
+	t_token		*tmp;
+	t_heredoc	data;//norm için sh->heredoc.XXX yapılabilir.
+	// int			status;
+	// pid_t		pid;
+
+	ft_bzero(&data, sizeof(data));
+	tmp = sh->token_list;
+	// pid = fork();
+	// if (pid == 0)
+	if (init_heredoc(sh, &data,tmp) < 0)
+		return (-1);
 	return (0);
 }

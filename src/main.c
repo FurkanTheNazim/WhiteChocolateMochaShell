@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/11 17:20:16 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/12 15:59:42 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,8 +198,7 @@ void	get_input(t_sh *sh)
 			continue ;
 		break ;
 	}
-	add_history(sh->input);
-	ft_printf("==%s==\n", sh->input);
+	add_history(sh->input);	
 	sh->cmd_cnt += 1;
 	setup_signal(2);
 	return ;
