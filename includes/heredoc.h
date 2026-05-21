@@ -15,10 +15,20 @@ typedef struct s_heredoc
 }t_heredoc;
 
 
-int is_heredoc(t_sh *sh);
-int	check_expand(t_sh *sh, t_heredoc *data);
-int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data);
+// int is_heredoc(t_sh *sh);
+// int	check_expand(t_sh *sh, t_heredoc *data);
+// int	cr_tmp_file(t_sh *sh, t_token *tmp, t_heredoc *data);
+// char	*expand_heredoc_input(t_sh *sh, int q_type, char *input);
+// char	*cr_file_name(t_sh *sh, int cmd_index);
+
+int	heredoc(t_sh *sh);
+int	heredoc_child(t_sh *sh, t_heredoc *data, int fd);
+void	read_heredoc_input(t_sh *sh, t_heredoc *data, int fd);
 char	*expand_heredoc_input(t_sh *sh, int q_type, char *input);
+int	handle_heredoc_eof(t_sh *sh, char *delimeter);
+int	init_data(t_sh *sh, t_token *list, t_heredoc *data);
+int	cr_heredoc_file(t_sh *sh, t_token *cmd);
 char	*cr_file_name(t_sh *sh, int cmd_index);
+void	find_cmd(t_token *list);
 
 #endif

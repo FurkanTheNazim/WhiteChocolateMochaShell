@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/07 03:34:57 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/10 17:12:49 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/20 00:45:37 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,17 @@ void	signal_in_wait(int sig)
 	}
 }
 
+
+static void	signal_in_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		rl_redisplay();
+		write(1, "^C\n", 4);
+		g_sig = SIGINT;
+	}
+}
+
 void	setup_signal(int mode)
 {
 	struct sigaction sa;
@@ -55,6 +66,8 @@ void	setup_signal(int mode)
 	ft_bzero(&sa, sizeof(sa));
 	if (mode == 1)
 		sa.sa_handler = signal_in_main;
+	else if (mode == 2)
+		sa.sa_handler = signal_in_heredoc;
 	else
 		sa.sa_handler = signal_in_wait;
 	sa.sa_flags = SA_RESTART;
@@ -62,16 +75,16 @@ void	setup_signal(int mode)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-void setup_signal_heredoc(void)
-{
-	struct sigaction sa;
 
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = signal_in_main;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	
-}
+// void setup_signal_heredoc(t_sh *sh)
+// {
+// 	struct sigaction sa;
+
+// 	ft_bzero(&sa, sizeof(sa));	
+// 	sa.sa_handler = signal_heredoc;
+// 	sigaction(SIGINT, &sa, NULL);
+// 	sigaction(SIGQUIT, &sa, NULL);	
+// }
 
 void	term_pacifier(void)
 {

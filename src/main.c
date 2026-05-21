@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/12 15:59:42 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/20 00:37:10 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,14 @@ static int	handle_eof(t_sh *sh)
 	exit (sh->exit_status);
 }
 
+void	reset_loop(t_sh *sh, t_gc *cp_cmd)
+{
+	gc_rollback(sh, cp_cmd);
+	sh->token_list = NULL;
+	sh->input = NULL;
+	sh->in_pipe = 0;
+}
+
 int	newline_handler(t_sh *sh)
 {
 	static char	**split = NULL;
@@ -200,7 +208,6 @@ void	get_input(t_sh *sh)
 	}
 	add_history(sh->input);	
 	sh->cmd_cnt += 1;
-	setup_signal(2);
 	return ;
 }
 
@@ -216,11 +223,11 @@ int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
 		return (-1);
 	}
 	if (validate_tokens(sh))
-		return (-1);
-	if (is_heredoc(sh) < 0)
-		return (-1);
+		return (reset_loop(sh, cp_cmd), -1);
+	if (heredoc(sh) < 0)
+		return (reset_loop(sh, cp_cmd), -1);
 	if  (expand_token_list(sh) < 0)
-		return (-1);
+		return (reset_loop(sh, cp_cmd), -1);
 	return (0);
 }
 
@@ -250,10 +257,7 @@ int	main(int ac, char **av, char **envp)
 			g_sig = 0;
 		}
 		normalize_env(&sh);
-		gc_rollback(&sh, cp_cmd);
-		sh.token_list = NULL;
-		sh.input = NULL;
-		sh.in_pipe = 0;
+		reset_loop(&sh, cp_cmd);
 	}
 	return (0);
 }

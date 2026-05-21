@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/10 15:00:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/10 16:40:58 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/21 17:49:25 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,15 +158,18 @@ int	apply_redirections(t_sh *sh, t_redir *redirs)
 	(void)sh;
 	while (redirs)
 	{
+
 		fd = open_redir(redirs);
 		if (fd < 0)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(redirs->file, 2);
 			ft_putstr_fd(": ", 2);
-			ft_putendl_fd(strerror(errno), 2);
+			ft_putendl_fd(strerror(errno), 2);	
+			ft_printf("=======================\n");	
 			return (-1);
 		}
+		ft_printf("%d\n", redirs->type);
 		if (redirs->type == TOKEN_REDIR_IN)
 			target = STDIN_FILENO;
 		else
@@ -196,7 +199,9 @@ void	child_process(t_sh *sh, t_command *cmd, char *path)
 	char	*tmp;
 
 	if (cmd->redirs && apply_redirections(sh, cmd->redirs) < 0)
+	{
 		exit(1);
+	}
 	if (!path)
 	{
 		msg = ft_strjoin("minishell: ", cmd->args[0]);
@@ -252,8 +257,6 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 				}
 				dup2(fd, STDIN_FILENO);
 			}
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
 			child_process(sh, cmd, resolve_path(sh, cmd->args[0]));
 		}
 		waitpid(pid, &status, 0);

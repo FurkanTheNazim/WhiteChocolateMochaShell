@@ -49,7 +49,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/executor/executor_cmd.c \
 			  $(SRC_DIR)/executor/executor.c \
 			  $(SRC_DIR)/signals/signal.c \
-			  $(SRC_DIR)/heredoc/heredoc_tries.c
+			  $(SRC_DIR)/heredoc/heredoc_v2.c
 
 
 # Object files

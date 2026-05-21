@@ -31,21 +31,21 @@ extern volatile sig_atomic_t g_sig;
 
 typedef struct s_sh
 {
-    t_token     *token_list;
-    t_gc	    *gc;
-	t_env	    *env;
-    t_command   *command_list;
-    t_ast_node  *ast;
-    t_heredoc   *heredoc;
-    char        **envp;
-    char        *input;
-	int		    exit_status;
-	int		    syntax_error;
-    int         default_path;
-    int         in_pipe;
-    int         fds[2];
+    t_token		*token_list;
+    t_gc		*gc;
+	t_env		*env;
+    t_command	*command_list;
+    t_ast_node	*ast;
+    t_heredoc	*heredoc;
+    char		**envp;
+    char		*input;
+	int			exit_status;
+	int			syntax_error;
+    int			default_path;
+    int			in_pipe;
+    int			fds[2];
 	int			newline;
-    int         cmd_cnt;
+    int			cmd_cnt;
 } t_sh;
 
 #endif

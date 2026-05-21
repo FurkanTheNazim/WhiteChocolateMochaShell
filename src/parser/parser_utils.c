@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/10 20:05:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/02/17 21:22:52 by mahmmous         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   parser_utils.c                                       :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/02/10 20:05:00 by mahmmous            #+#    #+#           */
+/*   Updated: 2026/05/21 17:51:01 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_redir_token(int type)
 {
-	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || \
+	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
 			type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
 }
 
