@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/15 01:30:12 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 19:18:22 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ static int	handle_syntax_error(t_sh *sh)
 t_token	*lexer(t_sh *sh)
 {
 	t_lexer	state;
-	int				i;
-	int				j;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (sh->input[i])
