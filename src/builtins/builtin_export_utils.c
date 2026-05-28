@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                          :::      :::::::: */
-/*   builtin_env.c                                        :+:      :+:    :+: */
+/*   builtin_export_utils.c                               :+:      :+:    :+: */
 /*                                                      +:+ +:+         +:+   */
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
-/*   Created: 2026/04/12 20:11:03 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/28 19:37:14 by kedemiro           ###   ########.fr     */
+/*   Created: 2026/05/28 19:31:04 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/28 19:31:57 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "WCMS.h"
 
-void	builtin_env(t_sh *sh, char **param)
+int	param_count(char **param)
 {
-	t_env	*tmp;
+	int	i;
 
-	(void)param;
-	tmp = sh->env;
-	while (tmp)
-	{
-		if (ft_strncmp(tmp->env_name, "PATH", 4) == 0 && sh->default_path)
-			tmp = tmp->next;
-		else if (tmp->exported && tmp->has_value && tmp->env_printable)
-		{
-			printf("%s=%s\n", tmp->env_name, tmp->env_value);
-			tmp = tmp->next;
-		}
-		else
-			tmp = tmp->next;
-	}
+	i = 0;
+	while (param && param[i])
+		i++;
+	return (i);
+}
+
+void	export_err(t_sh *sh, char	*param)
+{
+	ft_putstr_fd("minishell: export: '", 2);
+	ft_putstr_fd(param, 2);
+	ft_putendl_fd("': not a valid identfier", 2);
+	sh->exit_status = 1;
 }

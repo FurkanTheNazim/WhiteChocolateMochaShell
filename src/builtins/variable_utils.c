@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                          :::      :::::::: */
+/*   variable_utils.c                                     :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/05/28 19:20:57 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/28 19:21:35 by kedemiro           ###   ########.fr     */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "WCMS.h"
 
 char	**var_delimeter(t_sh *sh, char *envp, int i)
@@ -21,7 +33,7 @@ char	**var_delimeter(t_sh *sh, char *envp, int i)
 	else
 	{
 		ret[0] = gc_add(sh, ft_substr(envp, 0, i), 0);
-		ret[1] = gc_add(sh, ft_substr(envp, i +1, ft_strlen(envp +i +1)), 0);
+		ret[1] = gc_add(sh, ft_substr(envp, i +1, ft_strlen(envp + i + 1)), 0);
 	}
 	ret[2] = NULL;
 	return (ret);

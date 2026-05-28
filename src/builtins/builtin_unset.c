@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/12 20:11:22 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/08 06:17:56 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 19:24:22 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	builtin_unset(t_sh *sh, char **param)
 		{
 			next = tmp->next;
 			if (ft_strlen(param[i]) == ft_strlen(tmp->env_name)
-				&& ft_strncmp(tmp->env_name, param[i], ft_strlen(param[i])) == 0)
+				&& ft_strncmp(tmp->env_name, param[i],
+					ft_strlen(param[i])) == 0)
 			{
 				env_del_node(sh, tmp);
 				break ;

@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/12 20:18:32 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/07 03:55:18 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 19:20:03 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	calculate_new_pwd(t_sh	*sh, char ***result, char **base, char **path)
 				p_b_lvl[1]--;
 		}
 		else if (!ft_strncmp(path[p_b_lvl[0]], ".", 1) && !path[p_b_lvl[0]][1])
-			p_b_lvl[0] = p_b_lvl[0];											//mükemmel bir norm çözümü. Bunu yazan çocuk kör oldu.
+			;
 		else
 			(*result)[p_b_lvl[1]++] = path[p_b_lvl[0]];
 		p_b_lvl[0]++;

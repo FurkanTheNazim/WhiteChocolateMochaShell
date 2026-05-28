@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_cd_utils.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/12 20:15:05 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/12 20:16:42 by kedemiro         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   builtin_cd_utils.c                                   :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/04/12 20:15:05 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/28 19:20:49 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ int	count_max_lvl(char **base, char **path)
 			if (i != 0)
 				i--;
 		}
-		else if (!ft_strncmp(path[j], ".", 1) && !path[j][1]);
+		else if (!ft_strncmp(path[j], ".", 1) && !path[j][1])
+			;
 		else
 			i++;
-		j++;	
+		j++;
 	}
 	return (i);
 }
@@ -69,7 +70,7 @@ void	update_env_value(t_sh *sh, char *name, char *new_value, int has_value)
 	if (!new_value && !has_value)
 	{
 		tmp->env_value = NULL;
-		return ;	
+		return ;
 	}
 	tmp->env_value = gc_add(sh, new_value, 1);
 	if (!tmp->env_value)
