@@ -22,6 +22,7 @@ SRCS		= $(SRC_DIR)/main.c \
 		 	  $(SRC_DIR)/lexer/lexer_utils.c \
 			  $(SRC_DIR)/lexer/lexer_token.c \
 		 	  $(SRC_DIR)/lexer/lexer_operators.c\
+		 	  $(SRC_DIR)/garbage_collector/gc_cleaner.c \
 		 	  $(SRC_DIR)/garbage_collector/gc_utils.c \
 		 	  $(SRC_DIR)/parser/parser.c \
 		 	  $(SRC_DIR)/parser/parser_command.c \
