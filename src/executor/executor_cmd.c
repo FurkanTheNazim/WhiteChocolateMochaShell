@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/10 15:00:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/28 04:55:47 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 13:37:17 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,7 @@ static void	exec_in_pipe(t_sh *sh, t_command *cmd)
 		if (cmd->is_heredoc)
 		{
 			fd = open(cmd->heredoc_file, O_RDONLY);
+			unlink(cmd->heredoc_file);
 			if (fd < 0)
 			{
 				ft_putstr_fd("minishell: cannot create temp file for here-document: ", 2);
@@ -290,6 +291,7 @@ static void	exec_in_pipe(t_sh *sh, t_command *cmd)
 				exit(1);
 			}
 			dup2(fd, STDIN_FILENO);
+			close(fd);
 		}
 		child_process(sh, cmd, resolve_path(sh, cmd->args[0]));
 	}

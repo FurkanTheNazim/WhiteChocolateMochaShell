@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/05/14 17:23:35 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/28 04:58:34 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 13:40:41 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	cr_heredoc_file(t_sh *sh, t_token *cmd)
 	file_name = cr_file_name(sh, file_index);
 	if (!file_name)
 		return (allocate_error(sh), -1);
-	
 	file_index++;fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd < 0)
 		return (ft_putendl_fd(strerror(errno), 2), -1);
@@ -159,6 +158,7 @@ void	read_heredoc_input(t_sh *sh, t_heredoc *data, int fd)
 		input = gc_add(sh, ft_strjoin(input, "\n"), 0);
 		write(fd, input, ft_strlen(input));
 	}
+	close(fd);
 	exit(0);
 }
 
@@ -207,6 +207,7 @@ int	heredoc(t_sh *sh)
 				return (-1);
 			if (heredoc_child(sh, &data, fd) < 0)
 				return (-1);
+			close(fd);
 		}
 		if (list->type == TOKEN_PIPE)
 			tmp = list->next;

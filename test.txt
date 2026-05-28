@@ -1,2 +1,1 @@
-merhaba
-$PWD
+merhaba naber
