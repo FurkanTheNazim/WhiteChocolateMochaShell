@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/12 20:15:05 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/28 19:20:49 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 21:09:54 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	update_env_value(t_sh *sh, char *name, char *new_value, int has_value)
 
 	if (!name)
 		return ;
-	else if  (!new_value && has_value)
+	else if (!new_value && has_value)
 		return ;
 	tmp = find_env(sh, name);
 	if (!tmp)

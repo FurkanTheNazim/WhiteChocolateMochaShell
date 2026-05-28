@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   enviroment.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/12 20:11:53 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/18 18:03:08 by mahmmous         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   enviroment.c                                         :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/04/12 20:11:53 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/28 19:48:14 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	validate_env(t_sh *sh)
 		tmp = tmp->next;
 	}
 	if (i == 3)
-		return  (1);
+		return (1);
 	else
 		return (0);
 }
@@ -38,7 +38,7 @@ int	validate_env(t_sh *sh)
 void	manuel_init(t_sh *sh, char *av)
 {
 	char	*pwd;
-	
+
 	pwd = gc_add(sh, getcwd(NULL, 0), 1);
 	if (!pwd)
 		env_error(sh, "minishell: pwd: getcwd\n");
@@ -70,7 +70,8 @@ char	**env_delimeter(t_sh *sh, char *envp, int i)
 	else
 	{
 		ret[0] = gc_add(sh, ft_substr(envp, 0, i), 1);
-		ret[1] = gc_add(sh, ft_substr(envp, i +1, ft_strlen(envp +i +1)), 1);
+		ret[1] = gc_add(sh, ft_substr(envp, i + 1,
+					ft_strlen(envp + i + 1)), 1);
 	}
 	ret[2] = NULL;
 	return (ret);
@@ -83,7 +84,7 @@ void	add_to_list(t_sh *sh, char *envp)
 	int		shlvl;
 
 	i = 0;
-	data = env_delimeter(sh,  envp, i);
+	data = env_delimeter(sh, envp, i);
 	if (!data[0] || !data[1])
 		env_error(sh, "minishell: enviroment error\n");
 	if (ft_strncmp(data[0], "SHLVL", 5) == 0)
@@ -98,13 +99,13 @@ void	add_to_list(t_sh *sh, char *envp)
 			data[1] = gc_add(sh, ft_itoa(1), 1);
 		}
 		else
-			data[1] = gc_add(sh, ft_itoa(shlvl+1), 1);
+			data[1] = gc_add(sh, ft_itoa(shlvl + 1), 1);
 	}
 	if (!env_addback(sh, env_newnode(sh, data[0], data[1])))
 		env_error(sh, "minishell: enviroment error\n");
 }
 
-void	init_env(t_sh *sh, char *av ,char **envp)
+void	init_env(t_sh *sh, char *av, char **envp)
 {
 	int		i;
 	int		flag;

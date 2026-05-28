@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   enviroment_utils.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/12 20:11:49 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/14 16:47:18 by kedemiro         ###   ########.fr       */
+/*                                                          :::      :::::::: */
+/*   enviroment_utils.c                                   :+:      :+:    :+: */
+/*                                                      +:+ +:+         +:+   */
+/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
+/*                                                  +#+#+#+#+#+   +#+         */
+/*   Created: 2026/04/12 20:11:49 by kedemiro            #+#    #+#           */
+/*   Updated: 2026/05/28 19:48:39 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_env	*env_newnode(t_sh *sh, char *name, char *value)
 
 	if (!name)
 		return (NULL);
-	node = gc_malloc(sh,sizeof(t_env), 1);
+	node = gc_malloc(sh, sizeof(t_env), 1);
 	if (!node)
 		return (NULL);
 	node->env_name = name;
@@ -30,7 +30,7 @@ t_env	*env_newnode(t_sh *sh, char *name, char *value)
 		node->has_value = 0;
 	node->env_printable = 1;
 	node->temp_flag = 0;
-	node->old_value =NULL;
+	node->old_value = NULL;
 	node->next = NULL;
 	return (node);
 }

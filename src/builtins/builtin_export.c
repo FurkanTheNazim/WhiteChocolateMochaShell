@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/12 20:11:15 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/28 19:36:36 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 21:09:40 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	check_list(t_sh *sh, char **param)
 				tmp->has_value = 1;
 			}
 			tmp->exported = 1;
+			tmp->env_printable = 1;
 			return (1);
 		}
 		tmp = tmp->next;
