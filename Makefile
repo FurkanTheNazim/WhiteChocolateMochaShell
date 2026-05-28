@@ -31,6 +31,9 @@ SRCS		= $(SRC_DIR)/main.c \
 		 	  $(SRC_DIR)/parser/parser_validate.c \
 		 	  $(SRC_DIR)/enviroment/enviroment.c \
 		 	  $(SRC_DIR)/enviroment/enviroment_utils.c \
+			  $(SRC_DIR)/expander/expander_dollar.c\
+			  $(SRC_DIR)/expander/expander_parse.c\
+			  $(SRC_DIR)/expander/expander_utils.c\
 			  $(SRC_DIR)/expander/expander.c\
 			  $(SRC_DIR)/errors/errors.c\
 			  $(SRC_DIR)/builtins/builtin_env.c \
