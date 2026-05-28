@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/02/10 20:10:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/11 10:30:40 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 04:51:41 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ static t_command	*parse_simple_command(t_sh *shell, t_token **token)
 		if (is_redir_token((*token)->type))
 		{
 			handle_redirection(shell, cmd, token);
+		}
+		else if ((*token)->type == TOKEN_HEREDOC)
+		{
+			(*token) = (*token)->next->next;
 		}
 		else
 		{

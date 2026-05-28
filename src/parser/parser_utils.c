@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/02/10 20:05:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/21 17:51:01 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 04:47:31 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_redir_token(int type)
 {
 	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
-			type == TOKEN_REDIR_APPEND || type == TOKEN_HEREDOC);
+			type == TOKEN_REDIR_APPEND);
 }
 
 //Pipe'a kadar olan tokenları atlar, pipe yoksa listenin sonunu bulana kadar döner

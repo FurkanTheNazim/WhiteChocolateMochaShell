@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/04/10 15:00:00 by mahmmous            #+#    #+#           */
-/*   Updated: 2026/05/21 17:49:25 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/28 04:55:47 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,6 @@ static int	open_redir(t_redir *redir)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (redir->type == TOKEN_REDIR_APPEND)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (redir->type == TOKEN_HEREDOC)
-		fd = redir->heredoc_fd;
 	return (fd);
 }
 
@@ -166,10 +164,8 @@ int	apply_redirections(t_sh *sh, t_redir *redirs)
 			ft_putstr_fd(redirs->file, 2);
 			ft_putstr_fd(": ", 2);
 			ft_putendl_fd(strerror(errno), 2);	
-			ft_printf("=======================\n");	
 			return (-1);
 		}
-		ft_printf("%d\n", redirs->type);
 		if (redirs->type == TOKEN_REDIR_IN)
 			target = STDIN_FILENO;
 		else
@@ -249,6 +245,7 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 			if (cmd->is_heredoc)
 			{
 				fd = open(cmd->heredoc_file, O_RDONLY);
+				unlink(cmd->heredoc_file);
 				if (fd < 0)
 				{
 					ft_putstr_fd("minishell: cannot create temp file for here-document: ", 2);
@@ -256,12 +253,11 @@ static void	exec_in_main(t_sh *sh, t_command *cmd)
 					exit(1);
 				}
 				dup2(fd, STDIN_FILENO);
+				close(fd);
 			}
 			child_process(sh, cmd, resolve_path(sh, cmd->args[0]));
 		}
 		waitpid(pid, &status, 0);
-		if (cmd->is_heredoc)
-			unlink(cmd->heredoc_file);
 		if (WIFEXITED(status))
 			sh->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
