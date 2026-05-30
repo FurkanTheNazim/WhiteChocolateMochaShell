@@ -6,7 +6,7 @@
 /*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
 /*                                                  +#+#+#+#+#+   +#+         */
 /*   Created: 2026/01/09 18:00:00 by minishell           #+#    #+#           */
-/*   Updated: 2026/05/20 00:37:10 by kedemiro           ###   ########.fr     */
+/*   Updated: 2026/05/30 23:58:46 by kedemiro           ###   ########.fr     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ int	newline_handler(t_sh *sh)
 	{
 		free(split);
 		sh->newline = 0;
+		stop = 0;
 		split = NULL;
 		return (-1);
 	}
@@ -230,6 +231,20 @@ int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
 		return (reset_loop(sh, cp_cmd), -1);
 	return (0);
 }
+// char	*current_pos(t_sh *sh)
+// {
+// 	char	*pos;
+// 	char	*tmp;
+
+// 	pos = get_env_value(sh, "PWD");
+// 	if (!pos)
+// 		return ("mochashell>");
+// 	else
+// 	{
+// 		tmp = gc_join(pos, ">");
+// 		return (tmp);
+// 	}
+// }
 
 int	main(int ac, char **av, char **envp)
 {
