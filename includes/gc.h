@@ -1,14 +1,14 @@
 #ifndef GC_H
 # define GC_H
 
-typedef struct s_sh t_sh;//circular include problemi böyle çözülürmüş
+typedef struct s_sh	t_sh;//circular include problemi böyle çözülürmüş
 
 typedef struct s_gc
 {
 	int			mark;
 	void		*addr;
 	struct s_gc	*next;	
-}t_gc;
+}	t_gc;
 
 void	*gc_malloc(t_sh *shell, size_t n, int flag);
 void	gc_free(t_sh *shell, void *ptr, int key);

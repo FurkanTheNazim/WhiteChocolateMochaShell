@@ -12,7 +12,7 @@
 
 #include "../../includes/WCMS.h"
 
-int	is_redir_token(int type);
+int		is_redir_token(int type);
 t_token	*skip_to_pipe(t_token *token);
 
 static void	handle_redirection(t_sh *shell, t_command *cmd, t_token **token)
@@ -22,14 +22,9 @@ static void	handle_redirection(t_sh *shell, t_command *cmd, t_token **token)
 	char	*file;
 
 	type = (*token)->type;
-	
-	/* validate_tokens satır 59'da sıradaki token'ın TOKEN_WORD
-	   olduğunu önceden kontrol ettiği ve sözdizimi hatalarını
-	   önlediği için burada güvenle bir sonraki düğüme erişebiliriz. */
 	file = (*token)->next->value;
 	redir = create_redir(shell, type, file);
 	add_redir(shell, cmd, redir);
-	// Tokenı iki adım ilerlet: REDIR_OP -> FILE -> [Sıradaki]
 	*token = (*token)->next->next;
 }
 
@@ -52,7 +47,6 @@ static t_command	*parse_simple_command(t_sh *shell, t_token **token)
 		}
 		else
 		{
-			// Bu bir kelime/argüman
 			add_arg(shell, cmd, *token);
 			*token = (*token)->next;
 		}
@@ -70,8 +64,6 @@ t_command	*parser(t_sh *shell)
 		return (NULL);
 	token = shell->token_list;
 	cmd_list = NULL;
-	// if (validate_tokens(shell))
-	// 	return (NULL);
 	while (token)
 	{
 		new_cmd = parse_simple_command(shell, &token);
@@ -81,6 +73,6 @@ t_command	*parser(t_sh *shell)
 		if (token && (token->type == TOKEN_PIPE || token->type == TOKEN_OR))
 			token = token->next;
 	}
-	shell->command_list = cmd_list; // Shell yapısında sakla
+	shell->command_list = cmd_list;
 	return (cmd_list);
 }

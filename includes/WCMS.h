@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   WCMS.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/01 00:00:00 by mahmmous          #+#    #+#             */
+/*   Updated: 2026/06/01 00:00:00 by mahmmous         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef WCMS_H
 # define WCMS_H
 
@@ -27,25 +38,25 @@
 # include "sh_signals.h"
 # include "heredoc.h"
 
-extern volatile sig_atomic_t g_sig;
+extern volatile sig_atomic_t	g_sig;
 
 typedef struct s_sh
 {
-    t_token		*token_list;
-    t_gc		*gc;
+	t_token		*token_list;
+	t_gc		*gc;
 	t_env		*env;
-    t_command	*command_list;
-    t_ast_node	*ast;
-    t_heredoc	*heredoc;
-    char		**envp;
-    char		*input;
+	t_command	*command_list;
+	t_ast_node	*ast;
+	t_heredoc	*heredoc;
+	char		**envp;
+	char		*input;
 	int			exit_status;
 	int			syntax_error;
-    int			default_path;
-    int			in_pipe;
-    int			fds[2];
+	int			default_path;
+	int			in_pipe;
+	int			fds[2];
 	int			newline;
-    int			cmd_cnt;
-} t_sh;
+	int			cmd_cnt;
+}	t_sh;
 
 #endif

@@ -2,24 +2,24 @@
 # define BUILTIN_H
 
 # define MAX_PATH 4048
-# define LLONG_MAX  9223372036854775807LL
-# define LLONG_MIN  (-LLONG_MAX - 1LL)
+# define LLONG_MAX		9223372036854775807LL
+# define LLONG_MIN		-9223372036854775807LL
 
-typedef struct s_sh t_sh;//circular include problemi böyle çözülürmüş
+typedef struct s_sh	t_sh;//circular include problemi böyle çözülürmüş
 
 typedef struct s_pwd
 {
-	char	*value;
-	struct s_pwd *next;
-}t_pwd;
+	char			*value;
+	struct s_pwd	*next;
+}	t_pwd;
 
-typedef	struct	s_cd
+typedef struct s_cd
 {
 	t_env	*oldpwd_adr;
 	t_env	*pwd_adr;
 	char	tmp_pwd[MAX_PATH];
 	int		tmp_pwd_f;
-}t_cd;
+}	t_cd;
 
 void	builtin_env(t_sh *sh, char **param);
 
@@ -42,20 +42,19 @@ void	builtin_echo(t_sh *sh, char **param);
 int		validate_flag(char *flag);
 
 void	builtin_cd(t_sh *sh, char **param);
-t_env   *find_env(t_sh *sh, char *name);
-int     count_max_lvl(char **base, char **path);
-void    update_env_value(t_sh *sh, char *name, char *new_value, int has_value);
-void    create_oldpwd(t_sh *sh, t_env *new_oldpwd);
-int     cd_home(t_sh *sh, char **param);
-void    absolute_pwd_update(t_sh *sh, t_env **curr_pwd, char *param);
-char    *build_path(t_sh *sh, char **base, int b_lvl);
-void    calculate_new_pwd(t_sh *sh, char ***result, char **base, char **path);
-void    create_pwd(t_sh *sh, char *param, t_env *new_oldpwd);
-void    logical_pwd_update(t_sh *sh, char *param, t_env *new_oldpwd);
-void    update_pwds(t_sh *sh, char *param);
+t_env	*find_env(t_sh *sh, char *name);
+int		count_max_lvl(char **base, char **path);
+void	update_env_value(t_sh *sh, char *name, char *new_value, int has_value);
+void	create_oldpwd(t_sh *sh, t_env *new_oldpwd);
+int		cd_home(t_sh *sh, char **param);
+void	absolute_pwd_update(t_sh *sh, t_env **curr_pwd, char *param);
+char	*build_path(t_sh *sh, char **base, int b_lvl);
+void	calculate_new_pwd(t_sh *sh, char ***result, char **base, char **path);
+void	create_pwd(t_sh *sh, char *param, t_env *new_oldpwd);
+void	logical_pwd_update(t_sh *sh, char *param, t_env *new_oldpwd);
+void	update_pwds(t_sh *sh, char *param);
 
-
-void    builtin_pwd(t_sh *sh, char **param);
+void	builtin_pwd(t_sh *sh, char **param);
 
 int		identify_builtin(char *cmd_name);
 int		exec_builtin(t_sh *sh, t_command *cmd);

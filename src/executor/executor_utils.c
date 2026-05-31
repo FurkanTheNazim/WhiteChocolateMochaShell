@@ -66,48 +66,34 @@ char	**env_to_envp(t_sh *sh)
 	return (envp);
 }
 
-static char	*try_path(t_sh *sh, char *dir, char *cmd_name)
+void	handle_cmd_not_found(t_command *cmd)
 {
+	char	*msg;
 	char	*tmp;
-	char	*full_path;
 
-	tmp = gc_add(sh, ft_strjoin(dir, "/"), 0);
-	if (!tmp)
-		return (NULL);
-	full_path = gc_add(sh, ft_strjoin(tmp, cmd_name), 0);
-	if (!full_path)
-		return (NULL);
-	if (access(full_path, X_OK) == 0)
-		return (full_path);
-	return (NULL);
+	msg = ft_strjoin("minishell: ", cmd->args[0]);
+	if (ft_strchr(cmd->args[0], '/') && access(cmd->args[0], F_OK) == 0)
+	{
+		tmp = ft_strjoin(msg, ": Permission denied\n");
+		ft_putstr_fd(tmp, 2);
+		free(msg);
+		free(tmp);
+		exit(126);
+	}
+	tmp = ft_strjoin(msg, ": command not found\n");
+	ft_putstr_fd(tmp, 2);
+	free(msg);
+	free(tmp);
+	exit(127);
 }
 
-char	*resolve_path(t_sh *sh, char *cmd_name)
+void	wait_single_child(t_sh *sh, pid_t pid)
 {
-	t_env	*path_env;
-	char	**dirs;
-	char	*result;
-	int		i;
+	int	status;
 
-	if (!cmd_name || !cmd_name[0])
-		return (NULL);
-	if (ft_strchr(cmd_name, '/'))
-	{
-		if (access(cmd_name, X_OK) == 0)
-			return (cmd_name);
-		return (NULL);
-	}
-	path_env = find_env(sh, "PATH");
-	if (!path_env || !path_env->env_value)
-		return (NULL);
-	dirs = gc_add_matrix(sh, (void **)ft_split(path_env->env_value, ':'), 0);
-	i = 0;
-	while (dirs && dirs[i])
-	{
-		result = try_path(sh, dirs[i], cmd_name);
-		if (result)
-			return (result);
-		i++;
-	}
-	return (NULL);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		sh->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		sh->exit_status = WTERMSIG(status) + 128;
 }

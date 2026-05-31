@@ -12,7 +12,6 @@
 
 #include "../../includes/WCMS.h"
 
-// GC (Garbage Collector) kullanarak yeni boş bir komut düğümü oluşturur
 t_command	*create_command(t_sh *shell)
 {
 	t_command	*new_cmd;
@@ -29,7 +28,6 @@ t_command	*create_command(t_sh *shell)
 	return (new_cmd);
 }
 
-// Komutun argüman dizisine GC kullanarak bir argüman ekler
 void	add_arg(t_sh *shell, t_command *cmd, t_token *token)
 {
 	char	**new_args;
@@ -58,7 +56,6 @@ void	add_arg(t_sh *shell, t_command *cmd, t_token *token)
 	cmd->args = new_args;
 }
 
-// Komut listesinin sonuna bir komut ekler
 void	add_command(t_sh *shell, t_command **list, t_command *new)
 {
 	t_command	*tmp;
@@ -75,7 +72,6 @@ void	add_command(t_sh *shell, t_command **list, t_command *new)
 	tmp->next = new;
 }
 
-// Bellek GC geri alma (rollback) ile yönetilir, bu yüzden bu işlevsiz olabilir veya gerekirse özelleştirilebilir
 void	free_command_list(t_sh *shell, t_command *list)
 {
 	(void)shell;

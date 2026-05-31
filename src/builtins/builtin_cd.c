@@ -65,6 +65,12 @@ void	update_pwds(t_sh *sh, char *param)
 
 void	builtin_cd(t_sh *sh, char **param)
 {
+	if (param[1] && param[2])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		sh->exit_status = 1;
+		return ;
+	}
 	if (!param[1])
 	{
 		if (cd_home(sh, &param[1]) < 0)

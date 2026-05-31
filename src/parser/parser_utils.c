@@ -14,12 +14,9 @@
 
 int	is_redir_token(int type)
 {
-	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT ||
-			type == TOKEN_REDIR_APPEND);
+	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT
+		|| type == TOKEN_REDIR_APPEND);
 }
-
-//Pipe'a kadar olan tokenları atlar, pipe yoksa listenin sonunu bulana kadar döner
- 
 
 t_token	*skip_to_pipe(t_token *token)
 {

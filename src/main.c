@@ -189,10 +189,11 @@ void	get_input(t_sh *sh)
 			else
 			{
 				sh->input = get_next_line(STDIN_FILENO);
-				if (sh->input && ft_strlen(sh->input) > 0 && sh->input[ft_strlen(sh->input) - 1] == '\n')
+				if (sh->input && ft_strlen(sh->input) > 0
+					&& sh->input[ft_strlen(sh->input) - 1] == '\n')
 					sh->input[ft_strlen(sh->input) - 1] = '\0';
 			}
-			if (!sh->input)	
+			if (!sh->input)
 				handle_eof(sh);
 			gc_add(sh, sh->input, 0);
 			if (g_sig == SIGINT)

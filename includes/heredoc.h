@@ -1,4 +1,4 @@
-#ifndef	HEREDOC_H
+#ifndef HEREDOC_H
 # define HEREDOC_H
 
 typedef struct s_sh		t_sh;
@@ -12,7 +12,7 @@ typedef struct s_heredoc
 	t_token	*start;
 	t_token	*end;
 
-}t_heredoc;
+}	t_heredoc;
 
 int		heredoc(t_sh *sh);
 int		heredoc_child(t_sh *sh, t_heredoc *data, int fd);

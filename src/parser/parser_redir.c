@@ -46,5 +46,4 @@ void	free_redir_list(t_sh *shell, t_redir *list)
 {
 	(void)shell;
 	(void)list;
-	// Temizliği GC (Garbage Collector) halleder
 }

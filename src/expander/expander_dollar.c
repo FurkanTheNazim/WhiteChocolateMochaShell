@@ -42,16 +42,18 @@ char	*resolve_var_name(t_sh *sh, char *str, int *i)
 {
 	char	*tmp;
 
-	while (str[*i] && ((ft_isalnum(str[*i]) || str[*i] == '_')
-			|| str[*i] == '?'))
+	if (str[*i] == '?')
+	{
+		(*i)++;
+		tmp = gc_add(sh, ft_itoa(sh->exit_status), 0);
+		return (tmp);
+	}
+	while (str[*i] && ((ft_isalnum(str[*i]) || str[*i] == '_')))
 		(*i)++;
 	tmp = gc_add(sh, ft_substr(str, 0, *i), 0);
 	if (!tmp)
 		return (NULL);
-	if (ft_strncmp(tmp, "?", 1) == 0)
-		tmp = gc_add(sh, ft_itoa(sh->exit_status), 0);
-	else
-		tmp = get_env_value(sh, tmp);
+	tmp = get_env_value(sh, tmp);
 	if (!tmp)
 		return (NULL);
 	return (tmp);

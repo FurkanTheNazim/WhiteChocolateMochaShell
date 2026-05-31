@@ -1,14 +1,14 @@
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
-typedef struct s_sh t_sh;
+typedef struct s_sh	t_sh;
 
 typedef enum e_seg_type
 {
 	SEG_NO_QUOTE,
 	SEG_SINGLE_QUOTE,
 	SEG_DOUBLE_QUOTE
-}t_seg_type;
+}	t_seg_type;
 
 typedef struct s_segment
 {
@@ -16,7 +16,7 @@ typedef struct s_segment
 	char		*expanded;
 	int			fail;
 	t_seg_type	type;
-}t_segment;
+}	t_segment;
 
 int			count_dollar_sign(char *str);
 void		split_by_dollar(t_sh *sh, char **tmp, char *str, int n);

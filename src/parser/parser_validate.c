@@ -12,7 +12,7 @@
 
 #include "../../includes/WCMS.h"
 
-int	is_redir_token(int type); // parser_utils.c dosyasından
+int	is_redir_token(int type);
 
 static int	print_syntax_error(char *token)
 {
@@ -27,14 +27,12 @@ static int	print_syntax_error(char *token)
 
 static int	check_pipe_syntax(t_token *t)
 {
-	// İlk token'ın Pipe olup olmadığını kontrol (| ls)
 	if (t->type == TOKEN_PIPE || t->type == TOKEN_OR)
 		return (print_syntax_error(t->value));
 	while (t)
 	{
 		if (t->type == TOKEN_PIPE || t->type == TOKEN_OR)
 		{
-			// Bir sonraki tokenın Pipe olup olmadığını kontrol et (| |) veya NULL durumu (ls |)
 			if (t->type == TOKEN_OR)
 				return (print_syntax_error(t->value));
 			if (!t->next)
@@ -51,13 +49,11 @@ static int	check_redir_syntax(t_token *t)
 {
 	while (t)
 	{
-		if (is_redir_token(t->type))
+		if (is_redir_token(t->type) || t->type == TOKEN_HEREDOC)
 		{
-			// Sonrakini var olduğunu ve operatör olduğunu kontrol et
-			// bash: syntax error near unexpected token `>' or `|'
 			if (!t->next)
 				return (print_syntax_error(NULL));
-			if (t->next->type != TOKEN_WORD) // Eğer sıradaki operator ise(PIPE or REDIR)
+			if (t->next->type != TOKEN_WORD)
 				return (print_syntax_error(t->next->value));
 		}
 		t = t->next;
@@ -68,10 +64,10 @@ static int	check_redir_syntax(t_token *t)
 int	validate_tokens(t_sh *shell)
 {
 	if (!shell->token_list)
-		return (0); // Boş olması geçerlidir veya okuyucu tarafından ele alınır
+		return (0);
 	if (check_pipe_syntax(shell->token_list))
 	{
-		shell->exit_status = 2; // Bash sözdizimi hata kodu 2'dir
+		shell->exit_status = 2;
 		return (1);
 	}
 	if (check_redir_syntax(shell->token_list))
