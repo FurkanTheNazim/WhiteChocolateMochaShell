@@ -18,6 +18,7 @@ LIBS		= -lreadline -lncurses
 # Source files
 SRC_DIR		= ./src
 SRCS		= $(SRC_DIR)/main.c \
+			  $(SRC_DIR)/main_inputs.c \
 		 	  $(SRC_DIR)/lexer/lexer.c \
 		 	  $(SRC_DIR)/lexer/lexer_utils.c \
 			  $(SRC_DIR)/lexer/lexer_token.c \

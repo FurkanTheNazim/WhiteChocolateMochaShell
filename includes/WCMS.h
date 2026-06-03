@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   WCMS.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mahmmous <mahmmous@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/01 00:00:00 by mahmmous          #+#    #+#             */
-/*   Updated: 2026/06/01 00:00:00 by mahmmous         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 #ifndef WCMS_H
 # define WCMS_H
 
@@ -58,5 +47,11 @@ typedef struct s_sh
 	int			newline;
 	int			cmd_cnt;
 }	t_sh;
+
+void	get_input(t_sh *sh);
+void	read_input(t_sh *sh);
+int		newline_handler(t_sh *sh);
+int		handle_eof(t_sh *sh);
+int		check_ischar(char	*input);
 
 #endif
