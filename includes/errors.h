@@ -7,5 +7,6 @@ void	allocate_error(t_sh *sh);
 void	no_home_error(t_sh *sh);
 void	env_error(t_sh *sh, char *err);
 void	exit_err(t_sh *sh, char *err, char *param, int stat);
+void	cd_error(t_sh *sh, char *param, int error);
 
 #endif

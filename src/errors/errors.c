@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kedemiro <kedemiro@student.42istanbul.com. +#+  +:+       +#+        */
+/*   By: mahmmous <mahmmous@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 20:12:00 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/04/13 12:44:25 by kedemiro         ###   ########.fr       */
+/*   Updated: 2026/06/03 18:41:07 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,14 @@ void	env_error(t_sh *sh, char *err)
 	ft_putendl_fd(err, 2);
 	gc_free_all(sh);
 	exit(1);
+}
+
+void	cd_error(t_sh *sh, char *param, int error)
+{
+	ft_putstr_fd("minishell: cd: ", 2);
+	ft_putstr_fd(param, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(error), 2);
+	sh->exit_status = 1;
+	return ;
 }

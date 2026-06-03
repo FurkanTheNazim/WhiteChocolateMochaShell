@@ -1,27 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                          :::      :::::::: */
-/*   builtin_cd.c                                         :+:      :+:    :+: */
-/*                                                      +:+ +:+         +:+   */
-/*   By: kedemiro <kedemiro@student.42istanbul.com.tr +#+  +:+       +#+      */
-/*                                                  +#+#+#+#+#+   +#+         */
-/*   Created: 2026/04/12 20:10:15 by kedemiro            #+#    #+#           */
-/*   Updated: 2026/05/28 19:44:36 by kedemiro           ###   ########.fr     */
+/*                                                        :::      ::::::::   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mahmmous <mahmmous@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/03 15:44:22 by kedemiro          #+#    #+#             */
+/*   Updated: 2026/06/03 18:41:20 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/WCMS.h"
 #include <errno.h>
 
+static char	*get_env_home_value(t_sh *sh, char *str, int *finded)
+{
+	t_env	*tmp;
+	size_t	len;
+	char	*result;
+
+	if (!str || !str[0])
+		return (NULL);
+	len = ft_strlen(str);
+	tmp = sh->env;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->env_name, str, len + 1))
+		{
+			if (!tmp->env_value)
+				return ("");
+			result = gc_add(sh, ft_strdup(tmp->env_value), 0);
+			if (!result)
+				return (NULL);
+			*finded = 1;
+			return (result);
+		}
+		tmp = tmp->next;
+	}
+	return ("");
+}
+
 int	cd_home(t_sh *sh, char **param)
 {
 	char	*home;
+	int		finded;
 
-	home = get_env_value(sh, "HOME");
+	finded = 0;
+	home = get_env_home_value(sh, "HOME", &finded);
 	if (!home)
 		return (allocate_error(sh), -1);
 	else if (!home[0])
-		return (no_home_error(sh), -1);
+	{
+		if (finded == 0)
+			return (no_home_error(sh), -1);
+		else
+			return (1);
+	}
 	if (chdir(home) < 0)
 	{
 		perror("minishell: cd: ");
@@ -78,21 +112,13 @@ void	builtin_cd(t_sh *sh, char **param)
 	}
 	else if (param[1] && !param[1][0])
 	{
-		// ft_putendl_fd("minishell: cd: null directory", 2);//expander world split yüzünden NAME="" cd $NAME durumunda bu hata değil errno gelmeli, cd "$NAME" world splitter a girmeyeceği için bu hata gelmeli, kontrol et sonradan //kampüste test et
 		sh->exit_status = 0;
 		return ;
 	}
 	else
 	{
 		if (chdir(param[1]) < 0)
-		{
-			ft_putstr_fd("minishell: cd: ", 2);
-			ft_putstr_fd(param[1], 2);
-			ft_putstr_fd(": ", 2);
-			ft_putendl_fd(strerror(errno), 2); //errno kullanımı ile ilgili araştır bence kullanılabilmeli çünkü strerror için errno şart ve izin erilen fonksiyonlar arasında
-			sh->exit_status = 1;
-			return ;
-		}
+			cd_error(sh, param[1], errno);
 	}
 	update_pwds(sh, param[1]);
 }
