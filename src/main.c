@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 18:00:00 by minishell         #+#    #+#             */
-/*   Updated: 2026/06/03 18:45:34 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/06/03 18:55:30 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	handle_eof(t_sh *sh)
 
 void	reset_loop(t_sh *sh, t_gc *cp_cmd)
 {
+	normalize_env(sh);
 	gc_rollback(sh, cp_cmd);
 	sh->token_list = NULL;
 	sh->input = NULL;
@@ -82,31 +83,36 @@ int	newline_handler(t_sh *sh)
 	return (0);
 }
 
+void	read_input(t_sh *sh)
+{
+	if (sh->newline == 0)
+	{
+		if (isatty(STDIN_FILENO))
+			sh->input = readline("mochashell>");
+		else
+		{
+			sh->input = get_next_line(STDIN_FILENO);
+			if (sh->input && ft_strlen(sh->input) > 0
+				&& sh->input[ft_strlen(sh->input) - 1] == '\n')
+				sh->input[ft_strlen(sh->input) - 1] = '\0';
+		}
+		if (!sh->input)
+			handle_eof(sh);
+		gc_add(sh, sh->input, 0);
+		if (g_sig == SIGINT)
+		{
+			sh->exit_status = g_sig + 128;
+			g_sig = 0;
+		}
+	}
+}
+
 void	get_input(t_sh *sh)
 {
 	while (1)
 	{
 		setup_signal(1);
-		if (sh->newline == 0)
-		{
-			if (isatty(STDIN_FILENO))
-				sh->input = readline("mochashell>");
-			else
-			{
-				sh->input = get_next_line(STDIN_FILENO);
-				if (sh->input && ft_strlen(sh->input) > 0
-					&& sh->input[ft_strlen(sh->input) - 1] == '\n')
-					sh->input[ft_strlen(sh->input) - 1] = '\0';
-			}
-			if (!sh->input)
-				handle_eof(sh);
-			gc_add(sh, sh->input, 0);
-			if (g_sig == SIGINT)
-			{
-				sh->exit_status = g_sig + 128;
-				g_sig = 0;
-			}
-		}
+		read_input(sh);
 		if ((newline_handler(sh) < 0))
 			continue ;
 		if (!check_ischar(sh->input))
@@ -138,16 +144,21 @@ int	execute_lexer_and_expander(t_sh *sh, t_gc *cp_cmd)
 	return (0);
 }
 
-int	main(int ac, char **av, char **envp)
+void	arg_checker(int ac)
 {
-	t_sh	sh;
-	t_gc	*cp_cmd;
-
 	if (ac != 1)
 	{
 		ft_putendl_fd("Usage: ./minishell", 2);
 		exit (1);
 	}
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_sh	sh;
+	t_gc	*cp_cmd;
+
+	arg_checker(ac);
 	init_minishell(&sh);
 	init_env(&sh, av[0], envp);
 	term_pacifier();
@@ -163,7 +174,6 @@ int	main(int ac, char **av, char **envp)
 			execute_ast(&sh, sh.ast);
 			g_sig = 0;
 		}
-		normalize_env(&sh);
 		reset_loop(&sh, cp_cmd);
 	}
 	return (0);
