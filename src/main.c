@@ -68,6 +68,7 @@ int	main(int ac, char **av, char **envp)
 	term_pacifier();
 	while (1)
 	{
+		term_pacifier();
 		cp_cmd = gc_checkpoint(&sh);
 		get_input(&sh);
 		if (execute_lexer_and_expander(&sh, cp_cmd) < 0)
