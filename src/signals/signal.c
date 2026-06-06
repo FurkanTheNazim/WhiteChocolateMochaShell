@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 03:34:57 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/06/06 21:32:56 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/06/06 22:14:41 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	signal_in_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
+		write(1, "^C\n", 3);
 		g_sig = SIGINT;
 	}
 }
