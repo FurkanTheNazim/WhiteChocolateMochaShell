@@ -35,7 +35,7 @@ void	signal_in_wait(int sig)
 	}
 	else if (sig == SIGQUIT)
 	{
-		write(2, "^\\Quit (core dumped)\n\n", 21);
+		write(2, "Quit (core dumped)\n", 19);
 		g_sig = SIGQUIT;
 	}
 }
