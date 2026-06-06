@@ -24,11 +24,6 @@ void	signal_in_main(int sig)
 		rl_redisplay();
 		g_sig = SIGINT;
 	}
-	else if (sig == SIGQUIT)
-	{
-		rl_redisplay();
-		g_sig = SIGQUIT;
-	}
 }
 
 void	signal_in_wait(int sig)
@@ -67,7 +62,10 @@ void	setup_signal(int mode)
 		sa.sa_handler = signal_in_wait;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	if (mode == 1 || mode == 2)
+		signal(SIGQUIT, SIG_IGN);
+	else
+		sigaction(SIGQUIT, &sa, NULL);
 }
 
 void	term_pacifier(void)
