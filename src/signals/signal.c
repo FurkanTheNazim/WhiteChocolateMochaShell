@@ -35,7 +35,7 @@ void	signal_in_wait(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "^C\n", 3);
+		write(1, "\n", 1);
 		g_sig = SIGINT;
 	}
 	else if (sig == SIGQUIT)
@@ -49,8 +49,7 @@ static void	signal_in_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		rl_redisplay();
-		write(1, "^C\n", 4);
+		write(1, "\n", 1);
 		g_sig = SIGINT;
 	}
 }
@@ -76,6 +75,6 @@ void	term_pacifier(void)
 	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
+	term.c_lflag |= ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
