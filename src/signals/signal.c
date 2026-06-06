@@ -6,7 +6,7 @@
 /*   By: mahmmous <mahmmous@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/07 03:34:57 by kedemiro          #+#    #+#             */
-/*   Updated: 2026/06/03 18:43:10 by mahmmous         ###   ########.fr       */
+/*   Updated: 2026/06/06 21:32:56 by mahmmous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	signal_in_main(int sig)
 {
 	if (sig == SIGINT)
 	{
+		rl_redisplay();
+		write(1, "^C", 3);
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
